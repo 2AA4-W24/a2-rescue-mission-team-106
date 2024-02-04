@@ -11,6 +11,8 @@ import org.json.JSONTokener;
 public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
+    private int counts = 1; 
+    private boolean isFlying = true; 
 
     @Override
     public void initialize(String s) {
@@ -36,14 +38,53 @@ public class Explorer implements IExplorerRaid {
         Integer batteryLevel = info.getInt("budget");
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
+        logger.info("****************** ENDING OF INITALIZATION*********************************** \n\n");
     }
 
     @Override
     public String takeDecision() {
+        logger.info("Times called: " + this.counts);
+
         // create a brand new json object this is not initalized with any data from before hand
         JSONObject decision = new JSONObject();
+        JSONObject parameters = new JSONObject();
+
         // here we are adding data with the key "action" and its assocaited value "stop"
-        decision.put("action", "stop"); // we stop the exploration immediately
+
+        switch (this.counts){
+            case 1: {
+                logger.info("CASE 1 FIRST HIT");
+                decision.put("action", "fly");
+                break; 
+            }
+            case 2: {
+                logger.info("ECHOING EAST");
+                parameters.put("direction", "E");
+                decision.put("action", "echo");
+                decision.put("parameters", parameters);
+                break; 
+            }
+
+            case 3: {
+                logger.info("ECHOING SOUTH");
+                parameters.put("direction", "S");
+                decision.put("action", "echo");
+                decision.put("parameters", parameters);
+                break; 
+            }
+
+            case 4: {
+                logger.info("ECHOING SOUTH");
+                parameters.put("direction", "N");
+                decision.put("action", "echo");
+                decision.put("parameters", parameters);
+                break; 
+            }
+        }
+
+        this.counts++;
+        
+        //decision.put("action", "stop"); // we stop the exploration immediately
         //reading the json file as a string 
         logger.info("** Decision: {}",decision.toString());
         return decision.toString();
@@ -73,6 +114,8 @@ public class Explorer implements IExplorerRaid {
         // get the 'extras' value same idea as above
         JSONObject extraInfo = response.getJSONObject("extras");
         logger.info("Additional information received: {}", extraInfo);
+        logger.info("\n");
+
     }
 
     @Override
