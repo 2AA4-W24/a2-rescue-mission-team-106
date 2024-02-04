@@ -12,7 +12,7 @@ public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
     private int counts = 1; 
-    private boolean isFlying = true; 
+    private Drone drone; 
 
     @Override
     public void initialize(String s) {
@@ -31,11 +31,16 @@ public class Explorer implements IExplorerRaid {
         // Extracting the value associated with the "heading" key from the 'info' JSON object.
         // In this case, the value represents the direction, which is assigned to the variable 'direction'.
         String direction = info.getString("heading");
-
+        
         // Extracting the battery level from the 'info' JSON object.
         // The battery level is obtained by retrieving the value associated with the "budget" key in the JSON file.
         // The result is stored in the 'batteryLevel' variable.
         Integer batteryLevel = info.getInt("budget");
+
+        Direction heading = Direction.fromString(direction); 
+        drone = new Drone(batteryLevel.intValue(), heading); 
+
+
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
         logger.info("****************** ENDING OF INITALIZATION*********************************** \n\n");
@@ -74,12 +79,16 @@ public class Explorer implements IExplorerRaid {
             }
 
             case 4: {
-                logger.info("ECHOING SOUTH");
+                logger.info("ECHOING NORTH");
                 parameters.put("direction", "N");
                 decision.put("action", "echo");
                 decision.put("parameters", parameters);
                 break; 
             }
+            case 5: {
+
+            }
+
         }
 
         this.counts++;
@@ -107,6 +116,10 @@ public class Explorer implements IExplorerRaid {
         Integer cost = response.getInt("cost");
         logger.info("The cost of the action was {}", cost);
 
+        if (drone.canMakeDecision(cost.intValue())){
+            drone.useBattery(cost.intValue());
+        }
+
         //get the status same idea as above
         String status = response.getString("status");
         logger.info("The status of the drone is {}", status);
@@ -114,6 +127,8 @@ public class Explorer implements IExplorerRaid {
         // get the 'extras' value same idea as above
         JSONObject extraInfo = response.getJSONObject("extras");
         logger.info("Additional information received: {}", extraInfo);
+
+        logger.info("Drone Battery:" + drone.getBatteryLevel() + " Heading: " + drone.getHeading());
         logger.info("\n");
 
     }
