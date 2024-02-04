@@ -4,5 +4,20 @@ public enum Direction {
     NORTH, 
     EAST, 
     SOUTH, 
-    WEST
+    WEST;
+
+    public static Direction fromString(String direction) {
+        switch (direction.toUpperCase()) {
+            case "E":
+                return EAST;
+            case "W":
+                return WEST;
+            case "N":
+                return NORTH;
+            case "S":
+                return SOUTH;
+            default:
+                throw new IllegalArgumentException("Invalid direction: " + direction);
+        }
+    }
 }
