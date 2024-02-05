@@ -55,7 +55,7 @@ public class Explorer implements IExplorerRaid {
         JSONObject parameters = new JSONObject();
 
         // here we are adding data with the key "action" and its assocaited value "stop"
-
+        
         switch (this.counts){
             case 1: {
                 logger.info("Flying");
