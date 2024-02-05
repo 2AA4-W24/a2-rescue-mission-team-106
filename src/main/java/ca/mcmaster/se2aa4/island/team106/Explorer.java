@@ -58,7 +58,7 @@ public class Explorer implements IExplorerRaid {
 
         switch (this.counts){
             case 1: {
-                logger.info("CASE 1 FIRST HIT");
+                logger.info("Flying");
                 decision.put("action", "fly");
                 break; 
             }
@@ -86,7 +86,9 @@ public class Explorer implements IExplorerRaid {
                 break; 
             }
             case 5: {
-
+                logger.info("LANDING DRONE");
+                decision.put("action", "stop");
+                break;
             }
 
         }
