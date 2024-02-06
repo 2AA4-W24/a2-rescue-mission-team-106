@@ -28,6 +28,10 @@ public class Drone {
         this.status = status; 
     }
 
+    public void setHeading(Direction heading){
+        this.heading = heading;
+    }
+
 
     public boolean canMakeDecision(int batteryUsage){
         return (this.batteryLevel - batteryUsage) >= 1; 
