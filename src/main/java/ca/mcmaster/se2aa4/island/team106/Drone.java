@@ -1,4 +1,5 @@
 package ca.mcmaster.se2aa4.island.team106;
+import org.json.JSONObject;
 
 public class Drone {
     private int batteryLevel; 
@@ -13,6 +14,47 @@ public class Drone {
 
     public Status getStatus(){
         return this.status; 
+    }
+
+
+    // CAN ONLY ECHO EAST IF NOT HEADING EAST
+    public void echoEast(JSONObject parameter, JSONObject decision){
+        if (heading != Direction.W)
+        {
+            parameter.put("direction", "E");
+            decision.put("action", "echo");
+            decision.put("parameters", parameter);
+        }
+    }
+
+    // CAN ONLY ECHO WEST IF NOT HEADING EAST
+    public void echoWest(JSONObject parameter, JSONObject decision){
+        if (heading != Direction.E)
+        {
+            parameter.put("direction", "W");
+            decision.put("action", "echo");
+            decision.put("parameters", parameter);
+        }
+    }
+
+    // CAN ONLY ECHO NORTH IF ARE NOT HEADING SOUTH
+    public void echoNorth(JSONObject parameter, JSONObject decision){
+        if (heading != Direction.S)
+        {
+            parameter.put("direction", "N");
+            decision.put("action", "echo");
+            decision.put("parameters", parameter);
+        }
+    }
+
+    // CAN ONLY ECHO SOUTH IF YOU ARE NOT HEADING NORTH
+    public void echoSouth(JSONObject parameter, JSONObject decision){
+        if (heading != Direction.N)
+        {
+            parameter.put("direction", "S");
+            decision.put("action", "echo");
+            decision.put("parameters", parameter);
+        }
     }
     
 

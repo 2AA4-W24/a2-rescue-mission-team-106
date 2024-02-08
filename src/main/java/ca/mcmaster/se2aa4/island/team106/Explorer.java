@@ -62,27 +62,26 @@ public class Explorer implements IExplorerRaid {
 
         if (!groundFound)
         {
-            if (this.counts % 4  == 0){
+            if (this.counts % 5  == 0){
                 decision.put("action", "fly");
             }
-            else if (this.counts % 4 == 1){
+            else if (this.counts % 5 == 1){
                 logger.info("ECHOING EAST");
-                parameters.put("direction", "E");
-                decision.put("action", "echo");
-                decision.put("parameters", parameters);
+                drone.echoEast(parameters, decision);
             }
-            else if (this.counts % 4 == 2){
+            else if (this.counts % 5 == 2){
                 logger.info("ECHOING SOUTH");
-                parameters.put("direction", "S");
-                decision.put("action", "echo");
-                decision.put("parameters", parameters);
+                drone.echoEast(parameters, decision);
             }
-            else if(this.counts % 4 == 3){
+            else if(this.counts % 5 == 3){
                 logger.info("ECHOING NORTH");
-                parameters.put("direction", "N");
-                decision.put("action", "echo");
-                decision.put("parameters", parameters);
+                drone.echoNorth(parameters, decision);
             }
+            else if (this.counts % 5 == 4){
+                logger.info("ECHOING WEST");
+                drone.echoWest(parameters, decision);
+            }
+
             
             if (prevHeading != drone.getHeading()){
                 prevHeading = drone.getHeading();
