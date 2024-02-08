@@ -3,6 +3,7 @@ package ca.mcmaster.se2aa4.island.team106;
 public class Drone {
     private int batteryLevel; 
     private Direction heading; 
+    private Direction prevHeading;
     private Status status; 
 
     public Drone(int batteryLevel, Direction heading){
@@ -14,7 +15,13 @@ public class Drone {
     public Status getStatus(){
         return this.status; 
     }
+    public Direction getPrevHeading(){
+        return this.prevHeading;
+    }
     
+    public void setPrevHeading(Direction heading){
+        this.prevHeading = heading;
+    }
 
     public int getBatteryLevel(){
         return this.batteryLevel; 
