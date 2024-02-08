@@ -14,6 +14,7 @@ public class Explorer implements IExplorerRaid {
     private int counts = 1; 
     private Drone drone; 
     private Direction prevHeading;
+    private boolean groundFound = false;
 
     @Override
     public void initialize(String s) {
@@ -46,20 +47,20 @@ public class Explorer implements IExplorerRaid {
 
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
-        logger.info("****************** ENDING OF INITALIZATION*********************************** \n\n");
+        logger.info("****************** ENDING OF INITIALIZATION*********************************** \n\n");
     }
 
     @Override
     public String takeDecision() {
         logger.info("Times called: " + this.counts);
 
-        // create a brand new json object this is not initalized with any data from before hand
+        // create a brand new json object this is not initialized with any data from before hand
         JSONObject decision = new JSONObject(); 
         JSONObject parameters = new JSONObject();
 
-        // here we are adding data with the key "action" and its assocaited value "stop"
+        // here we are adding data with the key "action" and its associated value "stop"
 
-        if (this.counts < 250)
+        if (!groundFound)
         {
             if (this.counts % 4  == 0){
                 decision.put("action", "fly");
@@ -87,7 +88,7 @@ public class Explorer implements IExplorerRaid {
                 prevHeading = drone.getHeading();
                 parameters.put("direction", "S");
                 decision.put("action", "heading"); 
-                decision.put("paramaters", parameters); 
+                decision.put("parameters", parameters); 
             }
 
         }
@@ -132,10 +133,11 @@ public class Explorer implements IExplorerRaid {
         if (extraInfo.has("found")){
             String echoResult = extraInfo.getString("found"); 
 
-            if (echoResult.equals("GROUND")){ // we want to move south 
+            if (echoResult.equals("GROUND")) { // we want to move south 
+                groundFound = true;
                 logger.info("GROUND HAS BEEN FOUND!");
                 logger.info("SETTING DRONES DIRECTION TO SOUTH");
-                drone.setHeading(Direction.SOUTH);
+                drone.setHeading(Direction.S);
             }
 
         }
