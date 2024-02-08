@@ -14,7 +14,6 @@ public class Explorer implements IExplorerRaid {
     private int counts = 1; 
     private Drone drone; 
     private Direction prevHeading;
-    private boolean groundFound = false;
 
     @Override
     public void initialize(String s) {
@@ -60,7 +59,7 @@ public class Explorer implements IExplorerRaid {
 
         // here we are adding data with the key "action" and its associated value "stop"
 
-        if (!groundFound)
+        if (!drone.getGroundStatus())
         {
             if (this.counts % 4  == 0){
                 decision.put("action", "fly");
@@ -134,7 +133,7 @@ public class Explorer implements IExplorerRaid {
             String echoResult = extraInfo.getString("found"); 
 
             if (echoResult.equals("GROUND")) { // we want to move south 
-                groundFound = true;
+                drone.setGroundStatus(true);
                 logger.info("GROUND HAS BEEN FOUND!");
                 logger.info("SETTING DRONES DIRECTION TO SOUTH");
                 drone.setHeading(Direction.S);
