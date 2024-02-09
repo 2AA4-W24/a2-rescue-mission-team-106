@@ -84,6 +84,7 @@ public class Drone {
         }
     }
 
+    
     public void stop(JSONObject decision){
         action.stop(decision);
     }
