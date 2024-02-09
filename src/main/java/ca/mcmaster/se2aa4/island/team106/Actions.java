@@ -20,7 +20,7 @@ public class Actions {
 
     public void heading(JSONObject parameter, JSONObject decision, Direction direction){
         parameter.put("direction", direction);
-        decision.put("action", "heading"); 
+        decision.put("action", "heading");  
         decision.put("parameters", parameter); 
     }
     
