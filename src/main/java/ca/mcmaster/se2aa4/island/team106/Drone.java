@@ -4,6 +4,7 @@ public class Drone {
     private int batteryLevel;
     private boolean groundStatus;
     private Direction heading; 
+    private Direction prevHeading;
     private Status status; 
 
     public Drone(int batteryLevel, Direction heading){
@@ -11,10 +12,14 @@ public class Drone {
         this.heading = heading; 
         this.status = Status.ACTIVE; // drone is now in active status
         this.groundStatus = false;
+        this.prevHeading = heading;
     }
 
     public Status getStatus(){
         return this.status; 
+    }
+    public Direction getPrevHeading(){
+        return this.prevHeading;
     }
     
     public int getBatteryLevel(){
@@ -30,6 +35,7 @@ public class Drone {
     }
 
     public void setHeading(Direction heading){
+        this.prevHeading = getHeading();
         this.heading = heading;
     }
 
