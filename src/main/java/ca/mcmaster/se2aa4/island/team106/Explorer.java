@@ -64,6 +64,7 @@ public class Explorer implements IExplorerRaid {
             else if (this.counts % 5 == 1){
                 logger.info("ECHOING EAST");
                 drone.echoEast(parameters, decision);
+                drone.echoEast(parameters, decision);
             }
             else if (this.counts % 5 == 2){
                 logger.info("ECHOING SOUTH");
@@ -84,7 +85,7 @@ public class Explorer implements IExplorerRaid {
 
         }
         else{
-            drone.stop(decision);; // we stop the exploration immediately
+            drone.stop(decision); // we stop the exploration immediately
         }
 
         this.counts++;
