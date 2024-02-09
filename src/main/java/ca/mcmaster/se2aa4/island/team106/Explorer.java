@@ -13,8 +13,8 @@ public class Explorer implements IExplorerRaid {
     private final Logger logger = LogManager.getLogger();
     private int counts = 1; 
     private Drone drone; 
-    private Direction prevHeading;
     private boolean groundFound = false;
+    private Direction heading;
 
     @Override
     public void initialize(String s) {
@@ -39,11 +39,8 @@ public class Explorer implements IExplorerRaid {
         // The result is stored in the 'batteryLevel' variable.
         Integer batteryLevel = info.getInt("budget");
 
-        Direction heading = Direction.fromString(direction); 
+        heading = Direction.fromString(direction); 
         drone = new Drone(batteryLevel.intValue(), heading); 
-        this.prevHeading = heading; // OUR VERY INITIAL HEADING (EAST)
-        
-
 
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
@@ -84,8 +81,7 @@ public class Explorer implements IExplorerRaid {
                 decision.put("parameters", parameters);
             }
             
-            if (prevHeading != drone.getHeading()){
-                prevHeading = drone.getHeading();
+            if (drone.getPrevHeading() != drone.getHeading()){
                 parameters.put("direction", "S");
                 decision.put("action", "heading"); 
                 decision.put("parameters", parameters); 
@@ -138,6 +134,8 @@ public class Explorer implements IExplorerRaid {
                 logger.info("GROUND HAS BEEN FOUND!");
                 logger.info("SETTING DRONES DIRECTION TO SOUTH");
                 drone.setHeading(Direction.S);
+                logger.info("THE PREVIOUS HEADING IS " + drone.getPrevHeading());
+
             }
 
         }
