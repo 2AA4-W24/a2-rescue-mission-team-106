@@ -11,6 +11,7 @@ public class Drone {
         this.heading = heading; 
         this.status = Status.ACTIVE; // drone is now in active status
         this.groundStatus = false;
+        this.prevHeading = heading;
     }
 
     public Status getStatus(){

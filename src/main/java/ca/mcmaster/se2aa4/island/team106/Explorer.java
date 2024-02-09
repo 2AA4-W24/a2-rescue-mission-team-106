@@ -14,6 +14,8 @@ public class Explorer implements IExplorerRaid {
     private int counts = 1; 
     private Drone drone; 
     private Direction prevHeading;
+    private boolean groundFound = false;
+    private Direction heading;
 
     @Override
     public void initialize(String s) {
