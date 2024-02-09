@@ -41,9 +41,6 @@ public class Explorer implements IExplorerRaid {
 
         heading = Direction.fromString(direction); 
         drone = new Drone(batteryLevel.intValue(), heading); 
-        drone.setPrevHeading(heading);// OUR VERY INITIAL HEADING (EAST)
-        
-
 
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
@@ -85,7 +82,6 @@ public class Explorer implements IExplorerRaid {
             }
             
             if (drone.getPrevHeading() != drone.getHeading()){
-                drone.setPrevHeading(heading);
                 parameters.put("direction", "S");
                 decision.put("action", "heading"); 
                 decision.put("parameters", parameters); 
@@ -137,9 +133,8 @@ public class Explorer implements IExplorerRaid {
                 groundFound = true;
                 logger.info("GROUND HAS BEEN FOUND!");
                 logger.info("SETTING DRONES DIRECTION TO SOUTH");
-                drone.setPrevHeading(heading);
-                logger.info("SET PREV HEADING TO "+ drone.getPrevHeading());
                 drone.setHeading(Direction.S);
+                logger.info("THE PREVIOUS HEADING IS " + drone.getPrevHeading());
 
             }
 
