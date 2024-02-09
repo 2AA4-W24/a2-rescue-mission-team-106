@@ -13,7 +13,6 @@ public class Explorer implements IExplorerRaid {
     private final Logger logger = LogManager.getLogger();
     private int counts = 1; 
     private Drone drone; 
-    private boolean groundFound = false;
     private Direction heading;
 
     @Override
@@ -40,7 +39,7 @@ public class Explorer implements IExplorerRaid {
         Integer batteryLevel = info.getInt("budget");
 
         heading = Direction.fromString(direction); 
-        drone = new Drone(batteryLevel.intValue(), heading); 
+        drone = new Drone(batteryLevel.intValue(), heading);
 
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
@@ -57,7 +56,7 @@ public class Explorer implements IExplorerRaid {
 
         // here we are adding data with the key "action" and its associated value "stop"
 
-        if (!groundFound)
+        if (!drone.getGroundStatus())
         {
             if (this.counts % 4  == 0){
                 decision.put("action", "fly");
@@ -81,7 +80,7 @@ public class Explorer implements IExplorerRaid {
                 decision.put("parameters", parameters);
             }
             
-            if (drone.getPrevHeading() != drone.getHeading()){
+            if (drone.getPrevHeading() != drone.getHeading()) {
                 parameters.put("direction", "S");
                 decision.put("action", "heading"); 
                 decision.put("parameters", parameters); 
@@ -130,12 +129,10 @@ public class Explorer implements IExplorerRaid {
             String echoResult = extraInfo.getString("found"); 
 
             if (echoResult.equals("GROUND")) { // we want to move south 
-                groundFound = true;
+                drone.setGroundStatus(true);
                 logger.info("GROUND HAS BEEN FOUND!");
                 logger.info("SETTING DRONES DIRECTION TO SOUTH");
                 drone.setHeading(Direction.S);
-                logger.info("THE PREVIOUS HEADING IS " + drone.getPrevHeading());
-
             }
 
         }

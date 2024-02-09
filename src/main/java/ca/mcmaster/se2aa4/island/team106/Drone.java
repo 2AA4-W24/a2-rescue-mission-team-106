@@ -1,8 +1,9 @@
 package ca.mcmaster.se2aa4.island.team106;
 
 public class Drone {
-    private int batteryLevel; 
-    private Direction heading; 
+    private int batteryLevel;
+    private boolean groundStatus;
+    private Direction heading;
     private Direction prevHeading;
     private Status status; 
 
@@ -10,17 +11,18 @@ public class Drone {
         this.batteryLevel = batteryLevel; 
         this.heading = heading; 
         this.status = Status.ACTIVE; // drone is now in active status
+        this.groundStatus = false;
         this.prevHeading = heading;
     }
 
-    public Status getStatus(){
-        return this.status; 
+    public Status getStatus() {
+        return this.status;
     }
+    
     public Direction getPrevHeading(){
         return this.prevHeading;
     }
     
-
     public int getBatteryLevel(){
         return this.batteryLevel; 
     }
@@ -33,7 +35,7 @@ public class Drone {
         this.status = status; 
     }
 
-    public void setHeading(Direction heading){
+    public void setHeading(Direction heading) {
         this.prevHeading = getHeading();
         this.heading = heading;
     }
@@ -43,13 +45,16 @@ public class Drone {
         return (this.batteryLevel - batteryUsage) >= 1; 
     }
 
-
-    public void useBattery(int batteryUsage){
-        this.batteryLevel -= batteryUsage; 
+    public void useBattery(int batteryUsage) {
+        this.batteryLevel -= batteryUsage;
     }
     
+    public boolean getGroundStatus() {
+        return this.groundStatus;
+    }
 
-
-
+    public void setGroundStatus(boolean status) {
+        this.groundStatus = status;
+    }
     
 }
