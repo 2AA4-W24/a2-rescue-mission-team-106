@@ -1,4 +1,5 @@
 package ca.mcmaster.se2aa4.island.team106;
+import org.json.JSONObject;
 
 public class Drone {
     private int batteryLevel;
@@ -6,6 +7,8 @@ public class Drone {
     private Direction heading;
     private Direction prevHeading;
     private Status status; 
+    private Actions action = new Actions(); 
+
 
     public Drone(int batteryLevel, Direction heading){
         this.batteryLevel = batteryLevel; 
@@ -15,21 +18,79 @@ public class Drone {
         this.prevHeading = heading;
     }
 
+
     public Status getStatus() {
         return this.status;
     }
     
+
     public Direction getPrevHeading(){
         return this.prevHeading;
     }
+
     
     public int getBatteryLevel(){
         return this.batteryLevel; 
     }
 
+
     public Direction getHeading(){
         return this.heading; 
     }
+
+
+     // CAN ONLY ECHO EAST IF NOT HEADING EAST
+    public void echoEast(JSONObject parameter, JSONObject decision){
+        if (heading != Direction.W){
+            action.echo(parameter, decision, Direction.E);
+        }
+        else{
+            action.fly(decision);
+        }
+    }
+
+
+    // CAN ONLY ECHO WEST IF NOT HEADING EAST
+    public void echoWest(JSONObject parameter, JSONObject decision){
+        if (heading != Direction.E){
+            action.echo(parameter, decision, Direction.W);
+        }
+        else{
+            action.fly(decision);
+        }
+    }
+
+
+    // CAN ONLY ECHO NORTH IF ARE NOT HEADING SOUTH
+    public void echoNorth(JSONObject parameter, JSONObject decision){
+        if (heading != Direction.S){
+            action.echo(parameter, decision, Direction.N);
+        }
+        else{
+            action.fly(decision);
+        }
+    }
+
+
+    // CAN ONLY ECHO SOUTH IF YOU ARE NOT HEADING NORTH
+    public void echoSouth(JSONObject parameter, JSONObject decision){
+        if (heading != Direction.N){
+            action.echo(parameter, decision, Direction.S);
+        }
+        else{
+            action.fly(decision);
+        }
+    }
+
+    
+    public void stop(JSONObject decision){
+        action.stop(decision);
+    }
+
+    public void updateHeading(JSONObject parameter, JSONObject decision, Direction updatedHeading){
+        action.heading(parameter, decision, updatedHeading);
+    }
+
 
     public void setStatus(Status status){
         this.status = status; 

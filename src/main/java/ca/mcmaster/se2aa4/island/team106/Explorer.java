@@ -58,37 +58,33 @@ public class Explorer implements IExplorerRaid {
 
         if (!drone.getGroundStatus())
         {
-            if (this.counts % 4  == 0){
+            if (this.counts % 5  == 0){
                 decision.put("action", "fly");
             }
-            else if (this.counts % 4 == 1){
+            else if (this.counts % 5 == 1){
                 logger.info("ECHOING EAST");
-                parameters.put("direction", "E");
-                decision.put("action", "echo");
-                decision.put("parameters", parameters);
+                drone.echoEast(parameters, decision);
             }
-            else if (this.counts % 4 == 2){
+            else if (this.counts % 5 == 2){
                 logger.info("ECHOING SOUTH");
-                parameters.put("direction", "S");
-                decision.put("action", "echo");
-                decision.put("parameters", parameters);
+                drone.echoSouth(parameters, decision);
             }
-            else if(this.counts % 4 == 3){
+            else if(this.counts % 5 == 3){
                 logger.info("ECHOING NORTH");
-                parameters.put("direction", "N");
-                decision.put("action", "echo");
-                decision.put("parameters", parameters);
+                drone.echoNorth(parameters, decision);
+            }
+            else if(this.counts % 5 == 4){
+                logger.info("ECHOING WEST");
+                drone.echoWest(parameters, decision);
             }
             
             if (drone.getPrevHeading() != drone.getHeading()) {
-                parameters.put("direction", "S");
-                decision.put("action", "heading"); 
-                decision.put("parameters", parameters); 
+                drone.updateHeading(parameters, decision, Direction.S); // ! If you are reading this, it is still hard coded to be south this should be dynamic later on
             }
 
         }
         else{
-            decision.put("action", "stop"); // we stop the exploration immediately
+            drone.stop(decision); // we stop the exploration immediately
         }
 
         this.counts++;
