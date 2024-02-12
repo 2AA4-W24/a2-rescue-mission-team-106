@@ -6,7 +6,7 @@ public enum Direction {
     S, 
     W;
 
-    public static Direction fromString(String direction) {
+    public static  Direction fromString(String direction) {
         switch (direction.toUpperCase()) {
             case "E":
                 return E;

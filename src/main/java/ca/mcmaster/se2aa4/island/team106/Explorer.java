@@ -34,6 +34,7 @@ public class Explorer implements IExplorerRaid {
         // In this case, the value represents the direction, which is assigned to the variable 'direction'.
         String direction = info.getString("heading");
         
+        
         // Extracting the battery level from the 'info' JSON object.
         // The battery level is obtained by retrieving the value associated with the "budget" key in the JSON file.
         // The result is stored in the 'batteryLevel' variable.
@@ -79,12 +80,12 @@ public class Explorer implements IExplorerRaid {
                 drone.echoWest(parameters, decision);
             }
             
-            if (drone.getPrevHeading() != drone.getHeading()) {
-                drone.updateHeading(parameters, decision, Direction.S); // ! If you are reading this, it is still hard coded to be south this should be dynamic later on
-            }
-
         }
-        else{
+        else{ // now we want to fly towards the ground, so a this point we have updated our current heading so it MUST me different than our previous heading
+
+            // drone.updateHeading(parameters, decision, drone.getHeading());
+            // logger.info("Drone Battery:" + drone.getBatteryLevel() + " Heading: " + drone.getHeading());
+            // drone.echoForwards(parameters, decision);
             drone.stop(decision); // we stop the exploration immediately
         }
 
@@ -127,11 +128,14 @@ public class Explorer implements IExplorerRaid {
 
             if (echoResult.equals("GROUND")) { // we want to move south 
                 drone.setGroundStatus(true);
+                Direction groundDirection = drone.getPrevEchoDirection();
                 logger.info("GROUND HAS BEEN FOUND!");
-                logger.info("SETTING DRONES DIRECTION TO SOUTH");
-                drone.setHeading(Direction.S);
-            }
+                logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
 
+                if (groundDirection != drone.getHeading()){ //! needs to be removed/fixed for later
+                    drone.setHeading(groundDirection);
+                }
+            }
             if (echoResult.equals("OUT_OF_RANGE ")) {
                 if (extraInfo.has("range")) {
                     int echoInt = extraInfo.getInt("range");
