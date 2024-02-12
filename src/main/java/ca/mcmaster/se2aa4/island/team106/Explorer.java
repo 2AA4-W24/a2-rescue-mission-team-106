@@ -14,6 +14,7 @@ public class Explorer implements IExplorerRaid {
     private int counts = 1; 
     private Drone drone; 
     private Direction heading;
+    private boolean danger = false;
 
     @Override
     public void initialize(String s) {
@@ -56,7 +57,7 @@ public class Explorer implements IExplorerRaid {
 
         // here we are adding data with the key "action" and its associated value "stop"
 
-        if (!drone.getGroundStatus())
+        if (!drone.getGroundStatus() && !danger)
         {
             if (this.counts % 5  == 0){
                 decision.put("action", "fly");
@@ -121,14 +122,24 @@ public class Explorer implements IExplorerRaid {
         // Integer range = extraInfo.getInt("range");
         logger.info("Additional information received: {}", extraInfo);
 
-        if (extraInfo.has("found")){
-            String echoResult = extraInfo.getString("found"); 
+        if (extraInfo.has("found")) {
+            String echoResult = extraInfo.getString("found");
 
             if (echoResult.equals("GROUND")) { // we want to move south 
                 drone.setGroundStatus(true);
                 logger.info("GROUND HAS BEEN FOUND!");
                 logger.info("SETTING DRONES DIRECTION TO SOUTH");
                 drone.setHeading(Direction.S);
+            }
+
+            if (echoResult.equals("OUT_OF_RANGE ")) {
+                if (extraInfo.has("range")) {
+                    int echoInt = extraInfo.getInt("range");
+                    if (echoInt <= 2) {
+                        danger = true;
+                        logger.info("Approaching OUT OF RANGE ara");
+                    }
+                }
             }
 
         }
