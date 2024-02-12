@@ -101,6 +101,28 @@ public class Drone {
         action.stop(decision);
     }
 
+    public void scan(JSONObject decision){
+        action.scan(decision);
+    }
+
+
+    public void land(JSONObject parameter, JSONObject decision){
+        action.land(parameter, decision);
+    }
+
+    public void explore(JSONObject decision){
+        action.explore(decision);
+    }
+
+    public void scout(JSONObject parameter, JSONObject decision, Direction direction){
+        action.scout(parameter, decision, direction);
+        
+    }
+
+    public void moveTo(JSONObject parameter, JSONObject decision, Direction direction){
+        action.moveTo(parameter, decision, direction);
+    }
+
     
     public void updateHeading(JSONObject parameter, JSONObject decision, Direction updatedHeading){
         if (updatedHeading != this.heading){
