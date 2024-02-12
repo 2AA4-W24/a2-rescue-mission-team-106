@@ -4,8 +4,9 @@ import org.json.JSONObject;
 public class Drone {
     private int batteryLevel;
     private boolean groundStatus;
-    private Direction heading;
-    private Direction prevHeading;
+    private Direction heading; // direction the drone is facing
+    private Direction prevHeading; // the previous direction the drone was facing
+    private Direction prevEchoDirection;  // the previous echo direction of the drone
     private Status status; 
     private Actions action = new Actions(); 
 
@@ -33,6 +34,10 @@ public class Drone {
         return this.batteryLevel; 
     }
 
+    public Direction getPrevEchoDirection(){
+        return this.prevEchoDirection;
+    }
+
 
     public Direction getHeading(){
         return this.heading; 
@@ -43,6 +48,7 @@ public class Drone {
     public void echoEast(JSONObject parameter, JSONObject decision){
         if (heading != Direction.W){
             action.echo(parameter, decision, Direction.E);
+            this.prevEchoDirection = Direction.E; 
         }
         else{
             action.fly(decision);
@@ -54,6 +60,7 @@ public class Drone {
     public void echoWest(JSONObject parameter, JSONObject decision){
         if (heading != Direction.E){
             action.echo(parameter, decision, Direction.W);
+            this.prevEchoDirection = Direction.W; 
         }
         else{
             action.fly(decision);
@@ -65,6 +72,7 @@ public class Drone {
     public void echoNorth(JSONObject parameter, JSONObject decision){
         if (heading != Direction.S){
             action.echo(parameter, decision, Direction.N);
+            this.prevEchoDirection = Direction.N; 
         }
         else{
             action.fly(decision);
@@ -76,10 +84,16 @@ public class Drone {
     public void echoSouth(JSONObject parameter, JSONObject decision){
         if (heading != Direction.N){
             action.echo(parameter, decision, Direction.S);
+            this.prevEchoDirection = Direction.S; 
         }
         else{
             action.fly(decision);
         }
+    }
+
+    public void echoForwards(JSONObject parameter, JSONObject decision){
+        action.echo(parameter, decision, this.heading);
+        this.prevEchoDirection = this.heading; 
     }
 
     
@@ -87,8 +101,12 @@ public class Drone {
         action.stop(decision);
     }
 
+    
     public void updateHeading(JSONObject parameter, JSONObject decision, Direction updatedHeading){
-        action.heading(parameter, decision, updatedHeading);
+        if (updatedHeading != this.heading){
+            setHeading(updatedHeading); // update the status of our drones heading
+            action.heading(parameter, decision, updatedHeading); // physically update the drone on our map
+        }
     }
 
 
@@ -97,7 +115,7 @@ public class Drone {
     }
 
     public void setHeading(Direction heading) {
-        this.prevHeading = getHeading();
+        this.prevHeading = this.getHeading();
         this.heading = heading;
     }
 
