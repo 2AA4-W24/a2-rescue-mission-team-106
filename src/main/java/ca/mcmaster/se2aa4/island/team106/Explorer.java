@@ -136,12 +136,12 @@ public class Explorer implements IExplorerRaid {
                     drone.setHeading(groundDirection);
                 }
             }
-            if (echoResult.equals("OUT_OF_RANGE ")) {
+            if (echoResult.equals("OUT_OF_RANGE")) {
                 if (extraInfo.has("range")) {
                     int echoInt = extraInfo.getInt("range");
-                    if (echoInt <= 2) {
+                    if (echoInt <= 2 && drone.getPrevEchoDirection() == drone.getHeading()) {
                         danger = true;
-                        logger.info("Approaching OUT OF RANGE ara");
+                        logger.info("Approaching OUT OF RANGE area");
                     }
                 }
             }
