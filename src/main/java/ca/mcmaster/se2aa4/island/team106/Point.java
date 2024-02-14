@@ -1,4 +1,4 @@
-package ca.mcmaster;
+package ca.mcmaster.se2aa4.island.team106;
 
 import java.text.DecimalFormat;
 
