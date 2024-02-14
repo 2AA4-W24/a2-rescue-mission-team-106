@@ -3,10 +3,11 @@ import org.json.JSONObject;
 
 public class Drone {
     private int batteryLevel;
-    private boolean groundStatus;
+    private boolean groundStatus; //! the previous echo direction of the drone  CAN SOMEONE PLEASE DEEM IF THIS IS REDUNDENT
     private Direction heading; // direction the drone is facing
-    private Direction prevHeading; // the previous direction the drone was facing
-    private Direction prevEchoDirection;  // the previous echo direction of the drone
+    private Direction prevHeading; // the previous direction the drone was facing 
+    private Direction prevEchoDirection;  
+    private Direction groundEchoDirection; // direction that the ground is facing required for GROUND_STATE
     private Status status; 
     private Actions action = new Actions(); 
 
@@ -14,15 +15,11 @@ public class Drone {
     public Drone(int batteryLevel, Direction heading){
         this.batteryLevel = batteryLevel; 
         this.heading = heading; 
-        this.status = Status.ACTIVE; // drone is now in active status
+        this.status = Status.START_STATE; // drone is now in active status
         this.groundStatus = false;
         this.prevHeading = heading;
     }
 
-
-    public Status getStatus() {
-        return this.status;
-    }
     
 
     public Direction getPrevHeading(){
@@ -38,10 +35,37 @@ public class Drone {
         return this.prevEchoDirection;
     }
 
+    public Direction getGroundEchoDirection(){
+        return this.groundEchoDirection; 
+    }
+
 
     public Direction getHeading(){
         return this.heading; 
     }
+
+    public boolean getGroundStatus() {
+        return this.groundStatus;
+    }
+
+    public Status getStatus(){
+        return this.status; 
+    }
+
+    public void setStatus(Status status){
+        this.status = status; 
+    }
+
+
+    public void setGroundStatus(boolean status) {
+        this.groundStatus = status;
+    }
+
+    public void setGroundEchoDirection(Direction echoDirection){
+        this.groundEchoDirection = echoDirection;  
+    }
+
+
 
 
      // CAN ONLY ECHO EAST IF NOT HEADING EAST
@@ -132,10 +156,6 @@ public class Drone {
     }
 
 
-    public void setStatus(Status status){
-        this.status = status; 
-    }
-
     public void setHeading(Direction heading) {
         this.prevHeading = this.getHeading();
         this.heading = heading;
@@ -149,13 +169,6 @@ public class Drone {
     public void useBattery(int batteryUsage) {
         this.batteryLevel -= batteryUsage;
     }
-    
-    public boolean getGroundStatus() {
-        return this.groundStatus;
-    }
 
-    public void setGroundStatus(boolean status) {
-        this.groundStatus = status;
-    }
     
 }

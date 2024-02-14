@@ -58,34 +58,43 @@ public class Explorer implements IExplorerRaid {
 
         // here we are adding data with the key "action" and its associated value "stop"
 
-        if (!drone.getGroundStatus() && !danger)
+        if (drone.getStatus() == Status.START_STATE)
         {
-            if (this.counts % 5  == 0){
-                decision.put("action", "fly");
-            }
-            else if (this.counts % 5 == 1){
-                logger.info("ECHOING EAST");
-                drone.echoEast(parameters, decision);
-            }
-            else if (this.counts % 5 == 2){
-                logger.info("ECHOING SOUTH");
-                drone.echoSouth(parameters, decision);
-            }
-            else if(this.counts % 5 == 3){
-                logger.info("ECHOING NORTH");
-                drone.echoNorth(parameters, decision);
-            }
-            else if(this.counts % 5 == 4){
-                logger.info("ECHOING WEST");
-                drone.echoWest(parameters, decision);
-            }
-            
+            if (!drone.getGroundStatus() && !danger) // danger is still relevant but I do not think ground status has any relevance at this point
+            {
+                if (this.counts % 5  == 0){
+                    decision.put("action", "fly");
+                }
+                else if (this.counts % 5 == 1){
+                    logger.info("ECHOING EAST");
+                    drone.echoEast(parameters, decision);
+                }
+                else if (this.counts % 5 == 2){
+                    logger.info("ECHOING SOUTH");
+                    drone.echoSouth(parameters, decision);
+                }
+                else if(this.counts % 5 == 3){
+                    logger.info("ECHOING NORTH");
+                    drone.echoNorth(parameters, decision);
+                }
+                else if(this.counts % 5 == 4){
+                    logger.info("ECHOING WEST");
+                    drone.echoWest(parameters, decision);
+                }
+            }       
         }
-        else{ // now we want to fly towards the ground, so a this point we have updated our current heading so it MUST me different than our previous heading
-
-            // drone.updateHeading(parameters, decision, drone.getHeading());
-            // logger.info("Drone Battery:" + drone.getBatteryLevel() + " Heading: " + drone.getHeading());
-            // drone.echoForwards(parameters, decision);
+        else if (drone.getStatus() == Status.GROUND_STATE)
+        { // now we want to fly towards the ground, so a this point we have updated our current heading so it MUST me different than our previous heading
+            if (drone.getHeading() == drone.getGroundEchoDirection()){
+                drone.echoForwards(parameters, decision); // this is called to verify that after turning the ground is physically infront of the drone and not in the "general" direction
+            }
+            else{
+                Direction echoGroundDirection = drone.getGroundEchoDirection(); 
+                drone.setHeading(echoGroundDirection); // turn in the direction of where ground is verified
+            }
+        }
+        else if (drone.getStatus() == Status.GROUND_FOUND_STATE){
+            logger.info("STATE STATUS " + Status.GROUND_FOUND_STATE);
             drone.stop(decision); // we stop the exploration immediately
         }
 
@@ -123,19 +132,42 @@ public class Explorer implements IExplorerRaid {
         // Integer range = extraInfo.getInt("range");
         logger.info("Additional information received: {}", extraInfo);
 
-        if (extraInfo.has("found")) {
+        if (extraInfo.has("found"))
+        {
             String echoResult = extraInfo.getString("found");
+            
+            if (drone.getStatus() == Status.START_STATE)
+            {
+                logger.info("CURRENT STATE: " + Status.START_STATE);
+                if (echoResult.equals("GROUND")) { 
+                    drone.setGroundStatus(true); // ! potential removal I see no siginficance anymore
+                    Direction groundDirection = drone.getPrevEchoDirection(); 
+                    logger.info("GROUND HAS BEEN FOUND!");
+                    logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
 
-            if (echoResult.equals("GROUND")) { // we want to move south 
-                drone.setGroundStatus(true);
-                Direction groundDirection = drone.getPrevEchoDirection();
-                logger.info("GROUND HAS BEEN FOUND!");
-                logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
-
-                if (groundDirection != drone.getHeading()){ //! needs to be removed/fixed for later
-                    drone.setHeading(groundDirection);
+                    if (groundDirection != drone.getHeading()){ 
+                        drone.setHeading(groundDirection);
+                    }
+    
+                    drone.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
+                    drone.setStatus(Status.GROUND_STATE); // transiiton into a new state of our algorithm ground_state
+    
                 }
             }
+            else if (drone.getStatus() == Status.GROUND_STATE)
+            {
+                logger.info("CURRENT STATE: " + Status.GROUND_STATE);
+                if (echoResult.equals("GROUND")) { // these echo results right here are infront of our drone since we are verifying after our turn that the ground is still in front of us
+                    drone.setGroundStatus(true);
+                    logger.info("GROUND HAS BEEN FOUND INFRONT CONFIRMED!");
+                    drone.setStatus(Status.GROUND_FOUND_STATE);
+                }
+                else{
+                    drone.setStatus(Status.START_STATE); // ground is no longer found need to go back to start state since we dont have that "concept" of found
+                }
+
+            }
+
             if (echoResult.equals("OUT_OF_RANGE")) {
                 if (extraInfo.has("range")) {
                     int echoInt = extraInfo.getInt("range");
