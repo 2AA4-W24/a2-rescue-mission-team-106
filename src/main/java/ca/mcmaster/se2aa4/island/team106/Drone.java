@@ -66,6 +66,11 @@ public class Drone {
     }
 
 
+    public void fly(JSONObject decision){
+        action.fly(decision);
+    }
+
+
 
 
      // CAN ONLY ECHO EAST IF NOT HEADING EAST

@@ -1,6 +1,7 @@
 package ca.mcmaster.se2aa4.island.team106;
 
 import java.io.StringReader;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +14,7 @@ public class Explorer implements IExplorerRaid {
     private final Logger logger = LogManager.getLogger();
     private int counts = 1; 
     private Drone drone; 
+    private IslandReacher islandReacher; 
     private Direction heading;
     private boolean danger = false;
 
@@ -63,7 +65,7 @@ public class Explorer implements IExplorerRaid {
             if (!drone.getGroundStatus() && !danger) // danger is still relevant but I do not think ground status has any relevance at this point
             {
                 if (this.counts % 5  == 0){
-                    decision.put("action", "fly");
+                    drone.fly(decision);
                 }
                 else if (this.counts % 5 == 1){
                     logger.info("ECHOING EAST");
@@ -95,6 +97,10 @@ public class Explorer implements IExplorerRaid {
         }
         else if (drone.getStatus() == Status.GROUND_FOUND_STATE){
             logger.info("STATE STATUS " + Status.GROUND_FOUND_STATE);
+            islandReacher.fly(drone, decision); // takes care of flying to the island
+        }
+        else if (drone.getStatus() == Status.ISLAND_STATE){
+            logger.info("STATE STATUS " + Status.ISLAND_STATE);
             drone.stop(decision); // we stop the exploration immediately
         }
 
@@ -160,12 +166,14 @@ public class Explorer implements IExplorerRaid {
                 if (echoResult.equals("GROUND")) { // these echo results right here are infront of our drone since we are verifying after our turn that the ground is still in front of us
                     drone.setGroundStatus(true);
                     logger.info("GROUND HAS BEEN FOUND INFRONT CONFIRMED!");
+                    int tiles = extraInfo.getInt("range");
+
+                    islandReacher = new IslandReacher(tiles); // used to store how many tiles drone needs to move forward
                     drone.setStatus(Status.GROUND_FOUND_STATE);
                 }
                 else{
                     drone.setStatus(Status.START_STATE); // ground is no longer found need to go back to start state since we dont have that "concept" of found
                 }
-
             }
 
             if (echoResult.equals("OUT_OF_RANGE")) {
