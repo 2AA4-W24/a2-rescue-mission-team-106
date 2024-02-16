@@ -13,6 +13,10 @@ public class IslandReacher{
         this.tiles = tiles; 
     }
 
+    public void setTiles(int tiles){
+        this.tiles = tiles; 
+    }
+
     public void fly(Drone drone, JSONObject decision){
         logger.info("TILES REMAINING: " + this.tiles);
         drone.fly(decision);

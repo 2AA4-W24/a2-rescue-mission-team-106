@@ -3,27 +3,23 @@ import org.json.JSONObject;
 
 public class Drone {
     private int batteryLevel;
-    private boolean groundStatus; //! the previous echo direction of the drone  CAN SOMEONE PLEASE DEEM IF THIS IS REDUNDENT
-    private Direction heading; // direction the drone is facing
-    private Direction prevHeading; // the previous direction the drone was facing 
-    private Direction prevEchoDirection;  
-    private Direction groundEchoDirection; // direction that the ground is facing required for GROUND_STATE
+    private boolean groundStatus; 
     private Status status; 
     private Actions action = new Actions(); 
+    private MapArea mapArea; 
 
-
-    public Drone(int batteryLevel, Direction heading){
+    public Drone(int batteryLevel, Direction heading, MapArea mapArea){
+        this.mapArea = mapArea; 
         this.batteryLevel = batteryLevel; 
-        this.heading = heading; 
+        this.mapArea.setHeading(heading);
         this.status = Status.START_STATE; // drone is now in active status
         this.groundStatus = false;
-        this.prevHeading = heading;
     }
 
-    
 
-    public Direction getPrevHeading(){
-        return this.prevHeading;
+    public void updateDrone(int batteryLevel, Direction direction){
+        this.batteryLevel = batteryLevel; 
+        this.mapArea.setHeading(direction);
     }
 
     
@@ -31,18 +27,6 @@ public class Drone {
         return this.batteryLevel; 
     }
 
-    public Direction getPrevEchoDirection(){
-        return this.prevEchoDirection;
-    }
-
-    public Direction getGroundEchoDirection(){
-        return this.groundEchoDirection; 
-    }
-
-
-    public Direction getHeading(){
-        return this.heading; 
-    }
 
     public boolean getGroundStatus() {
         return this.groundStatus;
@@ -61,109 +45,99 @@ public class Drone {
         this.groundStatus = status;
     }
 
-    public void setGroundEchoDirection(Direction echoDirection){
-        this.groundEchoDirection = echoDirection;  
-    }
-
 
     public void fly(JSONObject decision){
         action.fly(decision);
     }
 
 
-
-
-     // CAN ONLY ECHO EAST IF NOT HEADING EAST
     public void echoEast(JSONObject parameter, JSONObject decision){
-        if (heading != Direction.W){
-            action.echo(parameter, decision, Direction.E);
-            this.prevEchoDirection = Direction.E; 
+        if (this.mapArea.getHeading() != Direction.W){
+            this.action.echo(parameter, decision, Direction.E);
+            this.mapArea.setPrevEchoDirection(Direction.E);
         }
         else{
-            action.fly(decision);
+            this.action.fly(decision);
         }
     }
 
 
-    // CAN ONLY ECHO WEST IF NOT HEADING EAST
     public void echoWest(JSONObject parameter, JSONObject decision){
-        if (heading != Direction.E){
-            action.echo(parameter, decision, Direction.W);
-            this.prevEchoDirection = Direction.W; 
+        if (this.mapArea.getHeading() != Direction.E){
+            this.action.echo(parameter, decision, Direction.W);
+            this.mapArea.setPrevEchoDirection(Direction.W);
         }
         else{
-            action.fly(decision);
+            this.action.fly(decision);
         }
     }
 
 
-    // CAN ONLY ECHO NORTH IF ARE NOT HEADING SOUTH
     public void echoNorth(JSONObject parameter, JSONObject decision){
-        if (heading != Direction.S){
-            action.echo(parameter, decision, Direction.N);
-            this.prevEchoDirection = Direction.N; 
+        if (this.mapArea.getHeading() != Direction.S){
+            this.action.echo(parameter, decision, Direction.N);
+            this.mapArea.setPrevEchoDirection(Direction.N);
         }
         else{
-            action.fly(decision);
+            this.action.fly(decision);
         }
     }
 
 
-    // CAN ONLY ECHO SOUTH IF YOU ARE NOT HEADING NORTH
     public void echoSouth(JSONObject parameter, JSONObject decision){
-        if (heading != Direction.N){
-            action.echo(parameter, decision, Direction.S);
-            this.prevEchoDirection = Direction.S; 
+        if (this.mapArea.getHeading() != Direction.N){
+            this.action.echo(parameter, decision, Direction.S);
+            this.mapArea.setPrevEchoDirection(Direction.S);
         }
         else{
-            action.fly(decision);
+            this.action.fly(decision);
         }
     }
+
 
     public void echoForwards(JSONObject parameter, JSONObject decision){
-        action.echo(parameter, decision, this.heading);
-        this.prevEchoDirection = this.heading; 
+        Direction currentHeading = mapArea.getHeading();
+        this.action.echo(parameter, decision, currentHeading);
+        this.mapArea.setPrevEchoDirection(currentHeading);
     }
 
     
     public void stop(JSONObject decision){
-        action.stop(decision);
+        this.action.stop(decision);
     }
 
+
     public void scan(JSONObject decision){
-        action.scan(decision);
+        this.action.scan(decision);
     }
 
 
     public void land(JSONObject parameter, JSONObject decision){
-        action.land(parameter, decision);
+        this.action.land(parameter, decision);
     }
+
 
     public void explore(JSONObject decision){
-        action.explore(decision);
+        this.action.explore(decision);
     }
 
+
     public void scout(JSONObject parameter, JSONObject decision, Direction direction){
-        action.scout(parameter, decision, direction);
+        this.action.scout(parameter, decision, direction);
         
     }
 
+
     public void moveTo(JSONObject parameter, JSONObject decision, Direction direction){
-        action.moveTo(parameter, decision, direction);
+        this.action.moveTo(parameter, decision, direction);
     }
 
     
     public void updateHeading(JSONObject parameter, JSONObject decision, Direction updatedHeading){
-        if (updatedHeading != this.heading){
-            setHeading(updatedHeading); // update the status of our drones heading
-            action.heading(parameter, decision, updatedHeading); // physically update the drone on our map
+        if (updatedHeading != this.mapArea.getHeading()){
+            this.mapArea.setHeading(updatedHeading); // update the status of our drones heading
+            this.action.heading(parameter, decision, updatedHeading); // physically update the drone on our map
         }
-    }
-
-
-    public void setHeading(Direction heading) {
-        this.prevHeading = this.getHeading();
-        this.heading = heading;
     }
 
 
@@ -174,6 +148,4 @@ public class Drone {
     public void useBattery(int batteryUsage) {
         this.batteryLevel -= batteryUsage;
     }
-
-    
 }
