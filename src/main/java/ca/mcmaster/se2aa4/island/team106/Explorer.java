@@ -1,6 +1,7 @@
 package ca.mcmaster.se2aa4.island.team106;
 
 import java.io.StringReader;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,110 +12,52 @@ import org.json.JSONTokener;
 public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
-    private int counts = 1; 
-    private Drone drone; 
+    private IslandReacher islandReacher = new IslandReacher(0); 
     private Direction heading;
-    private boolean danger = false;
+    private MapArea mapArea = new MapArea(); 
+    private GroundFinder groundFinder = new GroundFinder(); 
+    private Drone drone = new Drone(0, Direction.N, mapArea);
+    private DecisionMaker decisionMaker = new DecisionMaker(drone, groundFinder, islandReacher, mapArea);
 
     @Override
     public void initialize(String s) {
         logger.info("** Initializing the Exploration Command Center"); 
-
-        // Creating a new JSON object called "info"
-        // Specifically, we are initializing it with the contents of an existing JSON file,
-        // which is represented by a JSON TOKEN (let's call it X).
-        // We read the contents of the JSON file (X) using a JSONTokener,
-        // which is constructed with a StringReader initialized with the string 's'.
-        // The 'info' object is now initialized with all the data from the JSON file (X) passed into the constructor.
         JSONObject info = new JSONObject(new JSONTokener(new StringReader(s)));  
         logger.info("** Initialization info:\n {}",info.toString(2));
 
-
-        // Extracting the value associated with the "heading" key from the 'info' JSON object.
-        // In this case, the value represents the direction, which is assigned to the variable 'direction'.
         String direction = info.getString("heading");
-        
-        
-        // Extracting the battery level from the 'info' JSON object.
-        // The battery level is obtained by retrieving the value associated with the "budget" key in the JSON file.
-        // The result is stored in the 'batteryLevel' variable.
         Integer batteryLevel = info.getInt("budget");
 
         heading = Direction.fromString(direction); 
-        drone = new Drone(batteryLevel.intValue(), heading);
+        drone.updateDrone(batteryLevel.intValue(), heading);
 
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
         logger.info("****************** ENDING OF INITIALIZATION*********************************** \n\n");
     }
 
+
     @Override
     public String takeDecision() {
-        logger.info("Times called: " + this.counts);
-
         // create a brand new json object this is not initialized with any data from before hand
         JSONObject decision = new JSONObject(); 
         JSONObject parameters = new JSONObject();
 
-        // here we are adding data with the key "action" and its associated value "stop"
+        decisionMaker.makeDecisions(parameters, decision);
 
-        if (drone.getStatus() == Status.START_STATE)
-        {
-            if (!drone.getGroundStatus() && !danger) // danger is still relevant but I do not think ground status has any relevance at this point
-            {
-                if (this.counts % 5  == 0){
-                    decision.put("action", "fly");
-                }
-                else if (this.counts % 5 == 1){
-                    logger.info("ECHOING EAST");
-                    drone.echoEast(parameters, decision);
-                }
-                else if (this.counts % 5 == 2){
-                    logger.info("ECHOING SOUTH");
-                    drone.echoSouth(parameters, decision);
-                }
-                else if(this.counts % 5 == 3){
-                    logger.info("ECHOING NORTH");
-                    drone.echoNorth(parameters, decision);
-                }
-                else if(this.counts % 5 == 4){
-                    logger.info("ECHOING WEST");
-                    drone.echoWest(parameters, decision);
-                }
-            }       
-        }
-        else if (drone.getStatus() == Status.GROUND_STATE)
-        { // now we want to fly towards the ground, so a this point we have updated our current heading so it MUST me different than our previous heading
-            if (drone.getHeading() == drone.getGroundEchoDirection()){
-                drone.echoForwards(parameters, decision); // this is called to verify that after turning the ground is physically infront of the drone and not in the "general" direction
-            }
-            else{
-                Direction echoGroundDirection = drone.getGroundEchoDirection(); 
-                drone.setHeading(echoGroundDirection); // turn in the direction of where ground is verified
-            }
-        }
-        else if (drone.getStatus() == Status.GROUND_FOUND_STATE){
-            logger.info("STATE STATUS " + Status.GROUND_FOUND_STATE);
-            drone.stop(decision); // we stop the exploration immediately
-        }
-
-        this.counts++;
-        
-        
         //reading the json file as a string 
         logger.info("** Decision: {}",decision.toString());
         return decision.toString();
     }
+
 
     @Override
     public void acknowledgeResults(String s) {
 
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
 
-        // print the json object
         logger.info("** Response received:\n"+response.toString(2));
 
-        // get the cost value from JSON we are accessing its KEY by using getInt
         Integer cost = response.getInt("cost");
         logger.info("The cost of the action was {}", cost);
 
@@ -140,18 +83,18 @@ public class Explorer implements IExplorerRaid {
             {
                 logger.info("CURRENT STATE: " + Status.START_STATE);
                 if (echoResult.equals("GROUND")) { 
-                    drone.setGroundStatus(true); // ! potential removal I see no siginficance anymore
-                    Direction groundDirection = drone.getPrevEchoDirection(); 
+                    drone.setGroundStatus(true); 
+                    Direction groundDirection = mapArea.getPrevEchoDirection();  
                     logger.info("GROUND HAS BEEN FOUND!");
                     logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
 
-                    if (groundDirection != drone.getHeading()){ 
-                        drone.setHeading(groundDirection);
+                    if (groundDirection != mapArea.getHeading()){ 
+                        mapArea.setHeading(groundDirection); 
                     }
     
-                    drone.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
+                    mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground 
                     drone.setStatus(Status.GROUND_STATE); // transiiton into a new state of our algorithm ground_state
-    
+
                 }
             }
             else if (drone.getStatus() == Status.GROUND_STATE)
@@ -160,34 +103,32 @@ public class Explorer implements IExplorerRaid {
                 if (echoResult.equals("GROUND")) { // these echo results right here are infront of our drone since we are verifying after our turn that the ground is still in front of us
                     drone.setGroundStatus(true);
                     logger.info("GROUND HAS BEEN FOUND INFRONT CONFIRMED!");
+                    int tiles = extraInfo.getInt("range");
+
+                    islandReacher.setTiles(tiles);
                     drone.setStatus(Status.GROUND_FOUND_STATE);
                 }
                 else{
                     drone.setStatus(Status.START_STATE); // ground is no longer found need to go back to start state since we dont have that "concept" of found
                 }
-
             }
-
             if (echoResult.equals("OUT_OF_RANGE")) {
                 if (extraInfo.has("range")) {
                     int echoInt = extraInfo.getInt("range");
-                    if (echoInt <= 2 && drone.getPrevEchoDirection() == drone.getHeading()) {
-                        danger = true;
+                    if (echoInt <= 2 && mapArea.getPrevEchoDirection() == mapArea.getHeading()) {
+                        groundFinder.setDanger(true); 
                         logger.info("Approaching OUT OF RANGE area");
                     }
                 }
             }
-
         }
-    
-        logger.info("Drone Battery:" + drone.getBatteryLevel() + " Heading: " + drone.getHeading());
-        logger.info("\n");
 
+        logger.info("Drone Battery:" + drone.getBatteryLevel() + " Heading: " + mapArea.getHeading());
+        logger.info("\n");
     }
 
     @Override
     public String deliverFinalReport() {
         return "no creek found";
     }
-
 }
