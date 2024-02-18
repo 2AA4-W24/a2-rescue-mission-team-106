@@ -17,7 +17,7 @@ public class Explorer implements IExplorerRaid {
     private MapArea mapArea = new MapArea(); 
     private GroundFinder groundFinder = new GroundFinder(); 
     private Drone drone = new Drone(0, Direction.N, mapArea);
-    private OutOfRange outOfRangeHandler = new OutOfRange(mapArea);
+    private OutOfRange outOfRangeHandler = new OutOfRange();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, groundFinder, islandReacher, mapArea, outOfRangeHandler);
 
     @Override
@@ -84,7 +84,7 @@ public class Explorer implements IExplorerRaid {
 
             
             if (echoResult.equals("OUT_OF_RANGE")) {
-                outOfRangeHandler.setDanger(echoInt);
+                outOfRangeHandler.setDanger(echoInt, mapArea);
                 if (outOfRangeHandler.getDanger()) {
                     logger.info("Approaching OUT OF RANGE area");
                 }

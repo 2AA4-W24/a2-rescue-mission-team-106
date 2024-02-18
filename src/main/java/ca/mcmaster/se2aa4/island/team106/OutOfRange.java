@@ -1,27 +1,25 @@
 package ca.mcmaster.se2aa4.island.team106;
 
 public class OutOfRange {
-    private MapArea mapArea;
-    private Direction currentDirection;
     private boolean danger;
     
-    public final int RANGE_BORDER = 40;
+    public final int RANGE_BORDER = 2;
     
-    public OutOfRange(MapArea mapArea) {
-        this.mapArea = mapArea;
-        this.currentDirection = mapArea.getHeading();
-    }
     
-    public void setDanger(int limit) {
+    public void setDanger(int limit, MapArea mapArea) {
         if (limit <= RANGE_BORDER && mapArea.getHeading() == mapArea.getPrevEchoDirection()) {
-            danger = true;
+            this.danger = true;
         } else {
-            danger = false;
+            this.danger = false;
         }
+    }
+
+    public void setDanger(boolean danger) {
+        this.danger = danger;
     }
     
     public boolean getDanger() {
-        return danger;
+        return this.danger;
     }
     
     /**
@@ -29,21 +27,21 @@ public class OutOfRange {
      * 
      * @return Direction to head towards
      */
-    public Direction changeDirection() {
+    public Direction changeDirection(MapArea mapArea) {
         
-        if (currentDirection == Direction.N) {
+        if (mapArea.getHeading() == Direction.N) {
             if (mapArea.getEastDistance() < mapArea.getWestDistance()) {
                 return Direction.W;
             } else {
                 return Direction.E;
             }
-        } else if (currentDirection == Direction.E){
+        } else if (mapArea.getHeading() == Direction.E){
             if (mapArea.getSouthDistance() < mapArea.getNorthDistance()) {
                 return Direction.N;
             } else {
                 return Direction.S;
             }
-        } else if (currentDirection == Direction.W) {
+        } else if (mapArea.getHeading() == Direction.W) {
             if (mapArea.getNorthDistance() < mapArea.getSouthDistance()) {
                 return Direction.S;
             } else {

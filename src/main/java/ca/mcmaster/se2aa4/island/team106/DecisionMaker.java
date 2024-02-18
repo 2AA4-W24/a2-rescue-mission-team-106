@@ -23,11 +23,17 @@ public class DecisionMaker {
 
 
     public void makeDecisions(JSONObject parameters, JSONObject decision) {
-        if (outOfRange.getDanger()) {
-            Direction nextDirection = this.outOfRange.changeDirection();
-            // this.mapArea.setHeading(nextDirection);
-            // logger.info(nextDirection);
+        if (this.outOfRange.getDanger()) {
+            Direction nextDirection = this.outOfRange.changeDirection(this.mapArea);
+            logger.info("CHANGING DIRECTION TO " + nextDirection);
+            // This was added to make sure an action was being fed in and not
+            // just heading being updated.
             this.drone.updateHeading(parameters, decision, nextDirection);
+            // The reason I am doing it this way is coz i don't want to pass in
+            // another value of lastDistance as that could be wrong due to the
+            // lastDistance being that of ground. So basically, I just reset the
+            // thing.
+            this.outOfRange.setDanger(false); 
         }
         else if (drone.getStatus() == Status.START_STATE)
         {

@@ -57,7 +57,7 @@ public class MapArea {
     }
 
     public int getLastDistance() {
-        return lastDistance;
+        return this.lastDistance;
     }
 
     public void setNorthDistance(int distance) {
