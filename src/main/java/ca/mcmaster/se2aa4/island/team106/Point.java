@@ -47,7 +47,7 @@ public class Point {
     }
 
     public int pointKey(){
-        return this.x + this.y; 
+        return this.x - this.y; 
     }
 
 }
