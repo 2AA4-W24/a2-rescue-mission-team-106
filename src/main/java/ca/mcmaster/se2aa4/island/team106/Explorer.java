@@ -17,7 +17,8 @@ public class Explorer implements IExplorerRaid {
     private MapArea mapArea = new MapArea(); 
     private GroundFinder groundFinder = new GroundFinder(); 
     private Drone drone = new Drone(0, Direction.N, mapArea);
-    private DecisionMaker decisionMaker = new DecisionMaker(drone, groundFinder, islandReacher, mapArea);
+    private OutOfRange outOfRangeHandler = new OutOfRange(mapArea);
+    private DecisionMaker decisionMaker = new DecisionMaker(drone, groundFinder, islandReacher, mapArea, outOfRangeHandler);
 
     @Override
     public void initialize(String s) {
@@ -78,8 +79,17 @@ public class Explorer implements IExplorerRaid {
         if (extraInfo.has("found"))
         {
             String echoResult = extraInfo.getString("found");
+            int echoInt = extraInfo.getInt("range");
+            mapArea.setLastDistance(echoInt);
+
             
-            if (drone.getStatus() == Status.START_STATE)
+            if (echoResult.equals("OUT_OF_RANGE")) {
+                outOfRangeHandler.setDanger(echoInt);
+                if (outOfRangeHandler.getDanger()) {
+                    logger.info("Approaching OUT OF RANGE area");
+                }
+            }
+            else if (drone.getStatus() == Status.START_STATE)
             {
                 logger.info("CURRENT STATE: " + Status.START_STATE);
                 if (echoResult.equals("GROUND")) { 
@@ -93,14 +103,14 @@ public class Explorer implements IExplorerRaid {
                     }
     
                     mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground 
-                    drone.setStatus(Status.GROUND_STATE); // transiiton into a new state of our algorithm ground_state
+                    drone.setStatus(Status.GROUND_STATE); // transition into a new state of our algorithm ground_state
 
                 }
             }
             else if (drone.getStatus() == Status.GROUND_STATE)
             {
                 logger.info("CURRENT STATE: " + Status.GROUND_STATE);
-                if (echoResult.equals("GROUND")) { // these echo results right here are infront of our drone since we are verifying after our turn that the ground is still in front of us
+                if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
                     drone.setGroundStatus(true);
                     logger.info("GROUND HAS BEEN FOUND INFRONT CONFIRMED!");
                     int tiles = extraInfo.getInt("range");
@@ -109,16 +119,7 @@ public class Explorer implements IExplorerRaid {
                     drone.setStatus(Status.GROUND_FOUND_STATE);
                 }
                 else{
-                    drone.setStatus(Status.START_STATE); // ground is no longer found need to go back to start state since we dont have that "concept" of found
-                }
-            }
-            if (echoResult.equals("OUT_OF_RANGE")) {
-                if (extraInfo.has("range")) {
-                    int echoInt = extraInfo.getInt("range");
-                    if (echoInt <= 2 && mapArea.getPrevEchoDirection() == mapArea.getHeading()) {
-                        groundFinder.setDanger(true); 
-                        logger.info("Approaching OUT OF RANGE area");
-                    }
+                    drone.setStatus(Status.START_STATE); // ground is no longer found need to go back to start state since we don't have that "concept" of found
                 }
             }
         }

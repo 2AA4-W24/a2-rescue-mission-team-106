@@ -10,25 +10,33 @@ public class DecisionMaker {
     private Drone drone; 
     private GroundFinder groundFinder; 
     private IslandReacher islandReacher; 
-    private MapArea mapArea; 
+    private MapArea mapArea;
+    private OutOfRange outOfRange;
 
-    public DecisionMaker(Drone drone, GroundFinder groundFinder, IslandReacher islandReacher, MapArea mapArea){
+    public DecisionMaker(Drone drone, GroundFinder groundFinder, IslandReacher islandReacher, MapArea mapArea, OutOfRange outOfRange){
         this.drone = drone; 
         this.groundFinder = groundFinder; 
         this.islandReacher = islandReacher; 
-        this.mapArea = mapArea; 
+        this.mapArea = mapArea;
+        this.outOfRange = outOfRange;
     }
 
 
-    public void makeDecisions(JSONObject parameters, JSONObject decision){
-        if (drone.getStatus() == Status.START_STATE)
+    public void makeDecisions(JSONObject parameters, JSONObject decision) {
+        if (outOfRange.getDanger()) {
+            Direction nextDirection = this.outOfRange.changeDirection();
+            // this.mapArea.setHeading(nextDirection);
+            // logger.info(nextDirection);
+            this.drone.updateHeading(parameters, decision, nextDirection);
+        }
+        else if (drone.getStatus() == Status.START_STATE)
         {
-            this.groundFinder.fly(this.drone, decision, parameters);
+            this.groundFinder.fly(this.drone, decision, parameters, mapArea);
         }
         else if (drone.getStatus() == Status.GROUND_STATE) // now we want to fly towards the ground, so a this point we have updated our current heading so it MUST me different than our previous heading
         { 
             if (this.mapArea.getHeading() == this.mapArea.getGroundEchoDirection()){
-                this.drone.echoForwards(parameters, decision); // this is called to verify that after turning the ground is physically infront of the drone and not in the "general" direction
+                this.drone.echoForwards(parameters, decision); // this is called to verify that after turning the ground is physically in front of the drone and not in the "general" direction
             }
             else{
                 Direction echoGroundDirection = this.mapArea.getGroundEchoDirection(); 
