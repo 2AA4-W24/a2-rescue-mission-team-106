@@ -3,7 +3,7 @@ package ca.mcmaster.se2aa4.island.team106;
 public class OutOfRange {
     private boolean danger;
     
-    public final int RANGE_BORDER = 2;
+    private final int RANGE_BORDER = 2;
     
     
     public void setDanger(int limit, MapArea mapArea) {
