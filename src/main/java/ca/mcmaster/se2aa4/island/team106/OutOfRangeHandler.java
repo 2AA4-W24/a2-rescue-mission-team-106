@@ -1,6 +1,6 @@
 package ca.mcmaster.se2aa4.island.team106;
 
-public class OutOfRange {
+public class OutOfRangeHandler {
     private boolean danger;
     
     private final int RANGE_BORDER = 2;

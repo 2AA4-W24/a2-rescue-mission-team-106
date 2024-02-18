@@ -14,11 +14,10 @@ public class Explorer implements IExplorerRaid {
     private final Logger logger = LogManager.getLogger();
     private IslandReacher islandReacher = new IslandReacher(0); 
     private Direction heading;
-    private MapArea mapArea = new MapArea(); 
-    private GroundFinder groundFinder = new GroundFinder(); 
+    private MapArea mapArea = new MapArea();
     private Drone drone = new Drone(0, Direction.N, mapArea);
-    private OutOfRange outOfRangeHandler = new OutOfRange();
-    private DecisionMaker decisionMaker = new DecisionMaker(drone, groundFinder, islandReacher, mapArea, outOfRangeHandler);
+    private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
+    private DecisionMaker decisionMaker = new DecisionMaker(drone, islandReacher, mapArea, outOfRangeHandler);
 
     @Override
     public void initialize(String s) {

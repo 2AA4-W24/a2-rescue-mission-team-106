@@ -11,20 +11,20 @@ public class DecisionMaker {
     private GroundFinder groundFinder; 
     private IslandReacher islandReacher; 
     private MapArea mapArea;
-    private OutOfRange outOfRange;
+    private OutOfRangeHandler outOfRangeHandler;
 
-    public DecisionMaker(Drone drone, GroundFinder groundFinder, IslandReacher islandReacher, MapArea mapArea, OutOfRange outOfRange){
+    public DecisionMaker(Drone drone, IslandReacher islandReacher, MapArea mapArea, OutOfRangeHandler outOfRangeHandler){
         this.drone = drone; 
-        this.groundFinder = groundFinder; 
+        this.groundFinder = new GroundFinder(mapArea); 
         this.islandReacher = islandReacher; 
         this.mapArea = mapArea;
-        this.outOfRange = outOfRange;
+        this.outOfRangeHandler = outOfRangeHandler;
     }
 
 
     public void makeDecisions(JSONObject parameters, JSONObject decision) {
-        if (this.outOfRange.getDanger()) {
-            Direction nextDirection = this.outOfRange.changeDirection(this.mapArea);
+        if (this.outOfRangeHandler.getDanger()) {
+            Direction nextDirection = this.outOfRangeHandler.changeDirection(this.mapArea);
             logger.info("CHANGING DIRECTION TO " + nextDirection);
             // This was added to make sure an action was being fed in and not
             // just heading being updated.
@@ -33,11 +33,11 @@ public class DecisionMaker {
             // another value of lastDistance as that could be wrong due to the
             // lastDistance being that of ground. So basically, I just reset the
             // thing.
-            this.outOfRange.setDanger(false); 
+            this.outOfRangeHandler.setDanger(false); 
         }
         else if (drone.getStatus() == Status.START_STATE)
         {
-            this.groundFinder.fly(this.drone, decision, parameters, mapArea);
+            this.groundFinder.fly(this.drone, decision, parameters);
         }
         else if (drone.getStatus() == Status.GROUND_STATE) // now we want to fly towards the ground, so a this point we have updated our current heading so it MUST me different than our previous heading
         { 
