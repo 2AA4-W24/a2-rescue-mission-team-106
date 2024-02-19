@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 public class GroundFinder {
     private int counts = 1;
+    // private boolean canTransition = false; 
 
     private final Logger logger = LogManager.getLogger();
 
@@ -28,26 +29,67 @@ public class GroundFinder {
      */
 
     public void fly(Drone drone, JSONObject decision, JSONObject parameters) {
-        if (this.counts % 5 == 0) {
-            drone.fly(decision);
-        } else if (this.counts % 5 == 1) {
-            logger.info("ECHOING EAST");
-            drone.echoEast(parameters, decision);
-            this.mapArea.setWestDistance(this.mapArea.getLastDistance());
-        } else if (this.counts % 5 == 2) {
-            logger.info("ECHOING SOUTH");
-            drone.echoSouth(parameters, decision);
-            this.mapArea.setEastDistance(this.mapArea.getLastDistance());
-        } else if (this.counts % 5 == 3) {
-            logger.info("ECHOING NORTH");
-            drone.echoNorth(parameters, decision);
-            this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
-        } else if (this.counts % 5 == 4) {
-            logger.info("ECHOING WEST");
-            drone.echoWest(parameters, decision);
-            this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
+
+        if (drone.getGroundStatus()){
+            drone.updateHeading(parameters, decision, mapArea.getNewHeading());
+            // canTransition = true;
+            drone.setStatus(Status.GROUND_STATE); 
+            logger.info("SETTING TURN STATUS TO TRUE");
         }
-        this.counts++;
+        else{ 
+            if (this.counts % 5 == 0) {
+                drone.fly(decision);
+            } else if (this.counts % 5 == 1) {
+                logger.info("ECHOING EAST");
+                drone.echoEast(parameters, decision);
+                this.mapArea.setWestDistance(this.mapArea.getLastDistance());
+            } else if (this.counts % 5 == 2) {
+                logger.info("ECHOING SOUTH");
+                drone.echoSouth(parameters, decision);
+                this.mapArea.setEastDistance(this.mapArea.getLastDistance());
+            } else if (this.counts % 5 == 3) {
+                logger.info("ECHOING NORTH");
+                drone.echoNorth(parameters, decision);
+                this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
+            } else if (this.counts % 5 == 4) {
+                logger.info("ECHOING WEST");
+                drone.echoWest(parameters, decision);
+                this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
+            }
+            // else if (this.counts % 6 == 5 ){
+            //     drone.scan(decision);
+            // }
+
+            this.counts++;
+        }
+
+        
+        // if (this.counts % 6 == 0) {
+        //     drone.fly(decision);
+        // } else if (this.counts % 6 == 1) {
+        //     logger.info("ECHOING EAST");
+        //     drone.echoEast(parameters, decision);
+        //     this.mapArea.setWestDistance(this.mapArea.getLastDistance());
+        // } else if (this.counts % 6 == 2) {
+        //     logger.info("ECHOING SOUTH");
+        //     drone.echoSouth(parameters, decision);
+        //     this.mapArea.setEastDistance(this.mapArea.getLastDistance());
+        // } else if (this.counts % 6 == 3) {
+        //     logger.info("ECHOING NORTH");
+        //     drone.echoNorth(parameters, decision);
+        //     this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
+        // } else if (this.counts % 6 == 4) {
+        //     logger.info("ECHOING WEST");
+        //     drone.echoWest(parameters, decision);
+        //     this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
+        // }
+        // else if (this.counts % 6 == 5 ){
+        //     drone.scan(decision);
+        // }
+
+        logger.info("DRONE IS CURRENTLY FACING: " + mapArea.getHeading());
+        
+        // this.counts++;
     }
 
 }

@@ -12,6 +12,8 @@ public class DecisionMaker {
     private IslandReacher islandReacher; 
     private MapArea mapArea;
     private OutOfRangeHandler outOfRangeHandler;
+    private boolean trial = false; 
+    int counts = 1;
 
     public DecisionMaker(Drone drone, IslandReacher islandReacher, MapArea mapArea, OutOfRangeHandler outOfRangeHandler){
         this.drone = drone; 
@@ -37,11 +39,17 @@ public class DecisionMaker {
         }
         else if (drone.getStatus() == Status.START_STATE)
         {
+            logger.info("STATE STATUS " + Status.START_STATE);
+            logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
             this.groundFinder.fly(this.drone, decision, parameters);
         }
         else if (drone.getStatus() == Status.GROUND_STATE) // now we want to fly towards the ground, so a this point we have updated our current heading so it MUST me different than our previous heading
         { 
+            logger.info("STATE STATUS " + Status.GROUND_STATE);
+            logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
+            logger.info("map area ground ECHO DIRECTION : " + mapArea.getGroundEchoDirection());
             if (this.mapArea.getHeading() == this.mapArea.getGroundEchoDirection()){
+                logger.info("CALLING FOR VERIFICATION NOW");
                 this.drone.echoForwards(parameters, decision); // this is called to verify that after turning the ground is physically in front of the drone and not in the "general" direction
             }
             else{
@@ -52,11 +60,20 @@ public class DecisionMaker {
         else if (this.drone.getStatus() == Status.GROUND_FOUND_STATE)
         {
             logger.info("STATE STATUS " + Status.GROUND_FOUND_STATE);
+            logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
             this.islandReacher.fly(this.drone, decision); // takes care of flying to the island
         }
         else if (drone.getStatus() == Status.ISLAND_STATE){
-            logger.info("STATE STATUS " + Status.ISLAND_STATE);
-            this.drone.stop(decision); // we stop the exploration immediately
+            logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
+            if (!this.trial){
+                logger.info("FIRST SCAN TAKING PLACE AT ISLAND STATE!");
+                this.drone.scan(decision);
+                this.trial = true; 
+            }
+            else{
+                logger.info("ENDING DRONE EXPLORATION NOW!");
+                this.drone.stop(decision); // we stop the exploration immediately
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ public class MapArea {
 
     private Direction heading; // direction the drone is facing
     private Direction prevHeading; // the previous direction the drone was facing 
+    private Direction newHeading; // this is the updated direction the drone needs to turn
     private Direction prevEchoDirection;  // most recent echo direction
     private Direction groundEchoDirection; // direction ground is facing relative to the drone from last echo
     private HashMap<Integer, Object> pointsOfInterestMap = new HashMap<>();
@@ -12,11 +13,8 @@ public class MapArea {
     private int lastDistance;
 
 
-    // These will store if there is ground or no ground when we echo. These will
-    // tell is relative to our drones coordinates
-    // ? Imo there was no point in setting them up as EchoResponse as they would
-    // ? then not serve any purpose. That is why I am using them to store int
-    // ? values for distances.
+    //? Maybe to rep the case of "OUT_OF_RANGE" we can put a negative distance because we know that value cannot be achieved
+    //? So that way when we want to check different cardinal directions if we get a negative distance, that tells us there is no land in that cardinal direction
     private int northDistance = 0; // GROUND/ OUT_OF_RANGE
     private int eastDistance = 0; 
     private int westDistance = 0; 
@@ -25,6 +23,10 @@ public class MapArea {
 
     public Direction getPrevEchoDirection(){
         return this.prevEchoDirection;
+    }
+
+    public Direction getNewHeading(){
+        return this.newHeading; 
     }
 
     public Direction getGroundEchoDirection(){
@@ -42,6 +44,10 @@ public class MapArea {
 
     public void setGroundEchoDirection(Direction echoDirection){
         this.groundEchoDirection = echoDirection;  
+    }
+
+    public void setNewHeading(Direction newHeading){
+        this.newHeading = newHeading; 
     }
 
 
