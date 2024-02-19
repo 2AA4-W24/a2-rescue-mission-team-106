@@ -1,4 +1,5 @@
 package ca.mcmaster.se2aa4.island.team106;
+import java.util.*;
 
 public class MapArea {
 
@@ -6,6 +7,7 @@ public class MapArea {
     private Direction prevHeading; // the previous direction the drone was facing 
     private Direction prevEchoDirection;  // most recent echo direction
     private Direction groundEchoDirection; // direction ground is facing relative to the drone from last echo
+    private HashMap<Integer, Object> pointsOfInterestMap = new HashMap<>();
 
     private int lastDistance;
 

@@ -46,4 +46,8 @@ public class Point {
         return Math.sqrt( (this.x * this.x) + (this.y * this.y));
     }
 
+    public int pointKey(){
+        return this.x - this.y; 
+    }
+
 }
