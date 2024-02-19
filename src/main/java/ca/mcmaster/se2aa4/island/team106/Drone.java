@@ -1,12 +1,17 @@
 package ca.mcmaster.se2aa4.island.team106;
 import org.json.JSONObject;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Drone {
     private int batteryLevel;
     private boolean groundStatus; 
     private Status status; 
     private Actions action = new Actions(); 
     private MapArea mapArea; 
+    private final Logger logger = LogManager.getLogger();
+
 
     public Drone(int batteryLevel, Direction heading, MapArea mapArea){
         this.mapArea = mapArea; 
@@ -134,9 +139,11 @@ public class Drone {
 
     
     public void updateHeading(JSONObject parameter, JSONObject decision, Direction updatedHeading){
+        logger.info("HERE IS SOME INFORMATION ABOUT WHATS HAPPENING: UPDATED HEADING: " + updatedHeading +" droneHEADING " + this.mapArea.getHeading());
         if (updatedHeading != this.mapArea.getHeading()){
             this.mapArea.setHeading(updatedHeading); // update the status of our drones heading
             this.action.heading(parameter, decision, updatedHeading); // physically update the drone on our map
+            logger.info("I HAVE OFFICIALLY TURNED THE DRONE! WITH STATUS OF " + mapArea.getHeading());
         }
     }
 

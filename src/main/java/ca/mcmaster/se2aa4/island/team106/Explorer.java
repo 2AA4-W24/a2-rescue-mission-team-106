@@ -91,20 +91,21 @@ public class Explorer implements IExplorerRaid {
             else if (drone.getStatus() == Status.START_STATE)
             {
                 logger.info("CURRENT STATE: " + Status.START_STATE);
+                Direction groundDirection = mapArea.getPrevEchoDirection();  // store the ground direction we have ground
+
                 if (echoResult.equals("GROUND")) { 
-                    drone.setGroundStatus(true); 
-                    Direction groundDirection = mapArea.getPrevEchoDirection();  
-                    logger.info("GROUND HAS BEEN FOUND!");
-                    logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
+                    drone.setGroundStatus(true);  // ground has been ground so notify drone that status of ground found is true
+                    logger.info("GROUND HAS BEEN FOUND AT " + groundDirection);
 
-                    if (groundDirection != mapArea.getHeading()){ 
-                        mapArea.setHeading(groundDirection); 
+
+                    if (groundDirection != mapArea.getHeading()){ //! map is updated to date with the heading the drone should be facing to go to ground
+                        mapArea.setNewHeading(groundDirection);
+                        logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
                     }
-    
-                    mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground 
-                    drone.setStatus(Status.GROUND_STATE); // transition into a new state of our algorithm ground_state
 
+                    mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
                 }
+              
             }
             else if (drone.getStatus() == Status.GROUND_STATE)
             {
@@ -112,7 +113,7 @@ public class Explorer implements IExplorerRaid {
                 if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
                     drone.setGroundStatus(true);
                     logger.info("GROUND HAS BEEN FOUND IN FRONT CONFIRMED!");
-
+                    
                     islandReacher.setTiles(echoInt);
                     drone.setStatus(Status.GROUND_FOUND_STATE);
                 }
