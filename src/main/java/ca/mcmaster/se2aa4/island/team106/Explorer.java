@@ -79,7 +79,7 @@ public class Explorer implements IExplorerRaid {
         {
             String echoResult = extraInfo.getString("found");
             int echoInt = extraInfo.getInt("range");
-            mapArea.setLastDistance(echoInt);
+            mapArea.setLastDistance(echoInt);   // Sets the last distance echoed till either out of range or ground.
 
             
             if (echoResult.equals("OUT_OF_RANGE")) {
@@ -111,10 +111,9 @@ public class Explorer implements IExplorerRaid {
                 logger.info("CURRENT STATE: " + Status.GROUND_STATE);
                 if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
                     drone.setGroundStatus(true);
-                    logger.info("GROUND HAS BEEN FOUND INFRONT CONFIRMED!");
-                    int tiles = extraInfo.getInt("range");
+                    logger.info("GROUND HAS BEEN FOUND IN FRONT CONFIRMED!");
 
-                    islandReacher.setTiles(tiles);
+                    islandReacher.setTiles(echoInt);
                     drone.setStatus(Status.GROUND_FOUND_STATE);
                 }
                 else{

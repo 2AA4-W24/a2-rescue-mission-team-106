@@ -18,11 +18,13 @@ public class GroundFinder {
 
     /*
      * The reason west distance is being set during east, or east distance is
-     * being set during west is because when u call the thing, it creates a
-     * record. However, you can only read from the record during the acknowledge
-     * results. Since this does not get called until after the acknowledge
-     * results, the moment during which the distance can be updated is when the
-     * next record is being created.
+     * being set during west is because of the asynchronous nature of the
+     * operation. When u call the 'fly' method, it creates a record in the JSON
+     * file. However, you can only read from the record during the acknowledge
+     * results call. Since the 'fly' method does not get called until the next
+     * call of take decision which happens after the acknowledge results method,
+     * the moment during which the distance can be updated is when the next
+     * record is being created.
      */
 
     public void fly(Drone drone, JSONObject decision, JSONObject parameters) {

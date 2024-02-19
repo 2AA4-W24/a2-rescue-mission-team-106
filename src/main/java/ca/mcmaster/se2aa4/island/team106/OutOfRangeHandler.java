@@ -3,7 +3,9 @@ package ca.mcmaster.se2aa4.island.team106;
 public class OutOfRangeHandler {
     private boolean danger;
     
-    private final int RANGE_BORDER = 2;
+    // The reason it is 5 is to allow us some buffer to turn as 2 is the minimum
+    // number of blocks we need for it to successfully turn.
+    private final int RANGE_BORDER = 5;
     
     
     public void setDanger(int limit, MapArea mapArea) {
@@ -25,6 +27,7 @@ public class OutOfRangeHandler {
     /**
      * Changes the direction if too close to the border
      * 
+     * @param mapArea to obtain the distance for each out of range call
      * @return Direction to head towards
      */
     public Direction changeDirection(MapArea mapArea) {
