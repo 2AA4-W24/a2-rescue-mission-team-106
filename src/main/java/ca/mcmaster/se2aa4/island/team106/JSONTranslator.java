@@ -51,7 +51,9 @@ public class JSONTranslator {
 
             if (echoResult.equals("OUT_OF_RANGE")) {
                 outOfRangeAction(echoInt);
-            } else if (drone.getStatus() == Status.START_STATE) {
+            }
+            
+            if (drone.getStatus() == Status.START_STATE) {
                 startStateHandler(echoResult);
             } else if (drone.getStatus() == Status.GROUND_STATE) {
                 groundStateHandler(echoResult, echoInt);
