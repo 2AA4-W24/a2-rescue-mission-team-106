@@ -18,7 +18,7 @@ public class Explorer implements IExplorerRaid {
     private Drone drone = new Drone(0, Direction.N, mapArea);
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, islandReacher, mapArea, outOfRangeHandler);
-    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(logger, drone, mapArea, outOfRangeHandler, islandReacher);
+    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler, islandReacher);
 
     @Override
     public void initialize(String s) {

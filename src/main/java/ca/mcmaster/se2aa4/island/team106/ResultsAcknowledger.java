@@ -1,18 +1,18 @@
 package ca.mcmaster.se2aa4.island.team106;
 
 import org.json.JSONObject;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ResultsAcknowledger {
 
-    Logger logger;
+    private final Logger logger = LogManager.getLogger();
     Drone drone;
     MapArea mapArea;
     OutOfRangeHandler outOfRangeHandler;
     IslandReacher islandReacher;
 
-    public ResultsAcknowledger(Logger logger, Drone drone, MapArea mapArea, OutOfRangeHandler handler, IslandReacher islandReacher) {
-        this.logger = logger;
+    public ResultsAcknowledger(Drone drone, MapArea mapArea, OutOfRangeHandler handler, IslandReacher islandReacher) {
         this.drone = drone;
         this.mapArea = mapArea;
         this.outOfRangeHandler = handler;
