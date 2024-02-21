@@ -18,6 +18,7 @@ public class Explorer implements IExplorerRaid {
     private Drone drone = new Drone(0, Direction.N, mapArea);
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, islandReacher, mapArea, outOfRangeHandler);
+    private JSONTranslator translator = new JSONTranslator(logger, drone, mapArea, outOfRangeHandler, islandReacher);
 
     @Override
     public void initialize(String s) {
@@ -56,75 +57,10 @@ public class Explorer implements IExplorerRaid {
 
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
 
-        logger.info("** Response received:\n"+response.toString(2));
-
-        Integer cost = response.getInt("cost");
-        logger.info("The cost of the action was {}", cost);
-
-        if (drone.canMakeDecision(cost.intValue())){
-            drone.useBattery(cost.intValue());
-        }
-
-        //get the status same idea as above
-        String status = response.getString("status");
-        logger.info("The status of the drone is {}", status);
-
-        // get the 'extras' value same idea as above
-        JSONObject extraInfo = response.getJSONObject("extras");
-        // String foundInfo = extraInfo.getString("found");
-        // Integer range = extraInfo.getInt("range");
-        logger.info("Additional information received: {}", extraInfo);
-
-        if (extraInfo.has("found"))
-        {
-            String echoResult = extraInfo.getString("found");
-            int echoInt = extraInfo.getInt("range");
-            mapArea.setLastDistance(echoInt);   // Sets the last distance echoed till either out of range or ground.
-
-            
-            if (echoResult.equals("OUT_OF_RANGE")) {
-                outOfRangeHandler.setDanger(echoInt, mapArea);
-                if (outOfRangeHandler.getDanger()) {
-                    logger.info("Approaching OUT OF RANGE area");
-                }
-            }
-            else if (drone.getStatus() == Status.START_STATE)
-            {
-                logger.info("CURRENT STATE: " + Status.START_STATE);
-                Direction groundDirection = mapArea.getPrevEchoDirection();  // store the ground direction we have ground
-
-                if (echoResult.equals("GROUND")) { 
-                    drone.setGroundStatus(true);  // ground has been ground so notify drone that status of ground found is true
-                    logger.info("GROUND HAS BEEN FOUND AT " + groundDirection);
-
-
-                    if (groundDirection != mapArea.getHeading()){ //! map is updated to date with the heading the drone should be facing to go to ground
-                        mapArea.setNewHeading(groundDirection);
-                        logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
-                    }
-
-                    mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
-                }
-              
-            }
-            else if (drone.getStatus() == Status.GROUND_STATE)
-            {
-                logger.info("CURRENT STATE: " + Status.GROUND_STATE);
-                if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
-                    drone.setGroundStatus(true);
-                    logger.info("GROUND HAS BEEN FOUND IN FRONT CONFIRMED!");
-                    
-                    islandReacher.setTiles(echoInt);
-                    drone.setStatus(Status.GROUND_FOUND_STATE);
-                }
-                else{
-                    drone.setStatus(Status.START_STATE); // ground is no longer found need to go back to start state since we don't have that "concept" of found
-                }
-            }
-        }
-
-        logger.info("Drone Battery:" + drone.getBatteryLevel() + " Heading: " + mapArea.getHeading());
-        logger.info("\n");
+        translator.determineCost(response);
+        translator.displayStatus(response);
+        translator.parseRecord(response);
+        translator.displayBatteryHeading();
     }
 
     @Override
