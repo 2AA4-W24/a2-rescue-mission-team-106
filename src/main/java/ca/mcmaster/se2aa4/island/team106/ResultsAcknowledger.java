@@ -3,7 +3,7 @@ package ca.mcmaster.se2aa4.island.team106;
 import org.json.JSONObject;
 import org.apache.logging.log4j.Logger;
 
-public class JSONTranslator {
+public class ResultsAcknowledger {
 
     Logger logger;
     Drone drone;
@@ -11,7 +11,7 @@ public class JSONTranslator {
     OutOfRangeHandler outOfRangeHandler;
     IslandReacher islandReacher;
 
-    public JSONTranslator(Logger logger, Drone drone, MapArea mapArea, OutOfRangeHandler handler, IslandReacher islandReacher) {
+    public ResultsAcknowledger(Logger logger, Drone drone, MapArea mapArea, OutOfRangeHandler handler, IslandReacher islandReacher) {
         this.logger = logger;
         this.drone = drone;
         this.mapArea = mapArea;

@@ -18,7 +18,7 @@ public class Explorer implements IExplorerRaid {
     private Drone drone = new Drone(0, Direction.N, mapArea);
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, islandReacher, mapArea, outOfRangeHandler);
-    private JSONTranslator translator = new JSONTranslator(logger, drone, mapArea, outOfRangeHandler, islandReacher);
+    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(logger, drone, mapArea, outOfRangeHandler, islandReacher);
 
     @Override
     public void initialize(String s) {
@@ -57,10 +57,10 @@ public class Explorer implements IExplorerRaid {
 
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
 
-        translator.determineCost(response);
-        translator.displayStatus(response);
-        translator.parseRecord(response);
-        translator.displayBatteryHeading();
+        acknowledger.determineCost(response);
+        acknowledger.displayStatus(response);
+        acknowledger.parseRecord(response);
+        acknowledger.displayBatteryHeading();
     }
 
     @Override
