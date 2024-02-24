@@ -30,6 +30,15 @@ public class Point {
         this.y = y;
     }
 
+    public int getXCoordinate(){
+        return this.x; 
+    }
+
+    public int getYCoordinate(){
+        return this.y; 
+    }
+
+
     
     public double getDistance(Point one, Point two){
         double distance = Math.sqrt(Math.pow(two.x - one.x, 2) + Math.pow(two.y - one.y, 2));

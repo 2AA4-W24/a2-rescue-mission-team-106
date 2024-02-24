@@ -12,9 +12,9 @@ import org.json.JSONTokener;
 public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
-    private IslandReacher islandReacher = new IslandReacher(0); 
-    private Direction heading;
     private MapArea mapArea = new MapArea();
+    private IslandReacher islandReacher = new IslandReacher(0, mapArea); 
+    private Direction heading;
     private Drone drone = new Drone(0, Direction.N, mapArea);
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, islandReacher, mapArea, outOfRangeHandler);
@@ -83,12 +83,14 @@ public class Explorer implements IExplorerRaid {
 
             
             if (echoResult.equals("OUT_OF_RANGE")) {
+                // logger.info("TRACER BULLET ACTIAVTE!");
                 outOfRangeHandler.setDanger(echoInt, mapArea);
                 if (outOfRangeHandler.getDanger()) {
                     logger.info("Approaching OUT OF RANGE area");
                 }
             }
-            else if (drone.getStatus() == Status.START_STATE)
+            
+            if (drone.getStatus() == Status.START_STATE)
             {
                 logger.info("CURRENT STATE: " + Status.START_STATE);
                 Direction groundDirection = mapArea.getPrevEchoDirection();  // store the ground direction we have ground
@@ -111,7 +113,7 @@ public class Explorer implements IExplorerRaid {
             {
                 logger.info("CURRENT STATE: " + Status.GROUND_STATE);
                 if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
-                    drone.setGroundStatus(true);
+                    
                     logger.info("GROUND HAS BEEN FOUND IN FRONT CONFIRMED!");
                     
                     islandReacher.setTiles(echoInt);
@@ -119,11 +121,31 @@ public class Explorer implements IExplorerRaid {
                 }
                 else{
                     drone.setStatus(Status.START_STATE); // ground is no longer found need to go back to start state since we don't have that "concept" of found
+                    drone.setGroundStatus(false);
+                }
+            }
+            else if (drone.getStatus() == Status.ISLAND_STATE){
+                logger.info("@ ISLAND STATE WITH ECHO RESULT OF : " + echoResult);
+            
+                if (echoResult.equals("GROUND")){
+                   logger.info("WE ARE STILL ABOVE GROUND ON THIS ECHO SO WE WILL MARK BY SCANNING ON NEXT MOVE,  THEN AFTER THAT MOVE WE WILL FLY");
+
+                    if (!mapArea.getIsAboveGround()){
+                        Direction groundDirection = mapArea.getPrevEchoDirection(); 
+                        mapArea.setHeading(groundDirection);
+                    }
+
+                }
+                else{
+                    logger.info("NO LONGER ABOVE THE ISLAND! SETTING FLAG TO FALSE");
+                    mapArea.setIsAboveGround(false);
                 }
             }
         }
 
-        logger.info("Drone Battery:" + drone.getBatteryLevel() + " Heading: " + mapArea.getHeading());
+
+
+        logger.info("Drone Battery:" + drone.getBatteryLevel() + " Heading: " + mapArea.getHeading() + " X: " + mapArea.getDroneX() + " Y: " + mapArea.getDroneY());
         logger.info("\n");
     }
 

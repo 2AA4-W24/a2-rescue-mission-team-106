@@ -3,6 +3,9 @@ import java.util.*;
 
 public class MapArea {
 
+    private boolean isAboveGround = false; //initally drone is not above the island
+    private Point droneCoordinates = new Point(0, 0); // drone originally spawns at 0,0
+
     private Direction heading; // direction the drone is facing
     private Direction prevHeading; // the previous direction the drone was facing 
     private Direction newHeading; // this is the updated direction the drone needs to turn
@@ -20,9 +23,44 @@ public class MapArea {
     private int westDistance = 0; 
     private int southDistance = 0; 
 
+    public void updateCoordinate(Direction direction){
+        int newX, newY; 
+        switch(direction) {
+            case E:
+                newX = this.droneCoordinates.getXCoordinate() + 1;
+                this.droneCoordinates.setXCoordinate(newX);
+                break;
+            case W:
+                newX = this.droneCoordinates.getXCoordinate() - 1;
+                this.droneCoordinates.setXCoordinate(newX);
+                break;
+            case S:
+                newY = this.droneCoordinates.getYCoordinate() - 1;
+                this.droneCoordinates.setYCoordinate(newY);
+                break;
+            case N:
+                newY = this.droneCoordinates.getYCoordinate() + 1;
+                this.droneCoordinates.setYCoordinate(newY);
+                break;
+        }
+    }
+
+
+    public int getDroneX(){
+        return this.droneCoordinates.getXCoordinate();
+    }
+
+    public int getDroneY(){
+        return this.droneCoordinates.getYCoordinate();
+    }
+
 
     public Direction getPrevEchoDirection(){
         return this.prevEchoDirection;
+    }
+
+    public boolean getIsAboveGround(){
+        return this.isAboveGround;
     }
 
     public Direction getNewHeading(){
@@ -40,6 +78,10 @@ public class MapArea {
 
     public Direction getHeading(){
         return this.heading; 
+    }
+
+    public void setIsAboveGround(boolean isAboveGroundStatus){
+        this.isAboveGround = isAboveGroundStatus; 
     }
 
     public void setGroundEchoDirection(Direction echoDirection){
