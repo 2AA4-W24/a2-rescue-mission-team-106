@@ -6,15 +6,23 @@ import org.json.JSONObject;
 
 public class IslandReacher{
     private int tiles; 
+    private MapArea mapArea;
     private final Logger logger = LogManager.getLogger();
-    // private int command = 1; 
+    
+    private int command = 1; 
+
+    // as we fly towards the isalnd, we echo left and right to see 
+
+
+
     //! You can uncomment the above line when you want to debug and use scan to physically see the trace of the drone on the map
     //! Currently this is commented to save on battery cost 
 
 
 
-    public IslandReacher(int tiles){
+    public IslandReacher(int tiles, MapArea mapArea){
         this.tiles = tiles; 
+        this.mapArea = mapArea; 
     }
 
     public void setTiles(int tiles){
@@ -39,11 +47,16 @@ public class IslandReacher{
         //     drone.scan(decision);
         // }
 
+      
+
 
         // this.command++;
 
         if (this.tiles <= 0){
+            mapArea.setIsAboveGround(true);
             drone.setStatus(Status.ISLAND_STATE);
         }
     }
+
+
 }

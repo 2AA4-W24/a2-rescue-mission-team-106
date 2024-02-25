@@ -12,9 +12,9 @@ import org.json.JSONTokener;
 public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
-    private IslandReacher islandReacher = new IslandReacher(0); 
-    private Direction heading;
     private MapArea mapArea = new MapArea();
+    private IslandReacher islandReacher = new IslandReacher(0, mapArea); 
+    private Direction heading;
     private Drone drone = new Drone(0, Direction.N, mapArea);
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, islandReacher, mapArea, outOfRangeHandler);
