@@ -62,6 +62,7 @@ public class DecisionMaker {
         }
         else if (drone.getStatus() == Status.ISLAND_STATE){
             logger.info("STATE STATUS " + Status.ISLAND_STATE);
+
             logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
             // lengthFinder.getLength(drone, decision, parameters);
             // drone.stop(decision);
