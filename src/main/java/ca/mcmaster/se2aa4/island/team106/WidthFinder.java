@@ -26,7 +26,6 @@ public class WidthFinder {
         if (!hasWidth)
         {
 
-            // ! need to code teh other cases of getEchoWest, getEchoEast etc... it implements same logic with the else statmeent saying FUCKING hit
             if (mapArea.getPrevHeading() == Direction.S)
             {
                 logger.info("CURRENT HEADING: " + mapArea.getHeading());
