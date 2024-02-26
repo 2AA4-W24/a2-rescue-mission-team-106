@@ -53,6 +53,8 @@ public class Drone {
 
     public void fly(JSONObject decision){
         action.fly(decision);
+        Direction currentHeading = mapArea.getHeading();
+        this.mapArea.updateCoordinate(currentHeading);
     }
 
 
@@ -62,7 +64,7 @@ public class Drone {
             this.mapArea.setPrevEchoDirection(Direction.E);
         }
         else{
-            this.action.fly(decision);
+            this.fly(decision);
         }
     }
 
@@ -73,7 +75,7 @@ public class Drone {
             this.mapArea.setPrevEchoDirection(Direction.W);
         }
         else{
-            this.action.fly(decision);
+            this.fly(decision);
         }
     }
 
@@ -84,7 +86,7 @@ public class Drone {
             this.mapArea.setPrevEchoDirection(Direction.N);
         }
         else{
-            this.action.fly(decision);
+            this.fly(decision);
         }
     }
 
@@ -95,13 +97,14 @@ public class Drone {
             this.mapArea.setPrevEchoDirection(Direction.S);
         }
         else{
-            this.action.fly(decision);
+            this.fly(decision);
         }
     }
 
 
     public void echoForwards(JSONObject parameter, JSONObject decision){
         Direction currentHeading = mapArea.getHeading();
+        logger.info("ECHOING DIRECTION : " + currentHeading);
         this.action.echo(parameter, decision, currentHeading);
         this.mapArea.setPrevEchoDirection(currentHeading);
     }
@@ -143,6 +146,7 @@ public class Drone {
         if (updatedHeading != this.mapArea.getHeading()){
             this.mapArea.setHeading(updatedHeading); // update the status of our drones heading
             this.action.heading(parameter, decision, updatedHeading); // physically update the drone on our map
+            this.mapArea.updateCoordinate(updatedHeading); // update the coordinates of the drone
             logger.info("I HAVE OFFICIALLY TURNED THE DRONE! WITH STATUS OF " + mapArea.getHeading());
         }
     }
