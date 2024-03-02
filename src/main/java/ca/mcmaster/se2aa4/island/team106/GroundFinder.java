@@ -34,17 +34,18 @@ public class GroundFinder {
             // the marking of the first 
             // drone.updateHeading(parameters, decision, mapArea.getNewHeading());
 
-            mapArea.setWidthStartPoint(mapArea.getDroneX());
             mapArea.setIsAbove(true); 
-
+            
             drone.fly(decision);
-
+            
             //! for this we dont always just want to jump to the width state, we would jump to the length state if our inital heading is north or south
             if (mapArea.getHeading() == Direction.E || mapArea.getHeading() == Direction.W){
+                mapArea.setWidthStartPoint(mapArea.getDroneX());
                 drone.setStatus(Status.WIDTH_STATE); 
                 logger.info("TRANSITIONING INTO WIDTH STATE");
             }
-            else{
+            else {
+                mapArea.setLengthStartPoint(mapArea.getDroneX());
                 drone.setStatus(Status.LENGTH_STATE);
                 logger.info("TRANSITIONING INTO LENGTH STATE");
             }

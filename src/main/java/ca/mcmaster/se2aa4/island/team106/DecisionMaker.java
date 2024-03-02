@@ -14,6 +14,7 @@ public class DecisionMaker {
     // private GridSearch gridSearch;
     private WidthFinder widthFinder;
     private LengthFinder lengthFinder;
+    private ReachCenter reachCenter;
     private IslandReacher islandReacher; 
     private MapArea mapArea;
     private OutOfRangeHandler outOfRangeHandler;
@@ -25,6 +26,7 @@ public class DecisionMaker {
         // this.gridSearch = new GridSearch(mapArea);
         this.widthFinder = new WidthFinder(mapArea);
         this.lengthFinder = new LengthFinder(mapArea);
+        this.reachCenter = new ReachCenter(mapArea);
         this.islandReacher = islandReacher; 
         this.mapArea = mapArea;
         this.outOfRangeHandler = outOfRangeHandler;
@@ -53,6 +55,12 @@ public class DecisionMaker {
         {
             logger.info("STATE STATUS " + Status.LENGTH_STATE);
             this.lengthFinder.getLengthOfIsland(drone, decision, parameters);
+        } else if (drone.getStatus() == Status.MOVE_CENTER_STATE) {
+            logger.info("STATE STATUS " + Status.MOVE_CENTER_STATE);
+            reachCenter.fly(drone, decision, parameters);
+        } else if (drone.getStatus() == Status.CENTER_STATE) {
+            logger.info("STATE STATUS " + Status.CENTER_STATE);
+            drone.stop(decision);
         }
         // else if (this.drone.getStatus() == Status.GROUND_FOUND_STATE)
         // {

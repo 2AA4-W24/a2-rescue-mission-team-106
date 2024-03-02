@@ -31,6 +31,8 @@ public class WidthFinder {
 
                 if (mapArea.getEastDistance() == 0){
                     mapArea.setIsAbove(true);
+                    int startPoint = mapArea.getDroneX();
+                    mapArea.setLengthStartPoint(startPoint);
                 } 
             }
             else if (mapArea.getHeading() == Direction.W && mapArea.getWestDistance() > 0){
@@ -40,12 +42,14 @@ public class WidthFinder {
 
                 if (mapArea.getWestDistance() == 0){
                     mapArea.setIsAbove(true);
+                    int startPoint = mapArea.getDroneX();
+                    mapArea.setLengthStartPoint(startPoint);
                 }
             }
-            else{
-                logger.info("i'm in the zoo with the lions and apes and bears !");
-                drone.stop(decision);
-            }
+            // else{
+            //     logger.info("i'm in the zoo with the lions and apes and bears !");
+            //     drone.stop(decision);
+            // }
         }
         else if (this.mapArea.getIsAbove())
         {
@@ -87,7 +91,14 @@ public class WidthFinder {
                 //! in this scenario, we would have already obtained our width 
                 //! we transition into a new state that makes our drone go to the middle of the island
                 logger.info("Both length and width have been found terminating for now!");
-                drone.stop(decision);
+                // drone.stop(decision);
+                // If we have found both the width and the length, we need to
+                // transition into the move to center state where we will move
+                // to the center point of the island. We will now update our
+                // heading to turn into the direction of the last echo.
+                drone.setStatus(Status.MOVE_CENTER_STATE);
+                logger.info("State Changed to:" + Status.MOVE_CENTER_STATE);
+                drone.updateHeading(parameters, decision, groundDirection);
             }
 
         }
