@@ -15,14 +15,14 @@ public class ResultsAcknowledger {
     OutOfRangeHandler outOfRangeHandler;
     IslandReacher islandReacher;
     
-    GridSearch gridSearcher;
+    // GridSearch gridSearcher;
 
     public ResultsAcknowledger(Drone drone, MapArea mapArea, OutOfRangeHandler handler, IslandReacher islandReacher) {
         this.drone = drone;
         this.mapArea = mapArea;
         this.outOfRangeHandler = handler;
         this.islandReacher = islandReacher;
-        this.gridSearcher = new GridSearch(mapArea);
+        // this.gridSearcher = new GridSearch(mapArea);
     }
 
     
@@ -66,11 +66,13 @@ public class ResultsAcknowledger {
             
             if (drone.getStatus() == Status.START_STATE) {
                 this.startStateHandler(echoResult);
-            } else if (drone.getStatus() == Status.GROUND_STATE) {
-                this.groundStateHandler(echoResult, echoInt);
-            } else if (drone.getStatus() == Status.ISLAND_STATE){
-                this.islandStateHandler(echoResult);
+            } else if (drone.getStatus() == Status.WIDTH_STATE) {
+                this.widthStateHandler(echoResult, echoInt);
+            } else if (drone.getStatus() == Status.LENGTH_STATE){
+                this.lengthStateHandler(echoResult, echoInt);
             }
+
+ 
         }
     }
 
@@ -111,67 +113,95 @@ public class ResultsAcknowledger {
             logger.info("GROUND HAS BEEN FOUND AT " + groundDirection);
             
             //! map is updated to date with the heading the drone should be facing to go to ground
-            if (groundDirection != mapArea.getHeading()) { 
-                mapArea.setNewHeading(groundDirection);
-                logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
-            }
+            // if (groundDirection != mapArea.getHeading()) { 
+            //     mapArea.setNewHeading(groundDirection);
+            //     logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
+            // }
 
             mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
         }
     }
 
 
-    private void groundStateHandler(String echoResult, int echoInt) {
-        logger.info("CURRENT STATE: " + Status.GROUND_STATE);
+    private void widthStateHandler(String echoResult, int echoInt) {
+        logger.info("CURRENT STATE: " + Status.WIDTH_STATE);
         if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
             drone.setGroundStatus(true);
-            logger.info("GROUND HAS BEEN FOUND IN FRONT CONFIRMED!");
+            mapArea.setIsAbove(true);
+            logger.info("CURRENTLY OBTAINING THE WIDTH OF THE ISLAND");
 
-            islandReacher.setTiles(echoInt);
-            drone.setStatus(Status.GROUND_FOUND_STATE);
+            if (mapArea.getPrevEchoDirection() == Direction.S){
+                int currentDistance = mapArea.getSouthDistance();
+                mapArea.setSouthDistance(Math.min(currentDistance, echoInt));
+            }
+            else if (mapArea.getPrevEchoDirection() == Direction.N){
+                int currentDistance = mapArea.getNorthDistance();
+                mapArea.setNorthDistance(Math.min(currentDistance, echoInt));
+            }
         } 
         else {
-            drone.setGroundStatus(false);
-            drone.setStatus(Status.START_STATE); // ground is no longer found need to go back to start state since we don't have that "concept" of found
+            mapArea.setIsAbove(false);
         }
     }
 
 
-    private void islandStateHandler(String echoResult){
+    private void lengthStateHandler(String echoResult, int echoInt) {
+        logger.info("CURRENT STATE: " + Status.LENGTH_STATE);
+        if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
+            drone.setGroundStatus(true);
+            logger.info("CURRENTLY OBTAINING THE LENGTH OF THE ISLAND");
+            mapArea.setIsAbove(true);
 
-        if (echoResult.equals("GROUND"))
-        {
-            mapArea.setEchoReponseDirectionGround();
-            // Direction groundDirection = mapArea.getPrevEchoDirection(); 
-            // mapArea.setGroundEchoDirection(groundDirection);
-
-            // if (gridSearcher.isFirstTime()){
-            //     logger.info("ARGHGHGHHGHGHGHHGHGHGH");
-            //     gridSearcher.setFirstTime(false);
-
-            // }
-
-            if (!gridSearcher.getHasReachedEndOfIsland())
-            {
-                if (!mapArea.getIsAboveGround()){
-                    logger.info("Hey we are not above groumd");
-                    Direction groundDirection = mapArea.getPrevEchoDirection(); 
-                    logger.info("Ground Direction/New Direction:\t" + groundDirection + " Current Direction:\t" + mapArea.getHeading());
-                    mapArea.setNewHeading(groundDirection); // update our new heading as now we want to turn in direction of ground after echoing
-                 }
+            if (mapArea.getPrevEchoDirection() == Direction.E){
+                int currentDistance = mapArea.getEastDistance();
+                mapArea.setEastDistance(Math.min(currentDistance, echoInt));
             }
-         }
-         else{
-
-            // if (!gridSearcher.isFirstTime() && !gridSearcher.isNeedToTurn()){
-            //     gridSearcher.setNeedToTurn(true);
-            //     logger.info("WAS THIS  OR WHAT! " + gridSearcher.isNeedToTurn());
-
-            // }
-            
-             logger.info("NO LONGER ABOVE THE ISLAND! SETTING FLAG TO FALSE");
-             mapArea.setIsAboveGround(false);
-             mapArea.setEchoReponseDirectionOutOfRange();
-         }
+            else if (mapArea.getPrevEchoDirection() == Direction.W){
+                int currentDistance = mapArea.getWestDistance();
+                mapArea.setWestDistance(Math.min(currentDistance, echoInt));
+            }
+        } 
+        else {
+            mapArea.setIsAbove(false);
+        }
     }
+
+
+    // private void islandStateHandler(String echoResult){
+
+    //     if (echoResult.equals("GROUND"))
+    //     {
+    //         mapArea.setEchoReponseDirectionGround();
+    //         // Direction groundDirection = mapArea.getPrevEchoDirection(); 
+    //         // mapArea.setGroundEchoDirection(groundDirection);
+
+    //         // if (gridSearcher.isFirstTime()){
+    //         //     logger.info("ARGHGHGHHGHGHGHHGHGHGH");
+    //         //     gridSearcher.setFirstTime(false);
+
+    //         // }
+
+    //         if (!gridSearcher.getHasReachedEndOfIsland())
+    //         {
+    //             if (!mapArea.getIsAboveGround()){
+    //                 logger.info("Hey we are not above groumd");
+    //                 Direction groundDirection = mapArea.getPrevEchoDirection(); 
+    //                 logger.info("Ground Direction/New Direction:\t" + groundDirection + " Current Direction:\t" + mapArea.getHeading());
+    //                 mapArea.setNewHeading(groundDirection); // update our new heading as now we want to turn in direction of ground after echoing
+    //              }
+    //         }
+    //      }
+    //      else{
+
+    //         // if (!gridSearcher.isFirstTime() && !gridSearcher.isNeedToTurn()){
+    //         //     gridSearcher.setNeedToTurn(true);
+    //         //     logger.info("WAS THIS  OR WHAT! " + gridSearcher.isNeedToTurn());
+
+    //         // }
+            
+    //          logger.info("NO LONGER ABOVE THE ISLAND! SETTING FLAG TO FALSE");
+    //          mapArea.setIsAboveGround(false);
+    //          mapArea.setEchoReponseDirectionOutOfRange();
+    //      }
+    // }
 }

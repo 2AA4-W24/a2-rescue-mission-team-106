@@ -11,7 +11,9 @@ public class DecisionMaker {
     private final Logger logger = LogManager.getLogger();
     private Drone drone; 
     private GroundFinder groundFinder; 
-    private GridSearch gridSearch;
+    // private GridSearch gridSearch;
+    private WidthFinder widthFinder;
+    private LengthFinder lengthFinder;
     private IslandReacher islandReacher; 
     private MapArea mapArea;
     private OutOfRangeHandler outOfRangeHandler;
@@ -20,7 +22,9 @@ public class DecisionMaker {
     public DecisionMaker(Drone drone, IslandReacher islandReacher, MapArea mapArea, OutOfRangeHandler outOfRangeHandler){
         this.drone = drone; 
         this.groundFinder = new GroundFinder(mapArea); 
-        this.gridSearch = new GridSearch(mapArea);
+        // this.gridSearch = new GridSearch(mapArea);
+        this.widthFinder = new WidthFinder(mapArea);
+        this.lengthFinder = new LengthFinder(mapArea);
         this.islandReacher = islandReacher; 
         this.mapArea = mapArea;
         this.outOfRangeHandler = outOfRangeHandler;
@@ -40,33 +44,29 @@ public class DecisionMaker {
             logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
             this.groundFinder.fly(this.drone, decision, parameters);
         }
-        else if (drone.getStatus() == Status.GROUND_STATE) // now we want to fly towards the ground, so a this point we have updated our current heading so it MUST me different than our previous heading
+        else if (drone.getStatus() == Status.WIDTH_STATE) // now we want to fly towards the ground, so a this point we have updated our current heading so it MUST me different than our previous heading
         { 
-            logger.info("STATE STATUS " + Status.GROUND_STATE);
-            logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
-            logger.info("map area ground ECHO DIRECTION : " + mapArea.getGroundEchoDirection());
-            if (this.mapArea.getHeading() == this.mapArea.getGroundEchoDirection()){
-                logger.info("CALLING FOR VERIFICATION NOW");
-                this.drone.echoForwards(parameters, decision); // this is called to verify that after turning the ground is physically in front of the drone and not in the "general" direction
-            }
-            else{
-                Direction echoGroundDirection = this.mapArea.getGroundEchoDirection(); 
-                this.mapArea.setHeading(echoGroundDirection); // turn in the direction of where ground is verified
-            }
+            logger.info("STATE STATUS " + Status.WIDTH_STATE);
+            this.widthFinder.getWidthOfIsland(drone, decision, parameters);
         }
-        else if (this.drone.getStatus() == Status.GROUND_FOUND_STATE)
+        else if(drone.getStatus() == Status.LENGTH_STATE)
         {
-            logger.info("STATE STATUS " + Status.GROUND_FOUND_STATE);
-            logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
-            this.islandReacher.fly(this.drone, decision); // takes care of flying to the island
+            logger.info("STATE STATUS " + Status.LENGTH_STATE);
+            this.lengthFinder.getLengthOfIsland(drone, decision, parameters);
         }
-        else if (drone.getStatus() == Status.ISLAND_STATE){
-            logger.info("STATE STATUS " + Status.ISLAND_STATE);
+        // else if (this.drone.getStatus() == Status.GROUND_FOUND_STATE)
+        // {
+        //     logger.info("STATE STATUS " + Status.GROUND_FOUND_STATE);
+        //     logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
+        //     this.islandReacher.fly(this.drone, decision); // takes care of flying to the island
+        // }
+        // else if (drone.getStatus() == Status.ISLAND_STATE){
+        //     logger.info("STATE STATUS " + Status.ISLAND_STATE);
 
-            logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
-            // lengthFinder.getLength(drone, decision, parameters);
-            // drone.stop(decision);
-            gridSearch.gridSearchIsland(drone, decision, parameters);
-        }
+        //     logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
+        //     // lengthFinder.getLength(drone, decision, parameters);
+        //     // drone.stop(decision);
+        //     gridSearch.gridSearchIsland(drone, decision, parameters);
+        // }
     }
 }

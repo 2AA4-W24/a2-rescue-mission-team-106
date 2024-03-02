@@ -10,6 +10,29 @@ public class MapArea {
     private boolean isAboveGround = false; //initally drone is not above the island
     private Point droneCoordinates = new Point(0, 0); // drone originally spawns at 0,0
 
+    //! Used for both the widthFinder and lengthFinder 
+    private boolean isAbove; // not physically above the ground this just means we are perpendicular we to island we are still above water 
+
+    //! These variables bellow  will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
+    //! Save the coordinate point of starting width
+    private int widthStartX; 
+    private int widthEndX; 
+    private int minimumDistanceFromIsland;
+
+    private boolean obtainedWidth = false; 
+
+    //! These variables above will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
+
+
+    //! These variables bellow  will be used for the LengthFinder Later we could just make a class that stores these relevant attributes
+    private int lengthStartY; 
+    private int lengthEndY;
+
+    private boolean obtainedLength = false; 
+
+    //! These variables above will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
+
+
     private Direction heading; // direction the drone is facing
     private Direction prevHeading; // the previous direction the drone was facing 
     private Direction newHeading; // this is the updated direction the drone needs to turn
@@ -71,6 +94,7 @@ public class MapArea {
         }
     }
 
+
     public void setEchoReponseDirectionGround(){
         if (this.getPrevEchoDirection() == Direction.N){
             this.setNorthEchoResponse(EchoResponse.GROUND);
@@ -87,7 +111,6 @@ public class MapArea {
 
     }
 
-
     public void setEchoReponseDirectionOutOfRange(){
         if (this.getPrevEchoDirection() == Direction.N){
             logger.info("CALL TO FRIENDS HERE!");
@@ -103,6 +126,53 @@ public class MapArea {
             this.setSouthEchoResponse(EchoResponse.OUT_OF_RANGE);
         }
 
+    }
+
+    public void setObtainedWidth(boolean flag){
+        this.obtainedWidth = flag; 
+    }
+
+    public void setObtainedLength(boolean flag){
+        this.obtainedLength = flag; 
+    }
+
+
+    public void setWidthStartPoint(int xCoordinate){
+        this.widthStartX = xCoordinate;
+    }
+
+
+    public void setWidthEndPoint(int xCoordinate){
+        this.widthEndX = xCoordinate;
+    }
+
+
+    public void setLengthStartPoint(int yCoordinate){
+        this.lengthStartY = yCoordinate;
+    }
+
+
+    public void setLengthEndPoint(int yCoordinate){
+        this.lengthEndY = yCoordinate;
+    }
+
+    
+    public void setIsAbove(boolean flag){
+        this.isAbove = flag; 
+    }
+
+
+    public boolean hasObtainedWidth(){
+        return this.obtainedWidth; 
+    }
+
+    public boolean hasObtainedLength(){
+        return this.obtainedLength; 
+    }
+
+
+    public boolean getIsAbove(){
+        return this.isAbove;
     }
 
     
@@ -158,6 +228,15 @@ public class MapArea {
 
     public Direction getHeading(){
         return this.heading; 
+    }
+
+    public int getWidthOfIsland(){
+        return Math.abs(this.widthEndX - this.widthStartX);
+    }
+
+
+    public int getLengthOfIsland(){
+        return Math.abs(this.lengthStartY - this.lengthEndY);
     }
 
 
