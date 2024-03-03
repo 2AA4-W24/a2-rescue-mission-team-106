@@ -46,10 +46,20 @@ public class WidthFinder {
                     mapArea.setLengthStartPoint(startPoint);
                 }
             }
-            // else{
-            //     logger.info("i'm in the zoo with the lions and apes and bears !");
-            //     drone.stop(decision);
-            // }
+            else {
+                // logger.info("i'm in the zoo with the lions and apes and bears !");
+                // drone.stop(decision);
+                // added new
+                logger.info("I have now obtained my WIDTH");
+                mapArea.setWidthEndPoint(mapArea.getDroneX());
+                
+                logger.info("Width of island achieved which is now: " + mapArea.getWidthOfIsland());
+
+                mapArea.getWidthOfIsland(); //internal mapArea memory we dont need to return this no relevance as its gonna be reffered to later via mapArea
+
+                mapArea.setObtainedWidth(true); // now we have obtained the length
+                echo(drone, groundDirection, decision, parameters);
+            }
         }
         else if (this.mapArea.getIsAbove())
         {
