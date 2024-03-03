@@ -21,7 +21,7 @@ public class WidthFinder {
         Direction groundDirection = mapArea.getGroundEchoDirection(); 
 
 
-        if (mapArea.hasObtainedLength() && !mapArea.getIsAbove()){
+        if (mapArea.hasObtainedLength() && !mapArea.getIsAbove()  && !mapArea.hasObtainedWidth()){
 
             if (mapArea.getHeading() == Direction.E && mapArea.getEastDistance() > 0)
             {
