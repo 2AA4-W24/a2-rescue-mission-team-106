@@ -177,7 +177,7 @@ public class ResultsAcknowledger {
     }
 
     private void centerStateHandler(String echoResult, int echoInt) {
-        logger.info("CURRENT STATE: " + Status.MOVE_CENTER_STATE);
+        logger.info("CURRENT STATE: " + Status.CENTER_STATE);
         if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
             drone.setGroundStatus(true);
             logger.info("At Center of Island");
