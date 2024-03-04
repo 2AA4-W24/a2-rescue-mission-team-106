@@ -64,7 +64,8 @@ public class Drone {
             this.mapArea.setPrevEchoDirection(Direction.E);
         }
         else{
-            this.fly(decision);
+            this.action.echo(parameter, decision, Direction.W);
+            this.mapArea.setPrevEchoDirection(Direction.W);
         }
     }
 
@@ -75,7 +76,8 @@ public class Drone {
             this.mapArea.setPrevEchoDirection(Direction.W);
         }
         else{
-            this.fly(decision);
+            this.action.echo(parameter, decision, Direction.E);
+            this.mapArea.setPrevEchoDirection(Direction.E);
         }
     }
 
@@ -86,7 +88,8 @@ public class Drone {
             this.mapArea.setPrevEchoDirection(Direction.N);
         }
         else{
-            this.fly(decision);
+            this.action.echo(parameter, decision, Direction.S);
+            this.mapArea.setPrevEchoDirection(Direction.S);
         }
     }
 
@@ -97,7 +100,8 @@ public class Drone {
             this.mapArea.setPrevEchoDirection(Direction.S);
         }
         else{
-            this.fly(decision);
+            this.action.echo(parameter, decision, Direction.N);
+            this.mapArea.setPrevEchoDirection(Direction.N);
         }
     }
 

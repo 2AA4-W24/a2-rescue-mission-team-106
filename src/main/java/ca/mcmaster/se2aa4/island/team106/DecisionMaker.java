@@ -15,6 +15,7 @@ public class DecisionMaker {
     private WidthFinder widthFinder;
     private LengthFinder lengthFinder;
     private ReachCenter reachCenter;
+    private SpiralSearch spiralSearch; 
     private IslandReacher islandReacher; 
     private MapArea mapArea;
     private OutOfRangeHandler outOfRangeHandler;
@@ -27,6 +28,7 @@ public class DecisionMaker {
         this.widthFinder = new WidthFinder(mapArea);
         this.lengthFinder = new LengthFinder(mapArea);
         this.reachCenter = new ReachCenter(mapArea);
+        this.spiralSearch = new SpiralSearch(mapArea);
         this.islandReacher = islandReacher; 
         this.mapArea = mapArea;
         this.outOfRangeHandler = outOfRangeHandler;
@@ -60,7 +62,9 @@ public class DecisionMaker {
             reachCenter.fly(drone, decision, parameters);
         } else if (drone.getStatus() == Status.CENTER_STATE) {
             logger.info("STATE STATUS " + Status.CENTER_STATE);
-            drone.stop(decision);
+            this.spiralSearch.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
+            this.spiralSearch.spiral(drone, decision, parameters);
+            // drone.stop(decision);
         }
         // else if (this.drone.getStatus() == Status.GROUND_FOUND_STATE)
         // {

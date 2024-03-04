@@ -32,7 +32,7 @@ public class WidthFinder {
                 if (mapArea.getEastDistance() == 0){
                     mapArea.setIsAbove(true);
                     int startPoint = mapArea.getDroneX();
-                    mapArea.setLengthStartPoint(startPoint);
+                    mapArea.setWidthStartPoint(startPoint);
                 } 
             }
             else if (mapArea.getHeading() == Direction.W && mapArea.getWestDistance() > 0){

@@ -92,9 +92,18 @@ public class ResultsAcknowledger {
         if (extraInfo.has("creeks")){
             JSONArray creeksArray = extraInfo.getJSONArray("creeks");
             if (creeksArray.length() != 0){
-                String creekInfo = creeksArray.get(0).toString();
-                Point creekPoint = new Point(mapArea.getDroneX(), mapArea.getDroneY());
-                mapArea.addCreek(new Creek(creekPoint, creekInfo));
+
+                for (int i = 0; i < creeksArray.length(); i++) {
+                    String creekInfo = creeksArray.getString(i);
+                    Point creekPoint = new Point(mapArea.getDroneX(), mapArea.getDroneY());
+                    mapArea.addCreek(new Creek(creekPoint, creekInfo));
+                }
+                
+
+                // logger.info("MARIO KART: " + creeksArray.toString());
+                // String creekInfo = creeksArray.get(0).toString();
+                // Point creekPoint = new Point(mapArea.getDroneX(), mapArea.getDroneY());
+                // mapArea.addCreek(new Creek(creekPoint, creekInfo));
             }
         }
     }
