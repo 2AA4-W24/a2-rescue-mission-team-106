@@ -53,6 +53,11 @@ public class ResultsAcknowledger {
 
         // extract any creeks if a scan is done
         this.extractCreeks(extraInfo);
+        this.extractEmergencySite(extraInfo);
+
+        if (extraInfo.has("sites")){
+
+        }
         
         if (extraInfo.has("found")) {
             String echoResult = extraInfo.getString("found");
@@ -98,13 +103,22 @@ public class ResultsAcknowledger {
                     Point creekPoint = new Point(mapArea.getDroneX(), mapArea.getDroneY());
                     mapArea.addCreek(new Creek(creekPoint, creekInfo));
                 }
-                
-
-                // logger.info("MARIO KART: " + creeksArray.toString());
-                // String creekInfo = creeksArray.get(0).toString();
-                // Point creekPoint = new Point(mapArea.getDroneX(), mapArea.getDroneY());
-                // mapArea.addCreek(new Creek(creekPoint, creekInfo));
             }
+        }
+    }
+
+    private void extractEmergencySite(JSONObject extraInfo){
+        if (extraInfo.has("sites")){
+            JSONArray emergencySiteArray = extraInfo.getJSONArray("sites");
+            if (emergencySiteArray.length() != 0){
+                String emergencySiteID = emergencySiteArray.getString(0);
+                Point emergencySitePoint = new Point(mapArea.getDroneX(), mapArea.getDroneY()); 
+                //! change creek class name to something more generic for later
+                Creek emergencySite = new Creek(emergencySitePoint, emergencySiteID);
+                mapArea.setEmergencySite(emergencySite);
+
+            }
+            
         }
     }
 

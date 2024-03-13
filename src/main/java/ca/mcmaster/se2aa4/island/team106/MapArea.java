@@ -40,6 +40,7 @@ public class MapArea {
     private Direction groundEchoDirection; // direction ground is facing relative to the drone from last echo
 
     private Set<Creek> creeks = new HashSet<>();
+    private Creek emergencySitePoint; 
 
     private int lastDistance; //! no potential use for so far
 
@@ -68,6 +69,11 @@ public class MapArea {
         for (Creek creek: this.creeks){
             logger.info(creek);
         }
+    }
+
+
+    public void setEmergencySite(Creek emergencySite){
+        this.emergencySitePoint = emergencySite;
     }
 
 
@@ -168,6 +174,15 @@ public class MapArea {
 
     public boolean hasObtainedLength(){
         return this.obtainedLength; 
+    }
+
+
+    public Set<Creek> getCreeks(){
+        return this.creeks;
+    }
+
+    public Creek getEmergencySite(){
+        return this.emergencySitePoint;
     }
 
 
