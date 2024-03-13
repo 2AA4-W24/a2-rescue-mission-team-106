@@ -6,6 +6,8 @@ public enum Direction {
     S, 
     W;
 
+
+    //! delete later
     public static  Direction fromString(String direction) {
         switch (direction.toUpperCase()) {
             case "E":
@@ -17,7 +19,8 @@ public enum Direction {
             case "S":
                 return S;
             default:
-                throw new IllegalArgumentException("Invalid direction: " + direction);
+                throw new IllegalArgumentException("Invalid direction: " + direction); 
         }
     }
+
 }

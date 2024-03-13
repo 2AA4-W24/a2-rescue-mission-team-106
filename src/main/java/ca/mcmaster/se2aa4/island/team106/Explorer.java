@@ -2,6 +2,8 @@ package ca.mcmaster.se2aa4.island.team106;
 
 import java.io.StringReader;
 
+import javax.management.openmbean.SimpleType;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,6 +21,8 @@ public class Explorer implements IExplorerRaid {
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, islandReacher, mapArea, outOfRangeHandler);
     private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler, islandReacher);
+    private Reporter reporter = new Reporter(mapArea);
+
 
     @Override
     public void initialize(String s) {
@@ -65,6 +69,12 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String deliverFinalReport() {
-        return "no creek found";
+        String report = reporter.deliverReport();
+        logger.info(report);
+        logger.info("HELLO SI THIS WORKING");
+        return report; 
+        
+
+        // return "no creek found";
     }
 }

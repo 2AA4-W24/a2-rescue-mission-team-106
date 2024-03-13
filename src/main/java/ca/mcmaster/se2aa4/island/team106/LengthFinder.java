@@ -7,12 +7,8 @@ import org.json.JSONObject;
 public class LengthFinder {
     private MapArea mapArea; 
     private int counts = 1; 
-    private int length = 0;
-
-    private boolean verifiedGround = false;  // used to verify that signal is OUT_OF_RANGE incase it wasn't updated properly
 
 
-    private boolean hasLength = false; 
 
     private final Logger logger = LogManager.getLogger();
 
@@ -21,172 +17,128 @@ public class LengthFinder {
     }
 
 
-    public int getLength(Drone drone, JSONObject decision, JSONObject parameters){
-        
-        if (!this.hasLength)
-        {
-            // this is just one case, that if our rpevious direction was east we wanna echo west, but gotta account for other 3 cases 
+    public void getLengthOfIsland(Drone drone, JSONObject decision, JSONObject parameters){
+        Direction groundDirection = mapArea.getGroundEchoDirection(); // Guaranteed to be East or West
 
-            //if our previous heading was east, we have now turned the drone facing (north) now, so want to echo west to esnure ground is beside us 
-            // while flying upwards obtaining out length
-            if (mapArea.getPrevHeading() == Direction.E)
+        if (mapArea.hasObtainedWidth() && !mapArea.getIsAbove() && !mapArea.hasObtainedLength()){
+            logger.info("AT THIS POINT IVE OBTAINED MY WIDTH AND MY GET ISABOVE SHOULD BE FALSE: " + mapArea.hasObtainedWidth() +" " + mapArea.getIsAbove());
+            if (mapArea.getHeading() == Direction.S && mapArea.getSouthDistance() > 0)
             {
+                drone.fly(decision);
+                int newSouthDistance = mapArea.getSouthDistance() -1;
+                mapArea.setSouthDistance(newSouthDistance);
+                logger.info("NEW SOUTH DISTANCE: " + newSouthDistance);
+
+                if (mapArea.getSouthDistance() == 0){
+                    mapArea.setIsAbove(true);
+                    int startPoint = mapArea.getDroneY();
+                    mapArea.setLengthStartPoint(startPoint);
+                } 
+            }
+            else if (mapArea.getHeading() == Direction.N && mapArea.getNorthDistance() > 0){
+                drone.fly(decision);
+                int newNorthDistance = mapArea.getNorthDistance() -1;
+                mapArea.setNorthDistance(newNorthDistance);
+
+                if (mapArea.getNorthDistance() == 0){
+                    mapArea.setIsAbove(true);
+                    int startPoint = mapArea.getDroneY();
+                    mapArea.setLengthStartPoint(startPoint);
+                }
+            }
+            else {
+                // logger.info("i'm in the zoo with the lions and apes and bears !");
+                // drone.stop(decision);
+                // added new
+                logger.info("I have now obtained my LENGTH");
+                mapArea.setLengthEndPoint(mapArea.getDroneY());
                 
-                if (mapArea.getWestEchoResponse() == EchoResponse.GROUND || mapArea.getWestEchoResponse() == null)
-                {
-    
-                    if (this.counts % 3 == 0){
-                        drone.fly(decision);
-                        this.length++; 
-                    }
-                    else if (this.counts % 3 == 1){
-                        drone.scan(decision);
-                    }
-                    else if (this.counts % 3 == 2){
-                        logger.info("ECHOING WEST");
-                        drone.echoWest(parameters, decision);
-                    }
-    
-                    this.counts++;
-                }
-                else{ // ground is not found so we need to turn our drone
+                logger.info("Length of island achieved which is now: " + mapArea.getLengthOfIsland());
 
-                    if (!this.verifiedGround)
-                    {
-                        drone.echoWest(parameters, decision);
-                        this.verifiedGround = true; 
-                    }
-                    else{
-                        logger.info("Current length of Island: " + this.length);
-                        logger.info("Current Direction:  " + mapArea.getHeading());
-                        logger.info("Previous Direction:  " + mapArea.getPrevHeading());
-                        logger.info("NEXT DIRECTION " + mapArea.getNewHeading());
-                        drone.updateHeading(parameters, decision, mapArea.getNewHeading());
-                        this.hasLength = true;
-                        return this.length;
-                    }
-                }
-            }
-            else if (mapArea.getPrevHeading() == Direction.W)
-            {
-                if (mapArea.getEastEchoResponse() == EchoResponse.GROUND || mapArea.getEastEchoResponse() == null)
-                {
-    
-                    if (this.counts % 3 == 0){
-                        drone.fly(decision);
-                        this.length++; 
-                    }
-                    else if (this.counts % 3 == 1){
-                        drone.scan(decision);
-                    }
-                    else if (this.counts % 3 == 2){
-                        logger.info("ECHOING EAST");
-                        drone.echoEast(parameters, decision);
-                    }
-    
-                    this.counts++;
-                }
-                else{ // ground is not found so we need to turn our drone
+                mapArea.getLengthOfIsland(); //internal mapArea memory we dont need to return this no relevance as its gonna be reffered to later via mapArea
 
-                    if (!this.verifiedGround)
-                    {
-                        drone.echoEast(parameters, decision);
-                        this.verifiedGround = true; 
-                    }
-                    else{
-                        logger.info("Current length of Island: " + this.length);
-                        logger.info("Current Direction:  " + mapArea.getHeading());
-                        logger.info("Previous Direction:  " + mapArea.getPrevHeading());
-                        logger.info("NEXT DIRECTION " + mapArea.getNewHeading());
-                        drone.updateHeading(parameters, decision, mapArea.getNewHeading());
-                        this.hasLength = true;
-                        return this.length;
-                    }
-                }
-            }
-            else if(mapArea.getPrevHeading() == Direction.N)
-            {
-                if (mapArea.getSouthEchoResponse() == EchoResponse.GROUND || mapArea.getSouthEchoResponse() == null)
-                {
-                    if (this.counts % 3 == 0){
-                        drone.fly(decision);
-                        this.length++; 
-                    }
-                    else if (this.counts % 3 == 1){
-                        drone.scan(decision);
-                    }
-                    else if (this.counts % 3 == 2){
-                        logger.info("ECHOING EAST");
-                        drone.echoSouth(parameters, decision);
-                    }
-    
-                    this.counts++;
-                }
-                else{ // ground is not found so we need to turn our drone
-
-                    if (!this.verifiedGround)
-                    {
-                        drone.echoSouth(parameters, decision);
-                        this.verifiedGround = true; 
-                    }
-                    else{
-                        logger.info("Current length of Island: " + this.length);
-                        logger.info("Current Direction:  " + mapArea.getHeading());
-                        logger.info("Previous Direction:  " + mapArea.getPrevHeading());
-                        logger.info("NEXT DIRECTION " + mapArea.getNewHeading());
-                        drone.updateHeading(parameters, decision, mapArea.getNewHeading());
-                        this.hasLength = true;
-                        return this.length;
-                    }
-                }
-            }
-            else if (mapArea.getPrevHeading() == Direction.S)
-            {
-                logger.info("CASE WE WANNA COVER! BY THE WAY HERE IS SOME INFO " + mapArea.getNorthEchoResponse());
-                if (mapArea.getNorthEchoResponse() == EchoResponse.GROUND || mapArea.getNorthEchoResponse() == null)
-                {
-                    if (this.counts % 3 == 0){
-                        drone.fly(decision);
-                        this.length++; 
-                    }
-                    else if (this.counts % 3 == 1){
-                        drone.scan(decision);
-                    }
-                    else if (this.counts % 3 == 2){
-                        logger.info("ECHOING NORTH");
-                        drone.echoNorth(parameters, decision);
-                    }
-    
-                    this.counts++;
-                }
-                else{ // ground is not found so we need to turn our drone
-                    logger.info("THIS IS A BIG HIT FROM THE LENGTH GRABBER");
-
-                    if (!this.verifiedGround)
-                    {
-                        drone.echoNorth(parameters, decision);
-                        this.verifiedGround = true; 
-                    }
-                    else{
-                        logger.info("Current length of Island: " + this.length);
-                        logger.info("Current Direction:  " + mapArea.getHeading());
-                        logger.info("Previous Direction:  " + mapArea.getPrevHeading());
-                        logger.info("NEXT DIRECTION " + mapArea.getNewHeading());
-                        drone.updateHeading(parameters, decision, mapArea.getNewHeading());
-                        this.hasLength = true;
-                        return this.length;
-                    }
-                }
+                mapArea.setObtainedLength(true); // now we have obtained the length
+                echo(drone, groundDirection, decision, parameters);
             }
         }
-        return this.length;
+        else if (this.mapArea.getIsAbove())
+        {
+            if (this.counts % 3 == 1){
+                echo(drone, groundDirection, decision, parameters);
+            }
+            else if (this.counts % 3 == 2){
+                drone.scan(decision);
+            }
+            else if (this.counts % 3 == 0){
+                drone.fly(decision);
+            }
+            this.counts++;
+        }
+        else{
+            logger.info("I have now obtained my LENGTH");
+            mapArea.setLengthEndPoint(mapArea.getDroneY());
+            
+            logger.info("Length of island achieved which is now: " + mapArea.getLengthOfIsland());
 
+            mapArea.getLengthOfIsland(); //internal mapArea memory we dont need to return this no relevance as its gonna be reffered to later via mapArea
+
+            mapArea.setObtainedLength(true); // now we have obtained the length
+
+            // if we havent obtained the width, we need to transition to width state, and update our heading 
+
+            if (!mapArea.hasObtainedWidth())
+            {
+                logger.info("WE have not found the width yet so now we are transitioning into the width state");
+                drone.updateHeading(parameters, decision, groundDirection);
+
+                Direction previousDirection = mapArea.getPrevHeading(); 
+
+                this.setNewEchoGroundDirection(previousDirection);
+
+                drone.setStatus(Status.WIDTH_STATE);
+            }
+            else{
+                //! in this scenario, we would have already obtained our width 
+                //! we transition into a new state that makes our drone go to the middle of the island
+                logger.info("Both length and width have been found terminating for now!");
+                // drone.stop(decision);
+                // If we have found both the width and the length, we need to
+                // transition into the move to center state where we will move
+                // to the center point of the island. We will now update our
+                // heading to turn into the direction of the last echo.
+                drone.setStatus(Status.MOVE_CENTER_STATE);
+                logger.info("State Changed to:" + Status.MOVE_CENTER_STATE);
+                drone.updateHeading(parameters, decision, groundDirection);
+            }
+        }
     }
 
 
-    public boolean getHasLength(){
-        return this.hasLength; 
+    private void echo(Drone drone, Direction direction, JSONObject decision, JSONObject parameters){
+        if (direction == Direction.W){
+            drone.echoWest(parameters, decision);
+        }
+        else if(direction == Direction.E){
+            drone.echoEast(parameters, decision);
+        }
+        else{
+            logger.info("This was an invalid echo attempted: " + direction);
+        }
     }
+
+
+    private void setNewEchoGroundDirection(Direction priorDirection){
+        if (priorDirection == Direction.N){
+            mapArea.setGroundEchoDirection(Direction.S);
+        }
+        else if (priorDirection == Direction.S){
+            mapArea.setGroundEchoDirection(Direction.N);
+        }
+        else{
+            logger.info("Invalid echo direction, your prior direction should be E or W but it was: " + priorDirection);
+        }
+    }
+
 
 
 
