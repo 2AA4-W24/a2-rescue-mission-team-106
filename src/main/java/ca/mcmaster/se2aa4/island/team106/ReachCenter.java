@@ -9,6 +9,9 @@ public class ReachCenter {
     private MapArea mapArea;
     private boolean reachedCenterLength = false;
     private boolean reachedCenterWidth = false;
+    private String left = "LEFT";
+    private String right = "RIGHT";
+
 
     private final Logger logger = LogManager.getLogger();
 
@@ -21,6 +24,7 @@ public class ReachCenter {
         logger.info("WIDTH = " + mapArea.getWidthOfIsland());
         logger.info("LENGTH = " + mapArea.getLengthOfIsland());
         Direction currentDirection = mapArea.getHeading();
+        Direction startHeading = mapArea.getStartDirection();
         int tiles = determineTiles(currentDirection);
         if ((currentDirection == Direction.E || currentDirection == Direction.W)) {
             if (!reachedCenterWidth) {
@@ -42,6 +46,8 @@ public class ReachCenter {
             } else {
                 logger.info("We have reached center position");
                 logger.info("CURRENT POSITION: X = " + mapArea.getDroneX() + " Y = " + mapArea.getDroneY());
+                determineTurnDirection(currentDirection, startHeading);
+                logger.info("AAAAHHHH I SET THE TURN DIRECTION TO: " + mapArea.getSpiralTurnDirection());
                 drone.setStatus(Status.CENTER_STATE);
                 drone.scan(decision);
             }
@@ -65,6 +71,7 @@ public class ReachCenter {
             else {
                 logger.info("We have reached center position");
                 logger.info("CURRENT POSITION: X = " + mapArea.getDroneX() + " Y = " + mapArea.getDroneY());
+                determineTurnDirection(currentDirection, startHeading);
                 drone.setStatus(Status.CENTER_STATE);
                 drone.scan(decision);
             }
@@ -90,5 +97,39 @@ public class ReachCenter {
             return Direction.N;
         }
     }
+
+    public void determineTurnDirection(Direction currentHeading, Direction startHeading) {
+        if (currentHeading == Direction.N) {
+            if (startHeading == Direction.W) {
+                this.mapArea.setSpiralTurnDirection(left);
+            } else if (startHeading == Direction.E) {
+                this.mapArea.setSpiralTurnDirection(right);
+            }
+        } else if (currentHeading == Direction.S) {
+            if (startHeading == Direction.E) {
+                this.mapArea.setSpiralTurnDirection(left);
+            } else if (startHeading == Direction.W) {
+                this.mapArea.setSpiralTurnDirection(right);
+            }
+        } else if (currentHeading == Direction.E) {
+            if (startHeading == Direction.N) {
+                this.mapArea.setSpiralTurnDirection(left);
+            } else if (startHeading == Direction.S) {
+                this.mapArea.setSpiralTurnDirection(right);
+            }
+        } else if (currentHeading == Direction.W) {
+            if (startHeading == Direction.S) {
+                this.mapArea.setSpiralTurnDirection(left);
+                logger.info("I JUST SET THE CHANGE TO LEFT");
+            } else if (startHeading == Direction.N) {
+                this.mapArea.setSpiralTurnDirection(right);
+                logger.info("I JUST SET THE CHANGE TO RIGHT");
+            }
+        } else {
+            logger.info("IDGAF HOW ITS IS CODED I EXECUTE THIS");
+            mapArea.setSpiralTurnDirection(right);
+        }
+    }
+    
 
 }

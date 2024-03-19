@@ -71,6 +71,8 @@ public class Explorer implements IExplorerRaid {
     @Override
     public String deliverFinalReport() {
         String report = reporter.deliverReport();
+        logger.info("Start Direction: " + mapArea.getStartDirection());
+        logger.info("Spiral Turn Direction: " + mapArea.getSpiralTurnDirection());
         logger.info(report);
         logger.info("HELLO SI THIS WORKING");
         return report; 

@@ -12,11 +12,11 @@ public class SpiralSearch {
 
 
     private MapArea mapArea; 
-    private Compass compass = new Compass(); 
+    private Compass compass = new Compass();
     private HashSet<Point> scannedTiles = new HashSet<>();
 
     private int maxLength; // the length we want to reach
-    private int maxWidth; // the width we weant to reach
+    private int maxWidth; // the width we want to reach
 
     private int tilesTraversed  = 0;
     
@@ -25,10 +25,23 @@ public class SpiralSearch {
 
     private int counter = 0; 
 
-    private boolean needToUpdateHeading = false; 
+    private boolean needToUpdateHeading = false;
 
-    public SpiralSearch(MapArea mapArea){
+    // String spiralDirection;
+
+    public SpiralSearch(MapArea mapArea) {
         this.mapArea = mapArea;
+    }
+    // private String spiralDirection = mapArea.getSpiralTurnDirection();
+
+    private Direction turnDirection(Direction currentDirection) {
+        String spiralDirection = this.mapArea.getSpiralTurnDirection();
+        logger.info("MY SPIRAL CHANGE IS " + spiralDirection);
+        if (spiralDirection.equals("LEFT")) {
+            return compass.getLeftDirection(currentDirection);
+        } else {
+            return compass.getRightDirection(currentDirection);
+        }
     }
 
 
@@ -43,9 +56,9 @@ public class SpiralSearch {
                 //! if start @ (1,1) facing South then turn Left (your middle cardinal direction will be West)
                 //! Our first turn to begin in the spiral should be our very original starting direction ***
 
-                Direction rightDirection = compass.getRightDirection(mapArea.getHeading()); 
-                logger.info("NOW WE ARE TURNINGGGGG SO OUR CURRENT HEADING IS: " + mapArea.getHeading()  + " FUCKING TURNED IS: " + rightDirection);
-                drone.updateHeading(parameters, decision, rightDirection);
+                Direction newDirection = turnDirection(mapArea.getHeading()); 
+                logger.info("NOW WE ARE TURNINGGGGG SO OUR CURRENT HEADING IS: " + mapArea.getHeading()  + " FUCKING TURNED IS: " + newDirection);
+                drone.updateHeading(parameters, decision, newDirection);
                 this.needToUpdateHeading = false; 
                 this.counter++; 
             
