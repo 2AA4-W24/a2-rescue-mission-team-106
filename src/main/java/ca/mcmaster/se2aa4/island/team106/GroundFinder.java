@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class GroundFinder {
+public class GroundFinder implements DroneFlightManager{
     private int counts = 1;
     private final Logger logger = LogManager.getLogger();
 
@@ -28,6 +28,7 @@ public class GroundFinder {
      * record is being created.
      */
 
+    @Override
     public void fly(Drone drone, JSONObject decision, JSONObject parameters) {
 
         if (drone.getGroundStatus()){

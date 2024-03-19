@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-public class LengthFinder {
+public class LengthFinder implements DimensionFinder{
     private MapArea mapArea; 
     private int counts = 1; 
 
@@ -16,8 +16,8 @@ public class LengthFinder {
         this.mapArea = mapArea; 
     }
 
-
-    public void getLengthOfIsland(Drone drone, JSONObject decision, JSONObject parameters){
+    @Override
+    public void getDimension(Drone drone, JSONObject decision, JSONObject parameters){
         Direction groundDirection = mapArea.getGroundEchoDirection(); // Guaranteed to be East or West
 
         if (mapArea.hasObtainedWidth() && !mapArea.getIsAbove() && !mapArea.hasObtainedLength()){

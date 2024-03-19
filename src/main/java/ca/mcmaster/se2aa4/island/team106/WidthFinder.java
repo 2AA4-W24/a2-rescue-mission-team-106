@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-public class WidthFinder {
+public class WidthFinder implements DimensionFinder{
 
     private MapArea mapArea; 
     private int counts = 1; 
@@ -17,7 +17,8 @@ public class WidthFinder {
     }
 
 
-    public void getWidthOfIsland(Drone drone, JSONObject decision, JSONObject parameters){
+    @Override
+    public void getDimension(Drone drone, JSONObject decision, JSONObject parameters){
         Direction groundDirection = mapArea.getGroundEchoDirection(); 
 
 
@@ -63,24 +64,13 @@ public class WidthFinder {
         }
         else if (this.mapArea.getIsAbove())
         {
-            if (this.counts % 3 == 1){
-                echo(drone, groundDirection, decision, parameters);
-            }
-            else if (this.counts % 3 == 2){
-                drone.scan(decision);
-            }
-            else if (this.counts % 3 == 0){
-                drone.fly(decision);
-            }
-            this.counts++;
+            this.moveDrone(drone, groundDirection, decision, parameters);
         }
         else{
             logger.info("I have now obtained my WIDTH");
             mapArea.setWidthEndPoint(mapArea.getDroneX());
             
             logger.info("Width of island achieved which is now: " + mapArea.getWidthOfIsland());
-
-            mapArea.getWidthOfIsland(); //internal mapArea memory we dont need to return this no relevance as its gonna be reffered to later via mapArea
 
             mapArea.setObtainedWidth(true); // now we have obtained the width
 
@@ -113,6 +103,24 @@ public class WidthFinder {
 
         }
     }
+
+    private void moveDrone(Drone drone, Direction direction, JSONObject decision, JSONObject parameters){
+        switch (this.counts % 3) {
+            case 1:
+                echo(drone, direction, decision, parameters);
+                break;
+            case 2:
+                drone.scan(decision);
+                break;
+            case 0:
+                drone.fly(decision);
+                break;
+        }
+        
+        this.counts++;
+
+    }
+
 
 
     private void echo(Drone drone, Direction direction, JSONObject decision, JSONObject parameters){

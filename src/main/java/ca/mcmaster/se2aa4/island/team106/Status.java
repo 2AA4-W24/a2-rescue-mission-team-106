@@ -7,5 +7,4 @@ public enum Status {
     MOVE_CENTER_STATE,
     CENTER_STATE,
     GROUND_FOUND_STATE,
-    ISLAND_STATE; 
 }

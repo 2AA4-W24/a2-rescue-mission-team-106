@@ -15,12 +15,11 @@ public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
     private MapArea mapArea = new MapArea();
-    private IslandReacher islandReacher = new IslandReacher(0, mapArea); 
     private Direction heading;
     private Drone drone = new Drone(0, Direction.N, mapArea);
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
-    private DecisionMaker decisionMaker = new DecisionMaker(drone, islandReacher, mapArea, outOfRangeHandler);
-    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler, islandReacher);
+    private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, outOfRangeHandler);
+    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler);
     private Reporter reporter = new Reporter(mapArea);
 
 
