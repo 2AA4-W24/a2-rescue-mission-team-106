@@ -43,7 +43,7 @@ public class WidthFinder {
                 if (mapArea.getWestDistance() == 0){
                     mapArea.setIsAbove(true);
                     int startPoint = mapArea.getDroneX();
-                    mapArea.setLengthStartPoint(startPoint);
+                    mapArea.setWidthStartPoint(startPoint);
                 }
             }
             else {

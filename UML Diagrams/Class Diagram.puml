@@ -1,0 +1,4 @@
+@startuml "Class Diagram"
+Room o- Student
+Room *-- Chair
+@enduml "Class Diagram"

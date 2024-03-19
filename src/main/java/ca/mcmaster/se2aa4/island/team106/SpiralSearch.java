@@ -40,7 +40,7 @@ public class SpiralSearch {
             if (this.needToUpdateHeading)
             {
                 // gets the right cardinal direction of our current heading
-                //! if start @ (1,1) facning South then turn Left (your middle cardinal direction will be West)
+                //! if start @ (1,1) facing South then turn Left (your middle cardinal direction will be West)
                 //! Our first turn to begin in the spiral should be our very original starting direction ***
 
                 Direction rightDirection = compass.getRightDirection(mapArea.getHeading()); 
@@ -86,9 +86,11 @@ public class SpiralSearch {
 
 
     public void updateSegment(){
-        // only incremenet currentWidth, once our tilesTraversed = currentWidth -1, then we move on to the next segmentwhere currentWidth incremenets
-        // width is associated with E and W
-        // need to make sure that currentWidth is NOT equal to width only then we can incremenet currentWidth to next segment
+        // only increment currentWidth, once our tilesTraversed = currentWidth
+        // -1, then we move on to the next segment where currentWidth increments
+        // width is associated with E and W need to make sure that currentWidth
+        // is NOT equal to width only then we can increment currentWidth to
+        // next segment
         if ( (mapArea.getHeading() == Direction.E || mapArea.getHeading() == Direction.W) && 
         (this.tilesTraversed == this.currentWidth )){
 
