@@ -35,6 +35,7 @@ public class Explorer implements IExplorerRaid {
 
         heading = Direction.fromString(direction); 
         drone.updateDrone(batteryLevel.intValue(), heading);
+        mapArea.setStartDirection(heading);
 
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
