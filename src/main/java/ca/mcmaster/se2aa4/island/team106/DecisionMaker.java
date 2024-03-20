@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DecisionMaker {
     private final Logger logger = LogManager.getLogger();
-    private Drone drone; 
+    private BaseDrone drone; 
 
     private DroneFlightManager groundFinder; 
     private DroneFlightManager reachCenter;
@@ -17,7 +17,7 @@ public class DecisionMaker {
     private DimensionFinder widthFinder;
     private DimensionFinder lengthFinder;
 
-    private Search spiralSearch; //! change to search for better implemention purpose 
+    private Search spiralSearch; 
     private MapArea mapArea;
     private OutOfRangeHandler outOfRangeHandler;
 
@@ -25,7 +25,6 @@ public class DecisionMaker {
     public DecisionMaker(Drone drone, MapArea mapArea, OutOfRangeHandler outOfRangeHandler){
         this.drone = drone; 
         this.groundFinder = new GroundFinder(mapArea); 
-        // this.gridSearch = new GridSearch(mapArea);
         this.widthFinder = new WidthFinder(mapArea);
         this.lengthFinder = new LengthFinder(mapArea);
         this.reachCenter = new ReachCenter(mapArea);
@@ -61,10 +60,7 @@ public class DecisionMaker {
                 break;
             default:
                 if (this.outOfRangeHandler.getDanger()) {
-                    Direction nextDirection = this.outOfRangeHandler.changeDirection(this.mapArea);
-                    logger.info("CHANGING DIRECTION TO " + nextDirection);
-                    this.drone.updateHeading(parameters, decision, nextDirection);
-                    this.outOfRangeHandler.setDanger(false);
+                    this.outOfRangeHandler.handleDanger(drone, mapArea, decision, parameters);
                 }
                 break;
         }

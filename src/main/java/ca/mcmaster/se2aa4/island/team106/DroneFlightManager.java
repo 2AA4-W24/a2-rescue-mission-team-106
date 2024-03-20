@@ -4,6 +4,6 @@ import org.json.JSONObject;
 
 public interface DroneFlightManager {
 
-    void fly(Drone drone, JSONObject decision, JSONObject parameters);
+    void fly(BaseDrone drone, JSONObject decision, JSONObject parameters);
     
 }

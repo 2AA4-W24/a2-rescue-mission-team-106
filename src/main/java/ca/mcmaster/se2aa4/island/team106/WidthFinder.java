@@ -18,7 +18,8 @@ public class WidthFinder implements DimensionFinder{
 
 
     @Override
-    public void getDimension(Drone drone, JSONObject decision, JSONObject parameters){
+    public void getDimension(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
+        Drone drone = (Drone) baseDrone; 
         Direction groundDirection = mapArea.getGroundEchoDirection(); 
 
 

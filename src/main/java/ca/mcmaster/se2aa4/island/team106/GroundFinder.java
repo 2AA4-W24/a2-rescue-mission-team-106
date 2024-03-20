@@ -29,7 +29,8 @@ public class GroundFinder implements DroneFlightManager{
      */
 
     @Override
-    public void fly(Drone drone, JSONObject decision, JSONObject parameters) {
+    public void fly(BaseDrone baseDrone, JSONObject decision, JSONObject parameters) {
+        Drone drone = (Drone) baseDrone; 
 
         if (drone.getGroundStatus()){
             logger.info("GROUND FOUND MARKING THE INITAL POINT OF WIDTH X AT: " + mapArea.getDroneX());

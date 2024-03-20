@@ -4,24 +4,20 @@ import org.json.JSONObject;
 
 public interface DroneActions {
 
-    void echo(JSONObject parameter, JSONObject decision, Direction direction);
-
     void fly(JSONObject decision);
 
     void stop(JSONObject decision);
 
-    void heading(JSONObject parameter, JSONObject decision, Direction direction);
-
-    void scan(JSONObject decision);
-
     void land(JSONObject parameter, JSONObject decision);
 
-    void explore(JSONObject decision);
+    Status getStatus();
 
-    void scout(JSONObject parameter, JSONObject decision, Direction direction);
+    void setStatus(Status status);
 
-    void moveTo(JSONObject parameter, JSONObject decision, Direction direction);
+    void useBattery(int batteryUsage);
 
+    int getBatteryLevel();
 
+    boolean canMakeDecision(int batteryUsage);
 
 }

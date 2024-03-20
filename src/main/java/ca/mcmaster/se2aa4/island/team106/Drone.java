@@ -4,20 +4,13 @@ import org.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Drone {
-    private int batteryLevel;
-    private boolean groundStatus; 
-    private Status status; 
-    private Actions action = new Actions(); 
-    private MapArea mapArea; 
+public class Drone extends BaseDrone{
     private final Logger logger = LogManager.getLogger();
+    private boolean groundStatus; 
 
 
     public Drone(int batteryLevel, Direction heading, MapArea mapArea){
-        this.mapArea = mapArea; 
-        this.batteryLevel = batteryLevel; 
-        this.mapArea.setHeading(heading);
-        this.status = Status.START_STATE; // drone is now in active status
+        super(batteryLevel, 20, heading, mapArea);
         this.groundStatus = false;
     }
 
@@ -28,6 +21,7 @@ public class Drone {
     }
 
     
+    @Override
     public int getBatteryLevel(){
         return this.batteryLevel; 
     }
@@ -37,10 +31,12 @@ public class Drone {
         return this.groundStatus;
     }
 
+    @Override
     public Status getStatus(){
         return this.status; 
     }
 
+    @Override
     public void setStatus(Status status){
         this.status = status; 
     }
@@ -51,6 +47,7 @@ public class Drone {
     }
 
 
+    @Override
     public void fly(JSONObject decision){
         action.fly(decision);
         Direction currentHeading = mapArea.getHeading();
@@ -114,6 +111,7 @@ public class Drone {
     }
 
     
+    @Override
     public void stop(JSONObject decision){
         this.action.stop(decision);
     }
@@ -124,6 +122,7 @@ public class Drone {
     }
 
 
+    @Override
     public void land(JSONObject parameter, JSONObject decision){
         this.action.land(parameter, decision);
     }
@@ -155,11 +154,13 @@ public class Drone {
         }
     }
 
-
+    @Override
     public boolean canMakeDecision(int batteryUsage){
-        return (this.batteryLevel - batteryUsage) >= 1; 
+        return (this.batteryLevel - batteryUsage) >= this.MINIMUM_BATTERY_TO_OPERATE; 
     }
 
+
+    @Override
     public void useBattery(int batteryUsage) {
         this.batteryLevel -= batteryUsage;
     }

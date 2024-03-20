@@ -17,7 +17,9 @@ public class LengthFinder implements DimensionFinder{
     }
 
     @Override
-    public void getDimension(Drone drone, JSONObject decision, JSONObject parameters){
+    public void getDimension(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
+        Drone drone = (Drone) baseDrone; 
+        
         Direction groundDirection = mapArea.getGroundEchoDirection(); // Guaranteed to be East or West
 
         if (mapArea.hasObtainedWidth() && !mapArea.getIsAbove() && !mapArea.hasObtainedLength()){

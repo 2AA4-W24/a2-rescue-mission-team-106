@@ -10,7 +10,6 @@ public class SpiralSearch implements Search{
 
     private final Logger logger = LogManager.getLogger(); 
 
-
     private MapArea mapArea; 
     private Compass compass = new Compass(); 
     private HashSet<Point> scannedTiles = new HashSet<>();
@@ -33,8 +32,10 @@ public class SpiralSearch implements Search{
 
     }
 
+
     @Override
-    public void search(Drone drone, JSONObject decision, JSONObject parameters){
+    public void search(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
+        Drone drone = (Drone) baseDrone; 
 
         if (this.currentLength != this.maxLength || this.currentWidth != this.maxWidth)
         {
