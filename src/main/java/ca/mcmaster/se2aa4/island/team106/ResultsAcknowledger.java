@@ -16,8 +16,8 @@ public class ResultsAcknowledger {
     
     // GridSearch gridSearcher;
 
-    public ResultsAcknowledger(Drone drone, MapArea mapArea, OutOfRangeHandler handler) {
-        this.drone = drone;
+    public ResultsAcknowledger(BaseDrone baseDrone, MapArea mapArea, OutOfRangeHandler handler) {
+        this.drone = (Drone) baseDrone;
         this.mapArea = mapArea;
         this.outOfRangeHandler = handler;
     }

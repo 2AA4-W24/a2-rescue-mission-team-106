@@ -22,7 +22,7 @@ public class DecisionMaker {
     private OutOfRangeHandler outOfRangeHandler;
 
 
-    public DecisionMaker(Drone drone, MapArea mapArea, OutOfRangeHandler outOfRangeHandler){
+    public DecisionMaker(BaseDrone drone, MapArea mapArea, OutOfRangeHandler outOfRangeHandler){
         this.drone = drone; 
         this.groundFinder = new GroundFinder(mapArea); 
         this.widthFinder = new WidthFinder(mapArea);

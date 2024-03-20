@@ -18,6 +18,8 @@ public abstract class BaseDrone implements DroneActions {
         this.status = Status.START_STATE;
     }
     
+    public abstract void updateDrone(int batteryLevel, Direction direction);
+
 
     @Override
     public abstract Status getStatus();
