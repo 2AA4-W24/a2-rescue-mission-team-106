@@ -3,8 +3,10 @@ package ca.mcmaster.se2aa4.island.team106;
 public enum Direction {
     N, 
     E, 
-    S, 
-    W;
+    S,
+    W,
+    LEFT,
+    RIGHT; 
 
 
     //! delete later

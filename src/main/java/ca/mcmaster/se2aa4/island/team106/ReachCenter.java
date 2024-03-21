@@ -103,33 +103,33 @@ public class ReachCenter implements DroneFlightManager{
     public void determineTurnDirection(Direction currentHeading, Direction startHeading) {
         if (currentHeading == Direction.N) {
             if (startHeading == Direction.W) {
-                this.mapArea.setSpiralTurnDirection(RelativeDirection.LEFT);
+                this.mapArea.setSpiralTurnDirection(Direction.LEFT);
             } else if (startHeading == Direction.E) {
-                this.mapArea.setSpiralTurnDirection(RelativeDirection.RIGHT);
+                this.mapArea.setSpiralTurnDirection(Direction.RIGHT);
             }
         } else if (currentHeading == Direction.S) {
             if (startHeading == Direction.E) {
-                this.mapArea.setSpiralTurnDirection(RelativeDirection.LEFT);
+                this.mapArea.setSpiralTurnDirection(Direction.LEFT);
             } else if (startHeading == Direction.W) {
-                this.mapArea.setSpiralTurnDirection(RelativeDirection.RIGHT);
+                this.mapArea.setSpiralTurnDirection(Direction.RIGHT);
             }
         } else if (currentHeading == Direction.E) {
             if (startHeading == Direction.N) {
-                this.mapArea.setSpiralTurnDirection(RelativeDirection.LEFT);
+                this.mapArea.setSpiralTurnDirection(Direction.LEFT);
             } else if (startHeading == Direction.S) {
-                this.mapArea.setSpiralTurnDirection(RelativeDirection.RIGHT);
+                this.mapArea.setSpiralTurnDirection(Direction.RIGHT);
             }
         } else if (currentHeading == Direction.W) {
             if (startHeading == Direction.S) {
-                this.mapArea.setSpiralTurnDirection(RelativeDirection.LEFT);
+                this.mapArea.setSpiralTurnDirection(Direction.LEFT);
                 logger.info("I JUST SET THE CHANGE TO LEFT");
             } else if (startHeading == Direction.N) {
-                this.mapArea.setSpiralTurnDirection(RelativeDirection.RIGHT);
+                this.mapArea.setSpiralTurnDirection(Direction.RIGHT);
                 logger.info("I JUST SET THE CHANGE TO RIGHT");
             }
         } else {
             logger.info("IDGAF HOW ITS IS CODED I EXECUTE THIS");
-            mapArea.setSpiralTurnDirection(RelativeDirection.RIGHT);
+            mapArea.setSpiralTurnDirection(Direction.RIGHT);
         }
     }
     
