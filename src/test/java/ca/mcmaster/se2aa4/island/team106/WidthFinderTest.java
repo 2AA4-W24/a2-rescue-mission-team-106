@@ -31,7 +31,7 @@ public class WidthFinderTest {
         mapArea.setIsAbove(true);
         mapArea.setSouthDistance(1);
 
-        widthFinder.getWidthOfIsland(drone, decision, parameters);
+        widthFinder.getDimension(drone, decision, parameters);
 
         assertTrue(mapArea.hasObtainedLength());
         assertTrue(mapArea.getIsAbove());
