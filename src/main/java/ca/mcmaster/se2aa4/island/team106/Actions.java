@@ -3,6 +3,7 @@ import org.json.JSONObject;
 
 public class Actions {
 
+    
     public void echo(JSONObject parameter, JSONObject decision, Direction direction)
     {
         parameter.put("direction", direction);
@@ -28,20 +29,24 @@ public class Actions {
         decision.put("action", "scan");
     }
 
+    
     public void land(JSONObject parameter, JSONObject decision){
         decision.put("action", "land");
         decision.put("parameters", parameter);
     }
 
+
     public void explore(JSONObject decision){
         decision.put("action", "explore");
     }
+
 
     public void scout(JSONObject parameter, JSONObject decision, Direction direction){
         parameter.put("direction", direction);
         decision.put("action", "scout");  
         decision.put("parameters", parameter); 
     }
+
 
     public void moveTo(JSONObject parameter, JSONObject decision, Direction direction){
         parameter.put("direction", direction);

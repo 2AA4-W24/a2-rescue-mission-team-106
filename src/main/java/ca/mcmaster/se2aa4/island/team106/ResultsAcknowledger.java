@@ -13,16 +13,12 @@ public class ResultsAcknowledger {
     Drone drone;
     MapArea mapArea;
     OutOfRangeHandler outOfRangeHandler;
-    IslandReacher islandReacher;
     
-    // GridSearch gridSearcher;
 
-    public ResultsAcknowledger(Drone drone, MapArea mapArea, OutOfRangeHandler handler, IslandReacher islandReacher) {
-        this.drone = drone;
+    public ResultsAcknowledger(BaseDrone baseDrone, MapArea mapArea, OutOfRangeHandler handler) {
+        this.drone = (Drone) baseDrone;
         this.mapArea = mapArea;
         this.outOfRangeHandler = handler;
-        this.islandReacher = islandReacher;
-        // this.gridSearcher = new GridSearch(mapArea);
     }
 
     
@@ -107,6 +103,7 @@ public class ResultsAcknowledger {
         }
     }
 
+    
     private void extractEmergencySite(JSONObject extraInfo){
         if (extraInfo.has("sites")){
             JSONArray emergencySiteArray = extraInfo.getJSONArray("sites");
