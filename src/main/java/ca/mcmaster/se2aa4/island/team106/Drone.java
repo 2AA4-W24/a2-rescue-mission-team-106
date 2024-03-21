@@ -6,16 +6,14 @@ import org.apache.logging.log4j.Logger;
 
 public class Drone extends BaseDrone {
     private final Logger logger = LogManager.getLogger();
-    private boolean groundStatus; 
-    
 
 
-    public Drone(int minimumBatteryToOperate, Direction heading, MapArea mapArea){
-        super(minimumBatteryToOperate, heading, mapArea);
-        this.groundStatus = false;
+    public Drone(int minimumBatteryToOperate, MapArea mapArea){
+        super(minimumBatteryToOperate, mapArea);
     }
 
 
+    @Override
     public void updateDrone(int batteryLevel, Direction direction){
         this.currentBatteryLevel = batteryLevel; 
         this.mapArea.setHeading(direction);
@@ -28,23 +26,15 @@ public class Drone extends BaseDrone {
     }
 
 
-    public boolean getGroundStatus() {
-        return this.groundStatus;
-    }
-
     @Override
     public Status getStatus(){
         return this.status; 
     }
 
+
     @Override
     public void setStatus(Status status){
         this.status = status; 
-    }
-
-
-    public void setGroundStatus(boolean status) {
-        this.groundStatus = status;
     }
 
 
@@ -56,95 +46,41 @@ public class Drone extends BaseDrone {
     }
 
 
-    public void echoEast(JSONObject parameter, JSONObject decision){
-        if (this.mapArea.getHeading() != Direction.W){
-            this.action.echo(parameter, decision, Direction.E);
-            this.mapArea.setPrevEchoDirection(Direction.E);
-        }
-        else{
-            this.action.echo(parameter, decision, Direction.W);
-            this.mapArea.setPrevEchoDirection(Direction.W);
-        }
-    }
-
-
-    public void echoWest(JSONObject parameter, JSONObject decision){
-        if (this.mapArea.getHeading() != Direction.E){
-            this.action.echo(parameter, decision, Direction.W);
-            this.mapArea.setPrevEchoDirection(Direction.W);
-        }
-        else{
-            this.action.echo(parameter, decision, Direction.E);
-            this.mapArea.setPrevEchoDirection(Direction.E);
+    @Override
+    public void echo(JSONObject parameter, JSONObject decision, Direction direction){
+        switch (direction)
+        {
+            case N: 
+                this.echoNorth(parameter, decision);
+                break; 
+            case E: 
+                this.echoEast(parameter, decision);
+                break; 
+            case S:
+                this.echoSouth(parameter, decision);
+                break; 
+            case W: 
+                this.echoWest(parameter, decision);
+                break; 
+            case FORWARD: 
+                this.echoForwards(parameter, decision);
         }
     }
 
 
-    public void echoNorth(JSONObject parameter, JSONObject decision){
-        if (this.mapArea.getHeading() != Direction.S){
-            this.action.echo(parameter, decision, Direction.N);
-            this.mapArea.setPrevEchoDirection(Direction.N);
-        }
-        else{
-            this.action.echo(parameter, decision, Direction.S);
-            this.mapArea.setPrevEchoDirection(Direction.S);
-        }
-    }
-
-
-    public void echoSouth(JSONObject parameter, JSONObject decision){
-        if (this.mapArea.getHeading() != Direction.N){
-            this.action.echo(parameter, decision, Direction.S);
-            this.mapArea.setPrevEchoDirection(Direction.S);
-        }
-        else{
-            this.action.echo(parameter, decision, Direction.N);
-            this.mapArea.setPrevEchoDirection(Direction.N);
-        }
-    }
-
-
-    public void echoForwards(JSONObject parameter, JSONObject decision){
-        Direction currentHeading = mapArea.getHeading();
-        logger.info("ECHOING DIRECTION : " + currentHeading);
-        this.action.echo(parameter, decision, currentHeading);
-        this.mapArea.setPrevEchoDirection(currentHeading);
-    }
-
-    
     @Override
     public void stop(JSONObject decision){
         this.action.stop(decision);
     }
 
 
+    @Override
     public void scan(JSONObject decision){
         this.action.scan(decision);
     }
 
 
     @Override
-    public void land(JSONObject parameter, JSONObject decision){
-        this.action.land(parameter, decision);
-    }
-
-
-    public void explore(JSONObject decision){
-        this.action.explore(decision);
-    }
-
-
-    public void scout(JSONObject parameter, JSONObject decision, Direction direction){
-        this.action.scout(parameter, decision, direction);
-        
-    }
-
-
-    public void moveTo(JSONObject parameter, JSONObject decision, Direction direction){
-        this.action.moveTo(parameter, decision, direction);
-    }
-
-    
     public void updateHeading(JSONObject parameter, JSONObject decision, Direction updatedHeading){
         logger.info("HERE IS SOME INFORMATION ABOUT WHATS HAPPENING: UPDATED HEADING: " + updatedHeading +" droneHEADING " + this.mapArea.getHeading());
         if (updatedHeading != this.mapArea.getHeading()){
@@ -154,6 +90,7 @@ public class Drone extends BaseDrone {
             logger.info("I HAVE OFFICIALLY TURNED THE DRONE! WITH STATUS OF " + mapArea.getHeading());
         }
     }
+
 
     @Override
     public boolean canMakeDecision(int batteryUsage){
@@ -165,4 +102,61 @@ public class Drone extends BaseDrone {
     public void useBattery(int batteryUsage) {
         this.currentBatteryLevel -= batteryUsage;
     }
+
+
+    private void echoEast(JSONObject parameter, JSONObject decision){
+        if (this.mapArea.getHeading() != Direction.W){
+            this.action.echo(parameter, decision, Direction.E);
+            this.mapArea.setPrevEchoDirection(Direction.E);
+        }
+        else{
+            this.action.echo(parameter, decision, Direction.W);
+            this.mapArea.setPrevEchoDirection(Direction.W);
+        }
+    }
+
+
+    private void echoWest(JSONObject parameter, JSONObject decision){
+        if (this.mapArea.getHeading() != Direction.E){
+            this.action.echo(parameter, decision, Direction.W);
+            this.mapArea.setPrevEchoDirection(Direction.W);
+        }
+        else{
+            this.action.echo(parameter, decision, Direction.E);
+            this.mapArea.setPrevEchoDirection(Direction.E);
+        }
+    }
+
+
+    private void echoNorth(JSONObject parameter, JSONObject decision){
+        if (this.mapArea.getHeading() != Direction.S){
+            this.action.echo(parameter, decision, Direction.N);
+            this.mapArea.setPrevEchoDirection(Direction.N);
+        }
+        else{
+            this.action.echo(parameter, decision, Direction.S);
+            this.mapArea.setPrevEchoDirection(Direction.S);
+        }
+    }
+
+
+    private void echoSouth(JSONObject parameter, JSONObject decision){
+        if (this.mapArea.getHeading() != Direction.N){
+            this.action.echo(parameter, decision, Direction.S);
+            this.mapArea.setPrevEchoDirection(Direction.S);
+        }
+        else{
+            this.action.echo(parameter, decision, Direction.N);
+            this.mapArea.setPrevEchoDirection(Direction.N);
+        }
+    }
+
+
+    private void echoForwards(JSONObject parameter, JSONObject decision){
+        Direction currentHeading = mapArea.getHeading();
+        logger.info("ECHOING DIRECTION : " + currentHeading);
+        this.action.echo(parameter, decision, currentHeading);
+        this.mapArea.setPrevEchoDirection(currentHeading);
+    }
+
 }
