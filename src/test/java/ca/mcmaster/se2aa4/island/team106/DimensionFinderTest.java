@@ -7,9 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 
-public class LengthFinderTest {
+public class DimensionFinderTest {
     private MapArea mapArea;
     private LengthFinder lengthFinder;
+    private WidthFinder widthFinder;
     private Drone drone; 
     private JSONObject decision;
     private JSONObject parameters;
@@ -18,6 +19,7 @@ public class LengthFinderTest {
     public void initialize() {
         mapArea = new MapArea();
         drone = new Drone(1000, Direction.N, mapArea);
+        widthFinder = new WidthFinder(mapArea);
         lengthFinder = new LengthFinder(mapArea);
         decision = new JSONObject();
         parameters = new JSONObject();
@@ -42,5 +44,25 @@ public class LengthFinderTest {
 
         assertEquals(1, mapArea.getSouthDistance());
         assertEquals(0, mapArea.getLengthOfIsland());
+    }
+
+    @Test
+    public void testWidthObtained() {
+        mapArea.setHeading(Direction.S);
+        mapArea.setObtainedLength(true);
+        mapArea.setIsAbove(true);
+        mapArea.setSouthDistance(1);
+
+        widthFinder.getDimension(drone, decision, parameters);
+
+        assertTrue(mapArea.hasObtainedLength());
+        assertTrue(mapArea.getIsAbove());
+        assertFalse(mapArea.hasObtainedWidth());
+
+        mapArea.setObtainedWidth(true);
+        assertTrue(mapArea.hasObtainedWidth());
+
+        assertEquals(1, mapArea.getSouthDistance());
+        assertEquals(0, mapArea.getWidthOfIsland());
     }
 }

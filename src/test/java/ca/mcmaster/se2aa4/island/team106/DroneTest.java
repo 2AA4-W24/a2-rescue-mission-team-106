@@ -33,9 +33,10 @@ public class DroneTest {
 
     @Test 
     public void testDroneBattery(){
-        drone = new Drone (1000, Direction.E, mapArea);
+        drone = new Drone (500, Direction.E, mapArea);
         drone.currentBatteryLevel = 1000;
-        drone.useBattery(10);
+        assertTrue(drone.canMakeDecision(100));
+        drone.useBattery(600);
         assertFalse(drone.canMakeDecision(6));
         
     }
