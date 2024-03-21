@@ -13,7 +13,6 @@ public class Reporter {
         this.mapArea = mapArea;
     }
 
-    //! deliver the fucking report
     public String deliverReport(){
         logger.info("Deliver called");
         return getClosestCreek(); 

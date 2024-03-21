@@ -17,7 +17,6 @@ public class MapArea {
     //! Save the coordinate point of starting width
     private int widthStartX; 
     private int widthEndX; 
-    private int minimumDistanceFromIsland;
 
     private boolean obtainedWidth = false; 
 
@@ -53,11 +52,6 @@ public class MapArea {
     private int westDistance = 0; 
     private int southDistance = 0; 
 
-    private EchoResponse northEchoResponse;
-    private EchoResponse eastEchoResponse;
-    private EchoResponse westEchoResponse;
-    private EchoResponse southEchoResponse;
-
 
     public void addCreek(Creek creek){
         creeks.add(creek);
@@ -71,13 +65,11 @@ public class MapArea {
         }
     }
 
-
     public void setEmergencySite(Creek emergencySite){
         this.emergencySitePoint = emergencySite;
     }
 
-
-
+    
     public void updateCoordinate(Direction direction){
         int newX, newY; 
         switch(direction) {
@@ -99,40 +91,7 @@ public class MapArea {
                 break;
         }
     }
-
-
-    public void setEchoReponseDirectionGround(){
-        if (this.getPrevEchoDirection() == Direction.N){
-            this.setNorthEchoResponse(EchoResponse.GROUND);
-        }
-        else if (this.getPrevEchoDirection() == Direction.E){
-            this.setEastEchoResponse(EchoResponse.GROUND);
-        }
-        else if (this.getPrevEchoDirection() == Direction.W){
-            this.setWestEchoResponse(EchoResponse.GROUND);
-        }
-        else if (this.getPrevEchoDirection() == Direction.S){
-            this.setSouthEchoResponse(EchoResponse.GROUND);
-        }
-
-    }
-
-    public void setEchoReponseDirectionOutOfRange(){
-        if (this.getPrevEchoDirection() == Direction.N){
-            logger.info("CALL TO FRIENDS HERE!");
-            this.setNorthEchoResponse(EchoResponse.OUT_OF_RANGE);
-        }
-        else if (this.getPrevEchoDirection() == Direction.E){
-            this.setEastEchoResponse(EchoResponse.OUT_OF_RANGE);
-        }
-        else if (this.getPrevEchoDirection() == Direction.W){
-            this.setWestEchoResponse(EchoResponse.OUT_OF_RANGE);
-        }
-        else if (this.getPrevEchoDirection() == Direction.S){
-            this.setSouthEchoResponse(EchoResponse.OUT_OF_RANGE);
-        }
-
-    }
+  
 
     public void setObtainedWidth(boolean flag){
         this.obtainedWidth = flag; 
@@ -190,26 +149,6 @@ public class MapArea {
         return this.isAbove;
     }
 
-    
-    public EchoResponse getNorthEchoResponse(){
-        return this.northEchoResponse;
-    }
-
-
-    public EchoResponse getEastEchoResponse(){
-        return this.eastEchoResponse;
-    }
-
-
-    public EchoResponse getWestEchoResponse(){
-        return this.westEchoResponse;
-    }
-
-
-    public EchoResponse getSouthEchoResponse(){
-        return this.southEchoResponse;
-    }
-
 
     public int getDroneX(){
         return this.droneCoordinates.getXCoordinate();
@@ -254,22 +193,6 @@ public class MapArea {
         return Math.abs(this.lengthStartY - this.lengthEndY);
     }
 
-
-    public void setNorthEchoResponse(EchoResponse response){
-        this.northEchoResponse = response;
-    }
-
-    public void setEastEchoResponse(EchoResponse response){
-        this.eastEchoResponse = response;
-    }
-
-    public void setWestEchoResponse(EchoResponse response){
-        this.westEchoResponse = response;
-    }
-
-    public void setSouthEchoResponse(EchoResponse response){
-        this.southEchoResponse = response;
-    }
 
     public void setIsAboveGround(boolean isAboveGroundStatus){
         this.isAboveGround = isAboveGroundStatus; 

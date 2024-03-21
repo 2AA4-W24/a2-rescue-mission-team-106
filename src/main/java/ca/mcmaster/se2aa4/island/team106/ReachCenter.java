@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-public class ReachCenter {
+public class ReachCenter implements DroneFlightManager{
 
     private MapArea mapArea;
     private boolean reachedCenterLength = false;
@@ -17,7 +17,11 @@ public class ReachCenter {
     }
     
     private int tilesTraversed = 0;
-    public void fly(Drone drone, JSONObject decision, JSONObject parameter) {
+
+    @Override
+    public void fly(BaseDrone baseDrone, JSONObject decision, JSONObject parameter) {
+        Drone drone = (Drone) baseDrone; 
+        
         logger.info("WIDTH = " + mapArea.getWidthOfIsland());
         logger.info("LENGTH = " + mapArea.getLengthOfIsland());
         Direction currentDirection = mapArea.getHeading();

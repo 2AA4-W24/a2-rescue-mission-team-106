@@ -2,8 +2,6 @@ package ca.mcmaster.se2aa4.island.team106;
 
 import java.io.StringReader;
 
-import javax.management.openmbean.SimpleType;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,12 +13,13 @@ public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
     private MapArea mapArea = new MapArea();
-    private IslandReacher islandReacher = new IslandReacher(0, mapArea); 
+    private final int MINIMUM_BATTERY_TO_OPERATE = 20;
+
     private Direction heading;
-    private Drone drone = new Drone(0, Direction.N, mapArea);
+    private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, Direction.N, mapArea);
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
-    private DecisionMaker decisionMaker = new DecisionMaker(drone, islandReacher, mapArea, outOfRangeHandler);
-    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler, islandReacher);
+    private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, outOfRangeHandler);
+    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler);
     private Reporter reporter = new Reporter(mapArea);
 
 
@@ -34,6 +33,8 @@ public class Explorer implements IExplorerRaid {
         Integer batteryLevel = info.getInt("budget");
 
         heading = Direction.fromString(direction); 
+        
+        // update drone to starting battery and heading facing at start
         drone.updateDrone(batteryLevel.intValue(), heading);
 
         logger.info("The drone is facing {}", direction);
