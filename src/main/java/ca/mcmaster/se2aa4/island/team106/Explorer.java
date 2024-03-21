@@ -2,8 +2,6 @@ package ca.mcmaster.se2aa4.island.team106;
 
 import java.io.StringReader;
 
-import javax.management.openmbean.SimpleType;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,8 +13,10 @@ public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
     private MapArea mapArea = new MapArea();
+    private final int START_BATTERY = 30000, MINIMUM_BATTERY_TO_OPERATE = 20;
+
     private Direction heading;
-    private BaseDrone drone = new Drone(0, Direction.N, mapArea);
+    private BaseDrone drone = new Drone(START_BATTERY, MINIMUM_BATTERY_TO_OPERATE, Direction.N, mapArea);
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, outOfRangeHandler);
     private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler);

@@ -3,8 +3,8 @@ package ca.mcmaster.se2aa4.island.team106;
 import org.json.JSONObject;
 
 public abstract class BaseDrone implements DroneActions {
-    protected final int MINIMUM_BATTERY_TO_OPERATE;
-    protected int batteryLevel;
+    protected int minimumBatteryToOperate;
+    protected int currentBatteryLevel;
     protected Status status;
     protected Actions action = new Actions();
     protected MapArea mapArea;
@@ -12,11 +12,12 @@ public abstract class BaseDrone implements DroneActions {
 
     public BaseDrone(int batteryLevel, int MINIMUM_BATTERY_TO_OPERATE, Direction heading, MapArea mapArea) {
         this.mapArea = mapArea;
-        this.batteryLevel = batteryLevel;
-        this.MINIMUM_BATTERY_TO_OPERATE = MINIMUM_BATTERY_TO_OPERATE; 
+        this.currentBatteryLevel = batteryLevel;
+        this.minimumBatteryToOperate = MINIMUM_BATTERY_TO_OPERATE; 
         this.mapArea.setHeading(heading);
         this.status = Status.START_STATE;
     }
+
     
     public abstract void updateDrone(int batteryLevel, Direction direction);
 

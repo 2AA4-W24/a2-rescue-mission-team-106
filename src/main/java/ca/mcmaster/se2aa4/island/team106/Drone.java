@@ -7,23 +7,24 @@ import org.apache.logging.log4j.Logger;
 public class Drone extends BaseDrone{
     private final Logger logger = LogManager.getLogger();
     private boolean groundStatus; 
+    
 
 
-    public Drone(int batteryLevel, Direction heading, MapArea mapArea){
-        super(batteryLevel, 20, heading, mapArea);
+    public Drone(int batteryLevel, int minimumBatteryToOperate, Direction heading, MapArea mapArea){
+        super(batteryLevel, minimumBatteryToOperate, heading, mapArea);
         this.groundStatus = false;
     }
 
 
     public void updateDrone(int batteryLevel, Direction direction){
-        this.batteryLevel = batteryLevel; 
+        this.currentBatteryLevel = batteryLevel; 
         this.mapArea.setHeading(direction);
     }
 
     
     @Override
     public int getBatteryLevel(){
-        return this.batteryLevel; 
+        return this.currentBatteryLevel; 
     }
 
 
@@ -156,12 +157,12 @@ public class Drone extends BaseDrone{
 
     @Override
     public boolean canMakeDecision(int batteryUsage){
-        return (this.batteryLevel - batteryUsage) >= this.MINIMUM_BATTERY_TO_OPERATE; 
+        return (this.currentBatteryLevel - batteryUsage) >= this.minimumBatteryToOperate; 
     }
 
 
     @Override
     public void useBattery(int batteryUsage) {
-        this.batteryLevel -= batteryUsage;
+        this.currentBatteryLevel -= batteryUsage;
     }
 }
