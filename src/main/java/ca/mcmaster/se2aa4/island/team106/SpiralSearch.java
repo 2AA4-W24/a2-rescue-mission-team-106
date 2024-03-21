@@ -102,9 +102,11 @@ public class SpiralSearch implements Search{
 
 
     private void updateSegment(){
-        // only incremenet currentWidth, once our tilesTraversed = currentWidth -1, then we move on to the next segmentwhere currentWidth incremenets
-        // width is associated with E and W
-        // need to make sure that currentWidth is NOT equal to width only then we can incremenet currentWidth to next segment
+        // only increment currentWidth, once our tilesTraversed = currentWidth
+        // -1, then we move on to the next segment where currentWidth increments
+        // width is associated with E and W need to make sure that currentWidth
+        // is NOT equal to width only then we can increment currentWidth to next
+        // segment
         if ( (mapArea.getHeading() == Direction.E || mapArea.getHeading() == Direction.W) && 
         (this.tilesTraversed == this.currentWidth )){
 
@@ -112,7 +114,7 @@ public class SpiralSearch implements Search{
                 this.currentWidth++; // make our segment bigger for next run
             }
             logger.info("We have finished our width segment so updating it now!");
-            this.tilesTraversed = 0; // we need to reset tilesTraversed because now we have compelted our segment
+            this.tilesTraversed = 0; // we need to reset tilesTraversed because now we have completed our segment
             this.needToUpdateHeading = true; 
         }
         else if ((mapArea.getHeading() == Direction.N || mapArea.getHeading() == Direction.S) && 

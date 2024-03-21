@@ -67,6 +67,8 @@ public class ResultsAcknowledger {
             
             if (drone.getStatus() == Status.START_STATE) {
                 this.startStateHandler(echoResult);
+            } else if (drone.getStatus() == Status.CENTER_START_STATE) {
+                this.centerStartStateHandler(echoResult);
             } else if (drone.getStatus() == Status.WIDTH_STATE) {
                 this.widthStateHandler(echoResult, echoInt);
             } else if (drone.getStatus() == Status.LENGTH_STATE){
@@ -135,6 +137,24 @@ public class ResultsAcknowledger {
         if (echoResult.equals("GROUND")) {
             drone.setGroundStatus(true); // ground has been ground so notify drone that status of ground found is true
             logger.info("GROUND HAS BEEN FOUND AT " + groundDirection);
+
+            //! map is updated to date with the heading the drone should be facing to go to ground
+            // if (groundDirection != mapArea.getHeading()) { 
+            //     mapArea.setNewHeading(groundDirection);
+            //     logger.info("SETTING DRONES DIRECTION TO " + groundDirection);
+            // }
+
+            mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
+        }
+    }
+    
+    private void centerStartStateHandler(String echoResult) {
+        logger.info("CURRENT STATE: " + Status.CENTER_START_STATE);
+        Direction groundDirection = mapArea.getPrevEchoDirection(); // store the ground direction we have ground
+
+        if (echoResult.equals("GROUND")) {
+            drone.setGroundStatus(true); // ground has been ground so notify drone that status of ground found is true
+            logger.info("GROUND HAS BEEN FOUND AT " + groundDirection);
             
             //! map is updated to date with the heading the drone should be facing to go to ground
             // if (groundDirection != mapArea.getHeading()) { 
@@ -143,6 +163,10 @@ public class ResultsAcknowledger {
             // }
 
             mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
+        } else {
+            if (mapArea.getPrevEchoDirection() == mapArea.getStartDirection()) {
+                drone.setGroundStatus(false);
+            }
         }
     }
 

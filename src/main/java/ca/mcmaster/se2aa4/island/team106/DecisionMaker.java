@@ -13,6 +13,7 @@ public class DecisionMaker {
 
     private DroneFlightManager groundFinder; 
     private DroneFlightManager reachCenter;
+    private DroneFlightManager centerStartHandler;
 
     private DimensionFinder widthFinder;
     private DimensionFinder lengthFinder;
@@ -24,7 +25,8 @@ public class DecisionMaker {
 
     public DecisionMaker(BaseDrone drone, MapArea mapArea, OutOfRangeHandler outOfRangeHandler){
         this.drone = drone; 
-        this.groundFinder = new GroundFinder(mapArea); 
+        this.groundFinder = new GroundFinder(mapArea);
+        this.centerStartHandler = new CenterStartHandler(mapArea);
         this.widthFinder = new WidthFinder(mapArea);
         this.lengthFinder = new LengthFinder(mapArea);
         this.reachCenter = new ReachCenter(mapArea);
@@ -40,6 +42,11 @@ public class DecisionMaker {
                 logger.info("STATE STATUS " + Status.START_STATE);
                 logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
                 this.groundFinder.fly(this.drone, decision, parameters);
+                break;
+            case CENTER_START_STATE:
+                logger.info("STATE STATUS " + Status.CENTER_START_STATE);
+                logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
+                this.centerStartHandler.fly(this.drone, decision, parameters);
                 break;
             case WIDTH_STATE:
                 logger.info("STATE STATUS " + Status.WIDTH_STATE);

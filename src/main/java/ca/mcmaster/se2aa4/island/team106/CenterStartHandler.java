@@ -5,14 +5,14 @@ import org.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class GroundFinder implements DroneFlightManager{
+public class CenterStartHandler implements DroneFlightManager{
     private int counts = 1;
     private final Logger logger = LogManager.getLogger();
 
     private MapArea mapArea;
     private Point previousDroneCoordinate;
 
-    public GroundFinder(MapArea mapArea) {
+    public CenterStartHandler(MapArea mapArea) {
         this.mapArea = mapArea;
         this.previousDroneCoordinate = new Point(mapArea.getDroneX(), mapArea.getDroneY());
     }
@@ -36,50 +36,38 @@ public class GroundFinder implements DroneFlightManager{
             if (mapArea.getHeading() == mapArea.getGroundEchoDirection()) {
                 Direction nextHeading = turnDirection(mapArea.getHeading());
                 drone.updateHeading(parameters, decision, nextHeading);
-                drone.setStatus(Status.CENTER_START_STATE);
             } else {
 
-                logger.info("GROUND FOUND MARKING THE INITAL POINT OF WIDTH X AT: " + mapArea.getDroneX());
-                mapArea.setIsAbove(true);
-                drone.fly(decision);
-
-                //! for this we dont always just want to jump to the width state, we would jump to the length state if our inital heading is north or south
-                if (mapArea.getHeading() == Direction.E || mapArea.getHeading() == Direction.W) {
-                    mapArea.setWidthStartPoint(previousDroneCoordinate.getXCoordinate()); //! modified
-                    drone.setStatus(Status.WIDTH_STATE);
-                    logger.info("TRANSITIONING INTO WIDTH STATE");
-                } else {
-                    mapArea.setLengthStartPoint(previousDroneCoordinate.getYCoordinate()); //! modified 
-                    drone.setStatus(Status.LENGTH_STATE);
-                    logger.info("TRANSITIONING INTO LENGTH STATE");
+                if (this.counts % 5 == 0) {
+                    previousDroneCoordinate.setCoordinate(mapArea.getDroneX(), mapArea.getDroneY());
+                    drone.fly(decision);
+                } else if (this.counts % 5 == 1) {
+                    logger.info("ECHOING EAST");
+                    drone.echoEast(parameters, decision);
+                    this.mapArea.setWestDistance(this.mapArea.getLastDistance());
+                } else if (this.counts % 5 == 2) {
+                    logger.info("ECHOING SOUTH");
+                    drone.echoSouth(parameters, decision);
+                    this.mapArea.setEastDistance(this.mapArea.getLastDistance());
+                } else if (this.counts % 5 == 3) {
+                    logger.info("ECHOING NORTH");
+                    drone.echoNorth(parameters, decision);
+                    this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
+                } else if (this.counts % 5 == 4) {
+                    logger.info("ECHOING WEST");
+                    drone.echoWest(parameters, decision);
+                    this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
                 }
+    
+                this.counts++;
             }
         } else {
-            if (this.counts % 5 == 0) {
-                previousDroneCoordinate.setCoordinate(mapArea.getDroneX(), mapArea.getDroneY());
-                drone.fly(decision);
-            } else if (this.counts % 5 == 1) {
-                logger.info("ECHOING EAST");
-                drone.echoEast(parameters, decision);
-                this.mapArea.setWestDistance(this.mapArea.getLastDistance());
-            } else if (this.counts % 5 == 2) {
-                logger.info("ECHOING SOUTH");
-                drone.echoSouth(parameters, decision);
-                this.mapArea.setEastDistance(this.mapArea.getLastDistance());
-            } else if (this.counts % 5 == 3) {
-                logger.info("ECHOING NORTH");
-                drone.echoNorth(parameters, decision);
-                this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
-            } else if (this.counts % 5 == 4) {
-                logger.info("ECHOING WEST");
-                drone.echoWest(parameters, decision);
-                this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
-            }
-
-            this.counts++;
+            Direction groundDirection = mapArea.getStartDirection();
+            drone.updateHeading(parameters, decision, groundDirection);
+            drone.setStatus(Status.START_STATE);
         }
         logger.info("DRONE IS CURRENTLY FACING: " + mapArea.getHeading());
-
+        
     }
     
     private Direction turnDirection(Direction currentDirection) {
