@@ -13,7 +13,7 @@ public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
     private MapArea mapArea = new MapArea();
-    private final int MINIMUM_BATTERY_TO_OPERATE = 11000;
+    private final int MINIMUM_BATTERY_TO_OPERATE = 20;
 
     private Direction heading;
     private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, Direction.N, mapArea);

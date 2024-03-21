@@ -41,7 +41,9 @@ public class MapArea {
     private String spiralTurnDirection;
 
     private Set<Creek> creeks = new HashSet<>();
-    private Creek emergencySitePoint; 
+    private Creek emergencySitePoint;
+    
+    private boolean emergencySiteFound = false;
 
     private int lastDistance; //! no potential use for so far
 
@@ -69,6 +71,7 @@ public class MapArea {
 
     public void setEmergencySite(Creek emergencySite){
         this.emergencySitePoint = emergencySite;
+        this.emergencySiteFound = true;
     }
 
     
@@ -142,10 +145,13 @@ public class MapArea {
         return this.creeks;
     }
 
-    public Creek getEmergencySite(){
+    public Creek getEmergencySite() {
         return this.emergencySitePoint;
     }
 
+    public boolean getEmergencySiteStatus() {
+        return this.emergencySiteFound;
+    }
 
     public boolean getIsAbove(){
         return this.isAbove;

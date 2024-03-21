@@ -16,7 +16,7 @@ public class FatalErrorHandler {
     
     // The reason it is 5 is to allow us some buffer to turn as 2 is the minimum
     // number of blocks we need for it to successfully turn.
-    private final int RANGE_BORDER = 5;
+    private final int RANGE_BORDER = 2;
     
     public FatalErrorHandler(int MINIMUM_BATTERY_TO_OPERATE, BaseDrone baseDrone, MapArea mapArea) {
         this.minOperationalBattery = MINIMUM_BATTERY_TO_OPERATE;
