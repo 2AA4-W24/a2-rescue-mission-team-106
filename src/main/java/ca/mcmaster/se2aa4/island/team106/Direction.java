@@ -4,7 +4,8 @@ public enum Direction {
     N, 
     E, 
     S, 
-    W;
+    W,
+    FORWARD;
 
 
     //! delete later
@@ -19,7 +20,7 @@ public enum Direction {
             case "S":
                 return S;
             default:
-                throw new IllegalArgumentException("Invalid direction: " + direction); 
+                return FORWARD; 
         }
     }
 
