@@ -11,7 +11,7 @@ public class DecisionMaker {
     private final Logger logger = LogManager.getLogger();
     private BaseDrone drone; 
 
-    private GroundFinder groundFinder; 
+    private DroneFlightManager groundFinder; 
     private DroneFlightManager reachCenter;
 
     private DimensionFinder widthFinder;
