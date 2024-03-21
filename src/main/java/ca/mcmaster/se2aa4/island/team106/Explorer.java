@@ -13,10 +13,10 @@ public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
     private MapArea mapArea = new MapArea();
-    private final int START_BATTERY = 30000, MINIMUM_BATTERY_TO_OPERATE = 20;
+    private final int MINIMUM_BATTERY_TO_OPERATE = 20;
 
     private Direction heading;
-    private BaseDrone drone = new Drone(START_BATTERY, MINIMUM_BATTERY_TO_OPERATE, Direction.N, mapArea);
+    private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, Direction.N, mapArea);
     private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, outOfRangeHandler);
     private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler);
@@ -34,6 +34,7 @@ public class Explorer implements IExplorerRaid {
 
         heading = Direction.fromString(direction); 
         
+        // update drone to starting battery and heading facing at start
         drone.updateDrone(batteryLevel.intValue(), heading);
 
         logger.info("The drone is facing {}", direction);

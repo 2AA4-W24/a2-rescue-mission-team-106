@@ -10,9 +10,8 @@ public abstract class BaseDrone implements DroneActions {
     protected MapArea mapArea;
 
 
-    public BaseDrone(int batteryLevel, int MINIMUM_BATTERY_TO_OPERATE, Direction heading, MapArea mapArea) {
+    public BaseDrone(int MINIMUM_BATTERY_TO_OPERATE, Direction heading, MapArea mapArea) {
         this.mapArea = mapArea;
-        this.currentBatteryLevel = batteryLevel;
         this.minimumBatteryToOperate = MINIMUM_BATTERY_TO_OPERATE; 
         this.mapArea.setHeading(heading);
         this.status = Status.START_STATE;

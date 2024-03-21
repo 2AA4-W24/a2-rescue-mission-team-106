@@ -4,14 +4,14 @@ import org.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Drone extends BaseDrone{
+public class Drone extends BaseDrone {
     private final Logger logger = LogManager.getLogger();
     private boolean groundStatus; 
     
 
 
-    public Drone(int batteryLevel, int minimumBatteryToOperate, Direction heading, MapArea mapArea){
-        super(batteryLevel, minimumBatteryToOperate, heading, mapArea);
+    public Drone(int minimumBatteryToOperate, Direction heading, MapArea mapArea){
+        super(minimumBatteryToOperate, heading, mapArea);
         this.groundStatus = false;
     }
 
