@@ -17,7 +17,7 @@ public class Explorer implements IExplorerRaid {
 
     private Direction heading;
     private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, Direction.N, mapArea);
-    private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
+    private FatalErrorHandler outOfRangeHandler = new FatalErrorHandler();
     private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, outOfRangeHandler);
     private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler);
     private Reporter reporter = new Reporter(mapArea);

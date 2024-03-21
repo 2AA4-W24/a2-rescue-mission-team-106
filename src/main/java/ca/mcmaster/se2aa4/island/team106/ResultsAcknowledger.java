@@ -12,13 +12,13 @@ public class ResultsAcknowledger {
     private final Logger logger = LogManager.getLogger();
     Drone drone;
     MapArea mapArea;
-    OutOfRangeHandler outOfRangeHandler;
+    FatalErrorHandler fatalErrorHandler;
     
 
-    public ResultsAcknowledger(BaseDrone baseDrone, MapArea mapArea, OutOfRangeHandler handler) {
+    public ResultsAcknowledger(BaseDrone baseDrone, MapArea mapArea, FatalErrorHandler handler) {
         this.drone = (Drone) baseDrone;
         this.mapArea = mapArea;
-        this.outOfRangeHandler = handler;
+        this.fatalErrorHandler = handler;
     }
 
     
@@ -123,8 +123,8 @@ public class ResultsAcknowledger {
 
 
     private void outOfRangeAction(int echoInt) {
-        outOfRangeHandler.setDanger(echoInt, mapArea);
-        if (outOfRangeHandler.getDanger()) {
+        fatalErrorHandler.setDanger(echoInt, mapArea);
+        if (fatalErrorHandler.getDanger()) {
             logger.info("Approaching OUT OF RANGE area");
         }
     }
@@ -227,43 +227,4 @@ public class ResultsAcknowledger {
             logger.info("At Center of Island");
         }
     }
-
-
-    // private void islandStateHandler(String echoResult){
-
-    //     if (echoResult.equals("GROUND"))
-    //     {
-    //         mapArea.setEchoReponseDirectionGround();
-    //         // Direction groundDirection = mapArea.getPrevEchoDirection(); 
-    //         // mapArea.setGroundEchoDirection(groundDirection);
-
-    //         // if (gridSearcher.isFirstTime()){
-    //         //     logger.info("ARGHGHGHHGHGHGHHGHGHGH");
-    //         //     gridSearcher.setFirstTime(false);
-
-    //         // }
-
-    //         if (!gridSearcher.getHasReachedEndOfIsland())
-    //         {
-    //             if (!mapArea.getIsAboveGround()){
-    //                 logger.info("Hey we are not above groumd");
-    //                 Direction groundDirection = mapArea.getPrevEchoDirection(); 
-    //                 logger.info("Ground Direction/New Direction:\t" + groundDirection + " Current Direction:\t" + mapArea.getHeading());
-    //                 mapArea.setNewHeading(groundDirection); // update our new heading as now we want to turn in direction of ground after echoing
-    //              }
-    //         }
-    //      }
-    //      else{
-
-    //         // if (!gridSearcher.isFirstTime() && !gridSearcher.isNeedToTurn()){
-    //         //     gridSearcher.setNeedToTurn(true);
-    //         //     logger.info("WAS THIS  OR WHAT! " + gridSearcher.isNeedToTurn());
-
-    //         // }
-            
-    //          logger.info("NO LONGER ABOVE THE ISLAND! SETTING FLAG TO FALSE");
-    //          mapArea.setIsAboveGround(false);
-    //          mapArea.setEchoReponseDirectionOutOfRange();
-    //      }
-    // }
 }

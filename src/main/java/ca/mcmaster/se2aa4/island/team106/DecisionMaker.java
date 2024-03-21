@@ -20,10 +20,10 @@ public class DecisionMaker {
 
     private Search spiralSearch; 
     private MapArea mapArea;
-    private OutOfRangeHandler outOfRangeHandler;
+    private FatalErrorHandler outOfRangeHandler;
 
 
-    public DecisionMaker(BaseDrone drone, MapArea mapArea, OutOfRangeHandler outOfRangeHandler){
+    public DecisionMaker(BaseDrone drone, MapArea mapArea, FatalErrorHandler outOfRangeHandler){
         this.drone = drone; 
         this.groundFinder = new GroundFinder(mapArea);
         this.centerStartHandler = new CenterStartHandler(mapArea);
