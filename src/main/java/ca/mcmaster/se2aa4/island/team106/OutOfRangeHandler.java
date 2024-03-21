@@ -1,6 +1,12 @@
 package ca.mcmaster.se2aa4.island.team106;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
+
 public class OutOfRangeHandler {
+    private final Logger logger = LogManager.getLogger();
+
     private boolean danger;
     
     // The reason it is 5 is to allow us some buffer to turn as 2 is the minimum
@@ -14,6 +20,16 @@ public class OutOfRangeHandler {
         } else {
             this.danger = false;
         }
+    }
+
+    public void handleDanger(BaseDrone baseDrone, MapArea mapArea, JSONObject decision, JSONObject parameters){
+        Drone drone = (Drone) baseDrone; 
+        Direction nextDirection = this.changeDirection(mapArea);
+        logger.info("CHANGING DIRECTION TO " + nextDirection);
+
+        drone.updateHeading(parameters, decision, nextDirection);
+        this.setDanger(false);
+
     }
 
     public void setDanger(boolean danger) {
@@ -58,8 +74,6 @@ public class OutOfRangeHandler {
             }
         }        
     }
-
-    
 
 
 }

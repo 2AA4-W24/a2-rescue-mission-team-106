@@ -6,10 +6,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-public class SpiralSearch {
+public class SpiralSearch implements Search{
 
     private final Logger logger = LogManager.getLogger(); 
-
 
     private MapArea mapArea; 
     private Compass compass = new Compass(); 
@@ -29,10 +28,14 @@ public class SpiralSearch {
 
     public SpiralSearch(MapArea mapArea){
         this.mapArea = mapArea;
+        this.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
+
     }
 
 
-    public void spiral(Drone drone, JSONObject decision, JSONObject parameters){
+    @Override
+    public void search(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
+        Drone drone = (Drone) baseDrone; 
 
         if (this.currentLength != this.maxLength || this.currentWidth != this.maxWidth)
         {
@@ -62,7 +65,7 @@ public class SpiralSearch {
                     Point currentCoordinates = new Point(mapArea.getDroneX(), mapArea.getDroneY());
 
                     if (this.scannedTiles.contains(currentCoordinates)){
-                        logger.info("NYO AHHHHHH FHAM YAM");
+                        logger.info("AHHHHHH");
                         drone.fly(decision);
                         this.tilesTraversed++; 
                     }
@@ -85,7 +88,7 @@ public class SpiralSearch {
     }
 
 
-    public void updateSegment(){
+    private void updateSegment(){
         // only incremenet currentWidth, once our tilesTraversed = currentWidth -1, then we move on to the next segmentwhere currentWidth incremenets
         // width is associated with E and W
         // need to make sure that currentWidth is NOT equal to width only then we can incremenet currentWidth to next segment
@@ -111,7 +114,8 @@ public class SpiralSearch {
             
         }
     }
-
+    
+    @Override
     public void setDimensions(int maxWidth, int maxLength){
         this.maxWidth = maxWidth; 
         this.maxLength = maxLength;

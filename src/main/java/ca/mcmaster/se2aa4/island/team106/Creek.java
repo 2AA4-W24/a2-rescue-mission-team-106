@@ -8,8 +8,6 @@ public class Creek {
     private DecimalFormat df = new DecimalFormat("#.#####"); // converter used to round decimals
 
 
-
-
     public Creek(Point coordinate, String creekID){
         this.coordinate = coordinate;
         this.creekID = creekID;
@@ -38,7 +36,6 @@ public class Creek {
     public String getID(){
         return this.creekID; 
     }
-
 
 
     @Override
