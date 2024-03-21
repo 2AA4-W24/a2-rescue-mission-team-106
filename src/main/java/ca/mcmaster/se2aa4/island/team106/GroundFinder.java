@@ -37,6 +37,7 @@ public class GroundFinder implements DroneFlightManager{
                 Direction nextHeading = turnDirection(mapArea.getHeading());
                 drone.updateHeading(parameters, decision, nextHeading);
                 drone.setStatus(Status.CENTER_START_STATE);
+                logger.info("TRANSITIONING INTO CENTER_START_STATE");
             } else {
 
                 logger.info("GROUND FOUND MARKING THE INITAL POINT OF WIDTH X AT: " + mapArea.getDroneX());
