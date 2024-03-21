@@ -37,39 +37,40 @@ public class DecisionMaker {
 
 
     public void makeDecisions(JSONObject parameters, JSONObject decision) {
-        switch (drone.getStatus()) {
-            case START_STATE:
-                logger.info("STATE STATUS " + Status.START_STATE);
-                logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
-                this.groundFinder.fly(this.drone, decision, parameters);
-                break;
-            case CENTER_START_STATE:
-                logger.info("STATE STATUS " + Status.CENTER_START_STATE);
-                logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
-                this.centerStartHandler.fly(this.drone, decision, parameters);
-                break;
-            case WIDTH_STATE:
-                logger.info("STATE STATUS " + Status.WIDTH_STATE);
-                this.widthFinder.getDimension(drone, decision, parameters);
-                break;
-            case LENGTH_STATE:
-                logger.info("STATE STATUS " + Status.LENGTH_STATE);
-                this.lengthFinder.getDimension(drone, decision, parameters);
-                break;
-            case MOVE_CENTER_STATE:
-                logger.info("STATE STATUS " + Status.MOVE_CENTER_STATE);
-                reachCenter.fly(drone, decision, parameters);
-                break;
-            case CENTER_STATE:
-                logger.info("STATE STATUS " + Status.CENTER_STATE);
-                this.spiralSearch.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
-                this.spiralSearch.search(drone, decision, parameters);
-                break;
-            default:
-                if (this.outOfRangeHandler.getDanger()) {
-                    this.outOfRangeHandler.handleDanger(drone, mapArea, decision, parameters);
-                }
-                break;
+        if (this.outOfRangeHandler.getDanger()) {
+            this.outOfRangeHandler.handleDanger(drone, mapArea, decision, parameters);
+        } else {
+            switch (drone.getStatus()) {
+                case START_STATE:
+                    logger.info("STATE STATUS " + Status.START_STATE);
+                    logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
+                    this.groundFinder.fly(this.drone, decision, parameters);
+                    break;
+                case CENTER_START_STATE:
+                    logger.info("STATE STATUS " + Status.CENTER_START_STATE);
+                    logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
+                    this.centerStartHandler.fly(this.drone, decision, parameters);
+                    break;
+                case WIDTH_STATE:
+                    logger.info("STATE STATUS " + Status.WIDTH_STATE);
+                    this.widthFinder.getDimension(drone, decision, parameters);
+                    break;
+                case LENGTH_STATE:
+                    logger.info("STATE STATUS " + Status.LENGTH_STATE);
+                    this.lengthFinder.getDimension(drone, decision, parameters);
+                    break;
+                case MOVE_CENTER_STATE:
+                    logger.info("STATE STATUS " + Status.MOVE_CENTER_STATE);
+                    reachCenter.fly(drone, decision, parameters);
+                    break;
+                case CENTER_STATE:
+                    logger.info("STATE STATUS " + Status.CENTER_STATE);
+                    this.spiralSearch.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
+                    this.spiralSearch.search(drone, decision, parameters);
+                    break;
+                default:
+                    break;
+            }
         }
         
     }
