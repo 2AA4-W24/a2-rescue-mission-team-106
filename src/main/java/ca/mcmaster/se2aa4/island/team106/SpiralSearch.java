@@ -36,9 +36,9 @@ public class SpiralSearch implements Search{
     // private String spiralDirection = mapArea.getSpiralTurnDirection();
 
     private Direction turnDirection(Direction currentDirection) {
-        String spiralDirection = this.mapArea.getSpiralTurnDirection();
+        RelativeDirection spiralDirection = this.mapArea.getSpiralTurnDirection();
         logger.info("MY SPIRAL CHANGE IS " + spiralDirection);
-        if (spiralDirection.equals("LEFT")) {
+        if (spiralDirection.equals(RelativeDirection.LEFT)) {
             return compass.getLeftDirection(currentDirection);
         } else {
             return compass.getRightDirection(currentDirection);

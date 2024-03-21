@@ -38,7 +38,7 @@ public class MapArea {
     private Direction prevEchoDirection;  // most recent echo direction
     private Direction groundEchoDirection; // direction ground is facing relative to the drone from last echo
     private Direction startDirection; // direction the drone is facing when it first spawns
-    private String spiralTurnDirection;
+    private RelativeDirection spiralTurnDirection;
 
     private Set<Creek> creeks = new HashSet<>();
     private Creek emergencySitePoint;
@@ -205,11 +205,11 @@ public class MapArea {
         return this.startDirection;
     }
 
-    public String getSpiralTurnDirection() {
+    public RelativeDirection getSpiralTurnDirection() {
         return this.spiralTurnDirection;
     }
 
-    public void setSpiralTurnDirection(String direction) {
+    public void setSpiralTurnDirection(RelativeDirection direction) {
         this.spiralTurnDirection = direction;
     }
 
