@@ -20,10 +20,10 @@ public class DecisionMaker {
 
     private Search spiralSearch; 
     private MapArea mapArea;
-    private FatalErrorHandler outOfRangeHandler;
+    private FatalErrorHandler fatalErrorHandler;
 
 
-    public DecisionMaker(BaseDrone drone, MapArea mapArea, FatalErrorHandler outOfRangeHandler){
+    public DecisionMaker(BaseDrone drone, MapArea mapArea, FatalErrorHandler fatalErrorHandler){
         this.drone = drone; 
         this.groundFinder = new GroundFinder(mapArea);
         this.centerStartHandler = new CenterStartHandler(mapArea);
@@ -32,13 +32,13 @@ public class DecisionMaker {
         this.reachCenter = new ReachCenter(mapArea);
         this.spiralSearch = new SpiralSearch(mapArea);
         this.mapArea = mapArea;
-        this.outOfRangeHandler = outOfRangeHandler;
+        this.fatalErrorHandler = fatalErrorHandler;
     }
 
 
     public void makeDecisions(JSONObject parameters, JSONObject decision) {
-        if (this.outOfRangeHandler.getDanger()) {
-            this.outOfRangeHandler.handleDanger(drone, mapArea, decision, parameters);
+        if (this.fatalErrorHandler.getDanger()) {
+            this.fatalErrorHandler.handleDanger(decision, parameters);
         } else {
             switch (drone.getStatus()) {
                 case START_STATE:

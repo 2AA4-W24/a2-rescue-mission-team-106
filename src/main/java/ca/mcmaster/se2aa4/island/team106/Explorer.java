@@ -13,13 +13,13 @@ public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
     private MapArea mapArea = new MapArea();
-    private final int MINIMUM_BATTERY_TO_OPERATE = 20;
+    private final int MINIMUM_BATTERY_TO_OPERATE = 11000;
 
     private Direction heading;
     private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, Direction.N, mapArea);
-    private FatalErrorHandler outOfRangeHandler = new FatalErrorHandler();
-    private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, outOfRangeHandler);
-    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler);
+    private FatalErrorHandler fatalErrorHandler = new FatalErrorHandler(MINIMUM_BATTERY_TO_OPERATE, drone, mapArea);
+    private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, fatalErrorHandler);
+    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, fatalErrorHandler);
     private Reporter reporter = new Reporter(mapArea);
 
 

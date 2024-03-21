@@ -7,37 +7,60 @@ import org.json.JSONObject;
 public class FatalErrorHandler {
     private final Logger logger = LogManager.getLogger();
 
-    private boolean danger;
+    private boolean rangeDanger;
+    private boolean batteryDanger;
+
+    private Drone drone;
+    private MapArea mapArea;
+    private int minOperationalBattery;
     
     // The reason it is 5 is to allow us some buffer to turn as 2 is the minimum
     // number of blocks we need for it to successfully turn.
     private final int RANGE_BORDER = 5;
     
+    public FatalErrorHandler(int MINIMUM_BATTERY_TO_OPERATE, BaseDrone baseDrone, MapArea mapArea) {
+        this.minOperationalBattery = MINIMUM_BATTERY_TO_OPERATE;
+        this.drone = (Drone) baseDrone;
+        this.mapArea = mapArea;
+    }
     
-    public void setDanger(int limit, MapArea mapArea) {
-        if (limit <= RANGE_BORDER && mapArea.getHeading() == mapArea.getPrevEchoDirection()) {
-            this.danger = true;
+    public void setDanger(int limit) {
+        if (this.drone.getBatteryLevel() <= this.minOperationalBattery) {
+            this.batteryDanger = true;
+            logger.info("BATTERY LEVEL CRITICAL");
+        } else if (limit <= RANGE_BORDER && mapArea.getHeading() == mapArea.getPrevEchoDirection()) {
+            this.rangeDanger = true;
+            logger.info("Approaching OUT OF RANGE area");
         } else {
-            this.danger = false;
+            this.rangeDanger = false;
+            this.batteryDanger = false;
         }
     }
 
-    public void handleDanger(BaseDrone baseDrone, MapArea mapArea, JSONObject decision, JSONObject parameters){
-        Drone drone = (Drone) baseDrone; 
-        Direction nextDirection = this.changeDirection(mapArea);
-        logger.info("CHANGING DIRECTION TO " + nextDirection);
-
-        drone.updateHeading(parameters, decision, nextDirection);
-        this.setDanger(false);
-
+    public void handleDanger(JSONObject decision, JSONObject parameters) {
+        
+        if (this.batteryDanger) {
+            drone.stop(decision);
+            logger.info("STOPPING DRONE DUE TO BATTERY LEVEL");
+        } else {
+            Direction nextDirection = this.changeDirection(this.mapArea);
+            logger.info("CHANGING DIRECTION TO " + nextDirection);
+    
+            drone.updateHeading(parameters, decision, nextDirection);
+            this.setRangeDanger(false);
+        }
     }
 
-    public void setDanger(boolean danger) {
-        this.danger = danger;
+    public void setRangeDanger(boolean danger) {
+        this.rangeDanger = danger;
+    }
+
+    public void setBatteryDanger(boolean danger) {
+        this.batteryDanger = danger;
     }
     
     public boolean getDanger() {
-        return this.danger;
+        return (this.rangeDanger || this.batteryDanger);
     }
     
     /**

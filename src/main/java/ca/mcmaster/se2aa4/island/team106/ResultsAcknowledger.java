@@ -123,9 +123,9 @@ public class ResultsAcknowledger {
 
 
     private void outOfRangeAction(int echoInt) {
-        fatalErrorHandler.setDanger(echoInt, mapArea);
+        fatalErrorHandler.setDanger(echoInt);
         if (fatalErrorHandler.getDanger()) {
-            logger.info("Approaching OUT OF RANGE area");
+            logger.info("Nearing Fatal Danger");
         }
     }
 
