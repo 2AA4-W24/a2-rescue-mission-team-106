@@ -33,72 +33,34 @@ public class CenterStartHandler implements DroneFlightManager{
         Drone drone = (Drone) baseDrone;
 
         if (drone.getGroundStatus()) {
-            if (mapArea.getHeading() == mapArea.getGroundEchoDirection()) {
-                Direction nextHeading = turnDirection(mapArea.getHeading());
-                drone.updateHeading(parameters, decision, nextHeading);
-            } else {
-
-                if (this.counts % 5 == 0) {
-                    previousDroneCoordinate.setCoordinate(mapArea.getDroneX(), mapArea.getDroneY());
-                    drone.fly(decision);
-                } else if (this.counts % 5 == 1) {
-                    logger.info("ECHOING EAST");
-                    drone.echoEast(parameters, decision);
-                    this.mapArea.setWestDistance(this.mapArea.getLastDistance());
-                } else if (this.counts % 5 == 2) {
-                    logger.info("ECHOING SOUTH");
-                    drone.echoSouth(parameters, decision);
-                    this.mapArea.setEastDistance(this.mapArea.getLastDistance());
-                } else if (this.counts % 5 == 3) {
-                    logger.info("ECHOING NORTH");
-                    drone.echoNorth(parameters, decision);
-                    this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
-                } else if (this.counts % 5 == 4) {
-                    logger.info("ECHOING WEST");
-                    drone.echoWest(parameters, decision);
-                    this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
-                }
-    
-                this.counts++;
+            if (this.counts % 5 == 0) {
+                previousDroneCoordinate.setCoordinate(mapArea.getDroneX(), mapArea.getDroneY());
+                drone.fly(decision);
+            } else if (this.counts % 5 == 1) {
+                logger.info("ECHOING EAST");
+                drone.echoEast(parameters, decision);
+                this.mapArea.setWestDistance(this.mapArea.getLastDistance());
+            } else if (this.counts % 5 == 2) {
+                logger.info("ECHOING SOUTH");
+                drone.echoSouth(parameters, decision);
+                this.mapArea.setEastDistance(this.mapArea.getLastDistance());
+            } else if (this.counts % 5 == 3) {
+                logger.info("ECHOING NORTH");
+                drone.echoNorth(parameters, decision);
+                this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
+            } else if (this.counts % 5 == 4) {
+                logger.info("ECHOING WEST");
+                drone.echoWest(parameters, decision);
+                this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
             }
+
+            this.counts++;
         } else {
             Direction groundDirection = mapArea.getStartDirection();
             drone.updateHeading(parameters, decision, groundDirection);
             drone.setStatus(Status.START_STATE);
         }
         logger.info("DRONE IS CURRENTLY FACING: " + mapArea.getHeading());
-        
-    }
-    
-    private Direction turnDirection(Direction currentDirection) {
-        switch (currentDirection) {
-            case N:
-                if (mapArea.getWestDistance() < mapArea.getEastDistance()) {
-                    return Direction.W;
-                } else {
-                    return Direction.E;
-                }
-            case S:
-                if (mapArea.getEastDistance() < mapArea.getWestDistance()) {
-                    return Direction.E;
-                } else {
-                    return Direction.W;
-                }
-            case E:
-                if (mapArea.getNorthDistance() < mapArea.getSouthDistance()) {
-                    return Direction.N;
-                } else {
-                    return Direction.S;
-                }
-            case W:
-                if (mapArea.getSouthDistance() < mapArea.getNorthDistance()) {
-                    return Direction.S;
-                } else {
-                    return Direction.N;
-                }
-            default:
-                return currentDirection;
-        }
-    }
 
+    }
 }
