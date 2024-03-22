@@ -11,8 +11,7 @@ import org.json.JSONTokener;
 
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
 import ca.mcmaster.se2aa4.island.team106.DroneTools.FatalErrorHandler;
-import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
-import ca.mcmaster.se2aa4.island.team106.Drones.Drone;
+import ca.mcmaster.se2aa4.island.team106.Drones.*;
 
 public class Explorer implements IExplorerRaid {
 
@@ -36,7 +35,7 @@ public class Explorer implements IExplorerRaid {
         String direction = info.getString("heading");
         Integer batteryLevel = info.getInt("budget");
 
-        Direction heading = Direction.fromString(direction); 
+        Direction heading = mapArea.fromString(direction); 
         
         // update drone to starting battery and heading facing at start
         drone.updateDrone(batteryLevel.intValue(), heading);

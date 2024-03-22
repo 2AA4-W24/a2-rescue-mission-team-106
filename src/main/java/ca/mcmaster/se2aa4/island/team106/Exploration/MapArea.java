@@ -75,9 +75,27 @@ public class MapArea {
         logger.info("\n");
     }
 
+
     public void setEmergencySite(POI emergencySite){
         this.emergencySitePoint = emergencySite;
         this.emergencySiteFound = true;
+    }
+
+
+    public Direction fromString(String direction) {
+        String upperCaseDirection = direction.toUpperCase();
+        switch (upperCaseDirection) {
+            case "E":
+                return Direction.E;
+            case "W":
+                return Direction.W;
+            case "N":
+                return Direction.N;
+            case "S":
+                return Direction.S;
+            default:
+                return Direction.FORWARD; 
+        }
     }
 
     
