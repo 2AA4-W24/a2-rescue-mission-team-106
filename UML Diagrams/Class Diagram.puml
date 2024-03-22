@@ -11,15 +11,65 @@ class Actions {
     + moveTo(JSONObject, JSONObject, Direction): void
 }
 abstract class BaseDrone {
-    
+    # currentBatteryLevel : int
+    # status : Status
+    + {abstract} updateDrone(int, Direction) : void
+    + {abstract} getStatus() : Status
+    + {abstract} setStatus(Status) : void
+    + {abstract} getBatterLevel() : int
+    + {abstract} stop(JSONObject) : void
+    + {abstract} fly(JSONObject) : void
+    + {abstract} canMakeDecision(int) : boolean
+    + {abstract} useBattery(int) : void
+    + {abstract} echo(JSONObject, JSONObject, Direction) : void
+    + {abstract} updateHeading(JSONObject, JSONObject, Direction) : void
+    + {abstract} scan(JSONObject) : void
 }
-class CenterStartHandler
-class Compass
-class Creek
-class DecisionMaker
-interface DimensionFinder
-enum Direction
-class Drone
+class CenterStartHandler {
+    + fly(BaseDrone, JSONObject, JSONObject) : void
+}
+class Compass {
+    + getLeftDirection(Direction) : Direction
+    + getRightDirection(Direction) : Direction
+}
+class Creek {
+    + Creek(Point, String)
+    + getCreekID() : String
+    + getCreekPoint() : Point
+    + getDistance(Creek) : double
+    + getID(): String
+    + toString() : String
+}
+class DecisionMaker {
+    + DecisionMaker(BaseDrone, MapArea, FatalErrorHandler)
+    + makeDecisions(JSONObject, JSONObject) : void
+}
+interface DimensionFinder {
+    getDimension(BaseDrone, JSONObject, JSONObject) : void
+}
+enum Direction {
+    N,
+    E,
+    W,
+    S,
+    FORWARD,
+    LEFT,
+    RIGHT
+    + {static} fromString(String) : Direction
+}
+class Drone {
+    + Drone(int, MapArea)
+    + ^updateDrone(int, Direction): void
+    + ^getBatteryLevel(): int
+    + ^getStatus(): Status
+    + ^setStatus(Status): void
+    + ^fly(JSONObject): void
+    + ^echo(JSONObject, JSONObject, Direction) : void
+    + ^stop(JSONObject) : void
+    + ^scan(JSONObject) : void
+    + ^updateHeading(JSONObject, JSONObject, Direction) : void
+    + ^useBattery(int) : void
+}
 interface DroneFlightManager
 class Explorer
 class FatalErrorHandler
