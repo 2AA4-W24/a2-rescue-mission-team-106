@@ -1,4 +1,5 @@
 package ca.mcmaster.se2aa4.island.team106;
+
 import org.junit.jupiter.api.Test;
 import org.json.JSONObject;
 import static org.junit.Assert.assertFalse;
@@ -6,6 +7,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
+
+// Import Direction enum
+import ca.mcmaster.se2aa4.island.team106.Direction;
 
 public class DimensionFinderTest {
     private MapArea mapArea;
@@ -18,17 +22,20 @@ public class DimensionFinderTest {
     @BeforeEach
     public void initialize() {
         mapArea = new MapArea();
-        drone = new Drone(1000, Direction.N, mapArea);
+        drone = new Drone(1000, mapArea);
         widthFinder = new WidthFinder(mapArea);
         lengthFinder = new LengthFinder(mapArea);
         decision = new JSONObject();
         parameters = new JSONObject();
-
+        
+        // Set initial direction for MapArea
+        mapArea.setStartDirection(Direction.N);
+        mapArea.setHeading(Direction.N);
+        mapArea.setGroundEchoDirection(Direction.N);
     }
 
     @Test
     public void testLengthObtained() {
-        mapArea.setHeading(Direction.S);
         mapArea.setObtainedWidth(true);
         mapArea.setIsAbove(true);
         mapArea.setSouthDistance(1);
@@ -48,7 +55,6 @@ public class DimensionFinderTest {
 
     @Test
     public void testWidthObtained() {
-        mapArea.setHeading(Direction.S);
         mapArea.setObtainedLength(true);
         mapArea.setIsAbove(true);
         mapArea.setSouthDistance(1);

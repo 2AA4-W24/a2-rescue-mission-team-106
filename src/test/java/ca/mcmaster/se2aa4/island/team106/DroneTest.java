@@ -18,7 +18,7 @@ public class DroneTest {
 
     @Test
     public void testUpdateDrone() {
-        drone = new Drone (1000, Direction.E, mapArea);
+        drone = new Drone (1000, mapArea);
         drone.updateDrone(900, Direction.N);
         assertEquals(900, drone.getBatteryLevel());
         assertEquals(Direction.N, mapArea.getHeading());
@@ -33,7 +33,7 @@ public class DroneTest {
 
     @Test 
     public void testDroneBattery(){
-        drone = new Drone (500, Direction.E, mapArea);
+        drone = new Drone (500, mapArea);
         drone.currentBatteryLevel = 1000;
         assertTrue(drone.canMakeDecision(100));
         drone.useBattery(600);
@@ -45,7 +45,7 @@ public class DroneTest {
     public void testUpdateHeading(){
         JSONObject parameter = new JSONObject();
         JSONObject decision = new JSONObject();
-        drone = new Drone(1000, Direction.E, mapArea);
+        drone = new Drone(1000, mapArea);
         drone.updateHeading(parameter, decision, Direction.N);
         assertEquals(Direction.N, mapArea.getHeading());
     } 
