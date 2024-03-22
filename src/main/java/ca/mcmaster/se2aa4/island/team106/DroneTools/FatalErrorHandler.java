@@ -44,14 +44,10 @@ public class FatalErrorHandler {
         
         if (this.batteryDanger) {
             drone.stop(decision);
-            if (logger.isDebugEnabled()){
-                logger.info("STOPPING DRONE DUE TO BATTERY LEVEL");
-                }
+            logger.info("STOPPING DRONE DUE TO BATTERY LEVEL");
         } else {
             Direction nextDirection = this.changeDirection(this.mapArea);
-            if (logger.isDebugEnabled()){
-                logger.info("CHANGING DIRECTION TO " + nextDirection);
-                }
+            logger.info("CHANGING DIRECTION TO " + nextDirection);
             drone.updateHeading(parameters, decision, nextDirection);
             this.setRangeDanger(false);
         }

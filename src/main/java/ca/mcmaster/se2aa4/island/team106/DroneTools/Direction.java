@@ -11,7 +11,8 @@ public enum Direction {
 
 
     public static Direction fromString(String direction) {
-        switch (direction.toUpperCase()) {
+        String upperCaseDirection = direction.toUpperCase();
+        switch (upperCaseDirection) {
             case "E":
                 return E;
             case "W":

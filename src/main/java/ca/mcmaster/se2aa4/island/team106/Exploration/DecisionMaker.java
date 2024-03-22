@@ -9,7 +9,6 @@ import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
 import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
 import ca.mcmaster.se2aa4.island.team106.States.*;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,12 +49,9 @@ public class DecisionMaker {
             switch (drone.getStatus())
             {
                 case GROUND_FINDER_STATE:
-                if (logger.isDebugEnabled()) {
                     logger.info("STATE STATUS " + Status.GROUND_FINDER_STATE);
                     logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
-                    }
                     this.currentState = this.groundFinderState; 
-                  
                     break;
                 case CENTER_START_STATE:
                     logger.info("STATE STATUS " + Status.CENTER_START_STATE);

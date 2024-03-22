@@ -1,5 +1,7 @@
 package ca.mcmaster.se2aa4.island.team106.Exploration;
-import java.util.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
