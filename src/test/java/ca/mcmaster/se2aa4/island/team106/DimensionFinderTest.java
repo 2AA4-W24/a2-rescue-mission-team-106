@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 
-// Import Direction enum
-import ca.mcmaster.se2aa4.island.team106.Direction;
 
 public class DimensionFinderTest {
     private MapArea mapArea;
