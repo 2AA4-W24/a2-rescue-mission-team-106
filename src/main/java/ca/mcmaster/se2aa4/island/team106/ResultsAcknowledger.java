@@ -153,7 +153,7 @@ public class ResultsAcknowledger {
         Direction groundDirection = mapArea.getPrevEchoDirection(); // store the ground direction we have ground
 
         if (echoResult.equals("GROUND")) {
-            drone.setGroundStatus(true); // ground has been ground so notify drone that status of ground found is true
+            mapArea.setGroundStatus(true); // ground has been ground so notify drone that status of ground found is true
             logger.info("GROUND HAS BEEN FOUND AT " + groundDirection);
             
             //! map is updated to date with the heading the drone should be facing to go to ground
@@ -165,7 +165,7 @@ public class ResultsAcknowledger {
             mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
         } else {
             if (mapArea.getPrevEchoDirection() == mapArea.getStartDirection()) {
-                drone.setGroundStatus(false);
+                mapArea.setGroundStatus(false);
             }
         }
     }

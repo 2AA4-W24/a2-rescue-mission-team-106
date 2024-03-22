@@ -100,7 +100,7 @@ public class ReachCenter implements DroneFlightManager{
         }
     }
 
-    public void determineTurnDirection(Direction currentHeading, Direction startHeading) {
+    private void determineTurnDirection(Direction currentHeading, Direction startHeading) {
         if (currentHeading == Direction.N) {
             if (startHeading == Direction.W) {
                 this.mapArea.setSpiralTurnDirection(Direction.LEFT);
