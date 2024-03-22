@@ -51,13 +51,13 @@ public class Reporter {
                 
         
                 logger.info("HEY I FOUND THE CLOEST CREEK? " + bestDistance);
-                logger.info("BIG BOY TEST: " + mappings.get(bestDistance).getCreekID());
-                return mappings.get(bestDistance).getCreekID();
+                logger.info("BIG BOY TEST: " + mappings.get(bestDistance).getID());
+                return mappings.get(bestDistance).getID();
             } else {
                 // In case the emergency site is not found, but some creeks have
                 // been located, return any one of the creeks.
                 Creek[] creekArray = creeks.toArray(new Creek[0]);
-                return creekArray[0].getCreekID();
+                return creekArray[0].getID();
             }
         }
     }

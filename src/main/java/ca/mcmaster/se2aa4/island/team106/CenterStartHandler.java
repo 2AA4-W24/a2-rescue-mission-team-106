@@ -12,6 +12,11 @@ public class CenterStartHandler implements DroneFlightManager{
     private MapArea mapArea;
     private Point previousDroneCoordinate;
 
+    /**
+     * Constructs a new CenterStartHandler with the specified map area.
+     *
+     * @param mapArea the map area on which the drone operates on.
+     */
     public CenterStartHandler(MapArea mapArea) {
         this.mapArea = mapArea;
         this.previousDroneCoordinate = new Point(mapArea.getDroneX(), mapArea.getDroneY());
@@ -28,6 +33,18 @@ public class CenterStartHandler implements DroneFlightManager{
      * record is being created.
      */
 
+     /**
+     * Implements the fly method of the DroneFlightManager interface to manage
+     * drone flights. Determines the direction for echoing based on the counts
+     * and updates distances accordingly. It further then transitions into a
+     * different state based on whether or not the ground has been detected by
+     * the latest round of echoes.
+     *
+     * @param drone the drone performing the flight
+     * @param decision the decision JSON object to be modified
+     * @param parameter the parameter JSON object that stores the additional
+     * parameters for the action
+     */
     @Override
     public void fly(BaseDrone drone, JSONObject decision, JSONObject parameters) {
 
