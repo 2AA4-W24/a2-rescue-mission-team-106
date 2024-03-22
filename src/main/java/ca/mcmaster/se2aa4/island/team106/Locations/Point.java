@@ -1,4 +1,4 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.Locations;
 
 public class Point {
     private int x; 

@@ -1,20 +1,31 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.States;
 
 import org.json.JSONObject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.DroneFlightManager;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.State;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
+import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+import ca.mcmaster.se2aa4.island.team106.Locations.Point;
 
-public class GroundFinder implements DroneFlightManager{
+
+public class GroundFinderState implements DroneFlightManager, State{
     private int counts = 1;
-    private final Logger logger = LogManager.getLogger();
 
     private MapArea mapArea;
     private Point previousDroneCoordinate;
 
-    public GroundFinder(MapArea mapArea) {
+    public GroundFinderState(MapArea mapArea) {
         this.mapArea = mapArea;
-        this.previousDroneCoordinate = new Point(mapArea.getDroneX(), mapArea.getDroneY());
+        this.previousDroneCoordinate = new Point(this.mapArea.getDroneX(), this.mapArea.getDroneY());
+    }
+
+
+    @Override
+    public void handle(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
+        this.fly(baseDrone, decision, parameters);
     }
 
 
@@ -29,50 +40,39 @@ public class GroundFinder implements DroneFlightManager{
      * record is being created.
      */
 
-     @Override
+    @Override
     public void fly(BaseDrone drone, JSONObject decision, JSONObject parameters) {
 
-        if (mapArea.getGroundStatus()) {
-            if (mapArea.getHeading() == mapArea.getGroundEchoDirection()) {
-                Direction nextHeading = turnDirection(mapArea.getHeading());
+        if (this.mapArea.getGroundStatus()) {
+            if (this.mapArea.getHeading() == this.mapArea.getGroundEchoDirection()) {
+                Direction nextHeading = turnDirection(this.mapArea.getHeading());
                 drone.updateHeading(parameters, decision, nextHeading);
                 drone.setStatus(Status.CENTER_START_STATE);
-                logger.info("TRANSITIONING INTO CENTER_START_STATE");
             } else {
-
-                logger.info("GROUND FOUND MARKING THE INITAL POINT OF WIDTH X AT: " + mapArea.getDroneX());
-                mapArea.setIsAbove(true);
+                this.mapArea.setIsAbove(true);
                 drone.fly(decision);
-
-                //! for this we dont always just want to jump to the width state, we would jump to the length state if our inital heading is north or south
-                if (mapArea.getHeading() == Direction.E || mapArea.getHeading() == Direction.W) {
-                    mapArea.setWidthStartPoint(previousDroneCoordinate.getXCoordinate()); //! modified
+                if (this.mapArea.getHeading() == Direction.E || this.mapArea.getHeading() == Direction.W) {
+                    this.mapArea.setWidthStartPoint(previousDroneCoordinate.getXCoordinate()); 
                     drone.setStatus(Status.WIDTH_STATE);
-                    logger.info("TRANSITIONING INTO WIDTH STATE");
                 } else {
-                    mapArea.setLengthStartPoint(previousDroneCoordinate.getYCoordinate()); //! modified 
+                    this.mapArea.setLengthStartPoint(previousDroneCoordinate.getYCoordinate()); 
                     drone.setStatus(Status.LENGTH_STATE);
-                    logger.info("TRANSITIONING INTO LENGTH STATE");
                 }
             }
         } else {
             if (this.counts % 5 == 0) {
-                previousDroneCoordinate.setCoordinate(mapArea.getDroneX(), mapArea.getDroneY());
+                previousDroneCoordinate.setCoordinate(this.mapArea.getDroneX(), this.mapArea.getDroneY());
                 drone.fly(decision);
             } else if (this.counts % 5 == 1) {
-                logger.info("ECHOING EAST");
                 drone.echo(parameters, decision, Direction.E);
                 this.mapArea.setWestDistance(this.mapArea.getLastDistance());
             } else if (this.counts % 5 == 2) {
-                logger.info("ECHOING SOUTH");
                 drone.echo(parameters, decision, Direction.S);
                 this.mapArea.setEastDistance(this.mapArea.getLastDistance());
             } else if (this.counts % 5 == 3) {
-                logger.info("ECHOING NORTH");
                 drone.echo(parameters, decision, Direction.N);
                 this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
             } else if (this.counts % 5 == 4) {
-                logger.info("ECHOING WEST");
                 drone.echo(parameters, decision, Direction.W);
                 this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
             }
@@ -80,32 +80,31 @@ public class GroundFinder implements DroneFlightManager{
 
             this.counts++;
         }
-        logger.info("DRONE IS CURRENTLY FACING: " + mapArea.getHeading());
-
     }
+
 
     private Direction turnDirection(Direction currentDirection) {
         switch (currentDirection) {
             case N:
-                if (mapArea.getWestDistance() < mapArea.getEastDistance()) {
+                if (this.mapArea.getWestDistance() < this.mapArea.getEastDistance()) {
                     return Direction.W;
                 } else {
                     return Direction.E;
                 }
             case S:
-                if (mapArea.getEastDistance() < mapArea.getWestDistance()) {
+                if (this.mapArea.getEastDistance() < this.mapArea.getWestDistance()) {
                     return Direction.E;
                 } else {
                     return Direction.W;
                 }
             case E:
-                if (mapArea.getNorthDistance() < mapArea.getSouthDistance()) {
+                if (this.mapArea.getNorthDistance() < this.mapArea.getSouthDistance()) {
                     return Direction.N;
                 } else {
                     return Direction.S;
                 }
             case W:
-                if (mapArea.getSouthDistance() < mapArea.getNorthDistance()) {
+                if (this.mapArea.getSouthDistance() < this.mapArea.getNorthDistance()) {
                     return Direction.S;
                 } else {
                     return Direction.N;

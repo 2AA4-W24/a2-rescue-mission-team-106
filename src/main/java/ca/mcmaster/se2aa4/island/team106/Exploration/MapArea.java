@@ -1,23 +1,31 @@
-package ca.mcmaster.se2aa4.island.team106;
-import java.util.*;
+package ca.mcmaster.se2aa4.island.team106.Exploration;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.Locations.*;
+
+
 public class MapArea {
     private final Logger logger = LogManager.getLogger();
 
-    private int initialX = 0, initialY = 0;
+    private final int INITAL_X = 0;
+    private final int INITAL_Y = 0;
 
     private boolean isAboveGround = false; //initally drone is not above the island
-    private Point droneCoordinates = new Point(initialX, initialY); // drone originally spawns at 0,0
+    private Point droneCoordinates = new Point(INITAL_X, INITAL_Y); // drone originally spawns at 0,0
 
     //! Used for both the widthFinder and lengthFinder 
     private boolean isAbove; // not physically above the ground this just means we are perpendicular we to island we are still above water 
 
     //! These variables bellow  will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
     //! Save the coordinate point of starting width
-    private int widthStartX, widthEndX; 
+    private int widthStartX; 
+    private int widthEndX; 
 
     private boolean obtainedWidth = false; 
     private boolean groundStatus = false; 
@@ -26,7 +34,8 @@ public class MapArea {
 
 
     //! These variables bellow  will be used for the LengthFinder Later we could just make a class that stores these relevant attributes
-    private int lengthStartY, lengthEndY; 
+    private int lengthStartY;
+    private int lengthEndY; 
 
     private boolean obtainedLength = false; 
 
@@ -41,8 +50,8 @@ public class MapArea {
     private Direction startDirection; // direction the drone is facing when it first spawns
     private Direction spiralTurnDirection;
 
-    private Set<Creek> creeks = new HashSet<>();
-    private Creek emergencySitePoint;
+    private Set<POI> creeks = new HashSet<>();
+    private POI emergencySitePoint;
     
     private boolean emergencySiteFound = false;
 
@@ -54,26 +63,27 @@ public class MapArea {
     private int southDistance = 0; 
 
 
-    public void addCreek(Creek creek){
+    public void addCreek(POI creek){
         creeks.add(creek);
     }
 
 
     public void viewCreeks(){
-        logger.info("CREEK INFO TIME!");
-        for (Creek creek: this.creeks){
+        for (POI creek: this.creeks){
             logger.info(creek);
         }
+        logger.info("\n");
     }
 
-    public void setEmergencySite(Creek emergencySite){
+    public void setEmergencySite(POI emergencySite){
         this.emergencySitePoint = emergencySite;
         this.emergencySiteFound = true;
     }
 
     
     public void updateCoordinate(Direction direction){
-        int newX, newY; 
+        int newX;
+        int newY; 
         switch(direction) {
             case E:
                 newX = this.droneCoordinates.getXCoordinate() + 1;
@@ -150,11 +160,11 @@ public class MapArea {
     }
 
 
-    public Set<Creek> getCreeks(){
+    public Set<POI> getCreeks(){
         return this.creeks;
     }
 
-    public Creek getEmergencySite() {
+    public POI getEmergencySite() {
         return this.emergencySitePoint;
     }
 

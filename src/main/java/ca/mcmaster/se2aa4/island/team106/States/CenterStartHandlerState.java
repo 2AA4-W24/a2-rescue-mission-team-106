@@ -1,20 +1,34 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.States;
 
 import org.json.JSONObject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.DroneFlightManager;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.State;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
+import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+import ca.mcmaster.se2aa4.island.team106.Locations.Point;
 
-public class CenterStartHandler implements DroneFlightManager{
+
+
+
+public class CenterStartHandlerState implements DroneFlightManager, State{
     private int counts = 1;
-    private final Logger logger = LogManager.getLogger();
 
     private MapArea mapArea;
     private Point previousDroneCoordinate;
 
-    public CenterStartHandler(MapArea mapArea) {
+    public CenterStartHandlerState(MapArea mapArea) {
         this.mapArea = mapArea;
-        this.previousDroneCoordinate = new Point(mapArea.getDroneX(), mapArea.getDroneY());
+        this.previousDroneCoordinate = new Point(this.mapArea.getDroneX(), this.mapArea.getDroneY());
+    }
+
+
+    @Override
+    public void handle(BaseDrone drone, JSONObject decision, JSONObject parameters){
+        this.previousDroneCoordinate = new Point(this.mapArea.getDroneX(), this.mapArea.getDroneY());
+        this.fly(drone, decision, parameters);
     }
 
     /*
@@ -31,35 +45,29 @@ public class CenterStartHandler implements DroneFlightManager{
     @Override
     public void fly(BaseDrone drone, JSONObject decision, JSONObject parameters) {
 
-        if (mapArea.getGroundStatus()) {
+        if (this.mapArea.getGroundStatus()) {
             if (this.counts % 5 == 0) {
-                previousDroneCoordinate.setCoordinate(mapArea.getDroneX(), mapArea.getDroneY());
+                previousDroneCoordinate.setCoordinate(this.mapArea.getDroneX(), this.mapArea.getDroneY());
                 drone.fly(decision);
             } else if (this.counts % 5 == 1) {
-                logger.info("ECHOING EAST");
                 drone.echo(parameters, decision, Direction.E);
                 this.mapArea.setWestDistance(this.mapArea.getLastDistance());
             } else if (this.counts % 5 == 2) {
-                logger.info("ECHOING SOUTH");
                 drone.echo(parameters, decision, Direction.S);
                 this.mapArea.setEastDistance(this.mapArea.getLastDistance());
             } else if (this.counts % 5 == 3) {
-                logger.info("ECHOING NORTH");
                 drone.echo(parameters, decision, Direction.N);
                 this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
             } else if (this.counts % 5 == 4) {
-                logger.info("ECHOING WEST");
                 drone.echo(parameters, decision, Direction.W);
                 this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
             }
 
             this.counts++;
         } else {
-            Direction groundDirection = mapArea.getStartDirection();
+            Direction groundDirection = this.mapArea.getStartDirection();
             drone.updateHeading(parameters, decision, groundDirection);
-            drone.setStatus(Status.START_STATE);
+            drone.setStatus(Status.GROUND_FINDER_STATE);
         }
-        logger.info("DRONE IS CURRENTLY FACING: " + mapArea.getHeading());
-
     }
 }
