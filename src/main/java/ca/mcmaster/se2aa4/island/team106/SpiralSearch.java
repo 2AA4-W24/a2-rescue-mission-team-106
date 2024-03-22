@@ -11,11 +11,11 @@ public class SpiralSearch implements Search{
     private final Logger logger = LogManager.getLogger(); 
 
     private MapArea mapArea; 
-    private Compass compass = new Compass(); 
+    private Compass compass = new Compass();
     private HashSet<Point> scannedTiles = new HashSet<>();
 
     private int maxLength; // the length we want to reach
-    private int maxWidth; // the width we weant to reach
+    private int maxWidth; // the width we want to reach
 
     private int tilesTraversed  = 0;
     
@@ -24,18 +24,30 @@ public class SpiralSearch implements Search{
 
     private int counter = 0; 
 
-    private boolean needToUpdateHeading = false; 
+    private boolean needToUpdateHeading = false;
 
-    public SpiralSearch(MapArea mapArea){
+    // String spiralDirection;
+
+    public SpiralSearch(MapArea mapArea) {
         this.mapArea = mapArea;
         this.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
 
+    }
+    // private String spiralDirection = mapArea.getSpiralTurnDirection();
+
+    private Direction turnDirection(Direction currentDirection) {
+        Direction spiralDirection = this.mapArea.getSpiralTurnDirection();
+        logger.info("MY SPIRAL CHANGE IS " + spiralDirection);
+        if (spiralDirection.equals(Direction.LEFT)) {
+            return compass.getLeftDirection(currentDirection);
+        } else {
+            return compass.getRightDirection(currentDirection);
+        }
     }
 
 
     @Override
     public void search(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
-        // Drone drone = (Drone) baseDrone; 
 
         if (this.currentLength != this.maxLength || this.currentWidth != this.maxWidth)
         {
@@ -43,12 +55,12 @@ public class SpiralSearch implements Search{
             if (this.needToUpdateHeading)
             {
                 // gets the right cardinal direction of our current heading
-                //! if start @ (1,1) facning South then turn Left (your middle cardinal direction will be West)
+                //! if start @ (1,1) facing South then turn Left (your middle cardinal direction will be West)
                 //! Our first turn to begin in the spiral should be our very original starting direction ***
 
-                Direction rightDirection = compass.getRightDirection(mapArea.getHeading()); 
-                logger.info("NOW WE ARE TURNINGGGGG SO OUR CURRENT HEADING IS: " + mapArea.getHeading()  + " FUCKING TURNED IS: " + rightDirection);
-                baseDrone.updateHeading(parameters, decision, rightDirection);
+                Direction newDirection = turnDirection(mapArea.getHeading()); 
+                logger.info("NOW WE ARE TURNINGGGGG SO OUR CURRENT HEADING IS: " + mapArea.getHeading()  + " FUCKING TURNED IS: " + newDirection);
+                baseDrone.updateHeading(parameters, decision, newDirection);
                 this.needToUpdateHeading = false; 
                 this.counter++; 
             
@@ -89,9 +101,11 @@ public class SpiralSearch implements Search{
 
 
     private void updateSegment(){
-        // only incremenet currentWidth, once our tilesTraversed = currentWidth -1, then we move on to the next segmentwhere currentWidth incremenets
-        // width is associated with E and W
-        // need to make sure that currentWidth is NOT equal to width only then we can incremenet currentWidth to next segment
+        // only increment currentWidth, once our tilesTraversed = currentWidth
+        // -1, then we move on to the next segment where currentWidth increments
+        // width is associated with E and W need to make sure that currentWidth
+        // is NOT equal to width only then we can increment currentWidth to next
+        // segment
         if ( (mapArea.getHeading() == Direction.E || mapArea.getHeading() == Direction.W) && 
         (this.tilesTraversed == this.currentWidth )){
 
@@ -99,7 +113,7 @@ public class SpiralSearch implements Search{
                 this.currentWidth++; // make our segment bigger for next run
             }
             logger.info("We have finished our width segment so updating it now!");
-            this.tilesTraversed = 0; // we need to reset tilesTraversed because now we have compelted our segment
+            this.tilesTraversed = 0; // we need to reset tilesTraversed because now we have completed our segment
             this.needToUpdateHeading = true; 
         }
         else if ((mapArea.getHeading() == Direction.N || mapArea.getHeading() == Direction.S) && 

@@ -17,9 +17,9 @@ public class Explorer implements IExplorerRaid {
 
     private Direction heading;
     private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, mapArea);
-    private OutOfRangeHandler outOfRangeHandler = new OutOfRangeHandler();
-    private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, outOfRangeHandler);
-    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, outOfRangeHandler);
+    private FatalErrorHandler fatalErrorHandler = new FatalErrorHandler(MINIMUM_BATTERY_TO_OPERATE, drone, mapArea);
+    private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, fatalErrorHandler);
+    private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, fatalErrorHandler);
     private Reporter reporter = new Reporter(mapArea);
 
 
@@ -36,6 +36,7 @@ public class Explorer implements IExplorerRaid {
         
         // update drone to starting battery and heading facing at start
         drone.updateDrone(batteryLevel.intValue(), heading);
+        mapArea.setStartDirection(heading);
 
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
@@ -71,6 +72,8 @@ public class Explorer implements IExplorerRaid {
     @Override
     public String deliverFinalReport() {
         String report = reporter.deliverReport();
+        logger.info("Start Direction: " + mapArea.getStartDirection());
+        logger.info("Spiral Turn Direction: " + mapArea.getSpiralTurnDirection());
         logger.info(report);
         logger.info("HELLO SI THIS WORKING");
         return report; 

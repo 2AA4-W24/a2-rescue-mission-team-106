@@ -1,0 +1,45 @@
+@startuml "Class Diagram"
+class Actions {
+    + echo(JSONObject, JSONObject, Direction): void
+    + fly(JSONObject): void
+    + stop(JSONObject): void
+    + heading(JSONObject, JSONObject, Direction): void
+    + scan(JSONObject): void
+    + land(JSONObject, JSONObject): void
+    + explore(JSONObject): void
+    + scout(JSONObject, JSONObject, Direction): void
+    + moveTo(JSONObject, JSONObject, Direction): void
+}
+abstract class BaseDrone {
+    
+}
+class CenterStartHandler
+class Compass
+class Creek
+class DecisionMaker
+interface DimensionFinder
+enum Direction
+class Drone
+interface DroneFlightManager
+class Explorer
+class FatalErrorHandler
+class GroundFinder
+interface IExplorerRaid {
+    + initialize(String): void
+    + takeDecision(): String
+    + acknowledgeResults(): void
+    + deliverFinalReport(): String
+}
+class LengthFinder
+class MapArea
+class Point
+class ReachCenter
+enum RelativeDirection
+class Reporter
+class ResultsAcknowledger
+class Runner
+interface Search
+class SpiralSearch
+enum Status
+class WidthFinder
+@enduml

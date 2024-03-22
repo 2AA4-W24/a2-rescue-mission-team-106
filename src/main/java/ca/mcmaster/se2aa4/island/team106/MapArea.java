@@ -38,9 +38,13 @@ public class MapArea {
     private Direction newHeading; // this is the updated direction the drone needs to turn
     private Direction prevEchoDirection;  // most recent echo direction
     private Direction groundEchoDirection; // direction ground is facing relative to the drone from last echo
+    private Direction startDirection; // direction the drone is facing when it first spawns
+    private Direction spiralTurnDirection;
 
     private Set<Creek> creeks = new HashSet<>();
-    private Creek emergencySitePoint; 
+    private Creek emergencySitePoint;
+    
+    private boolean emergencySiteFound = false;
 
     private int lastDistance; 
 
@@ -64,6 +68,7 @@ public class MapArea {
 
     public void setEmergencySite(Creek emergencySite){
         this.emergencySitePoint = emergencySite;
+        this.emergencySiteFound = true;
     }
 
     
@@ -85,6 +90,8 @@ public class MapArea {
             case N:
                 newY = this.droneCoordinates.getYCoordinate() + 1;
                 this.droneCoordinates.setYCoordinate(newY);
+                break;
+            default:
                 break;
         }
     }
@@ -147,10 +154,13 @@ public class MapArea {
         return this.creeks;
     }
 
-    public Creek getEmergencySite(){
+    public Creek getEmergencySite() {
         return this.emergencySitePoint;
     }
 
+    public boolean getEmergencySiteStatus() {
+        return this.emergencySiteFound;
+    }
 
     public boolean getIsAbove(){
         return this.isAbove;
@@ -196,8 +206,24 @@ public class MapArea {
     }
 
 
-    public int getLengthOfIsland(){
+    public int getLengthOfIsland() {
         return Math.abs(this.lengthStartY - this.lengthEndY);
+    }
+    
+    public Direction getStartDirection() {
+        return this.startDirection;
+    }
+
+    public Direction getSpiralTurnDirection() {
+        return this.spiralTurnDirection;
+    }
+
+    public void setSpiralTurnDirection(Direction direction) {
+        this.spiralTurnDirection = direction;
+    }
+
+    public void setStartDirection(Direction direction) {
+        this.startDirection = direction;
     }
 
 
