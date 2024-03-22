@@ -1,0 +1,72 @@
+@startuml
+participant Explorer << (C,#ADD1B2)>>
+participant DecisionMaker << (C,#ADD1B2)>>
+participant ResultAcknowledger << (C,#ADD1B2)>>
+participant Reporter << (C,#ADD1B2)>>
+participant GroundFinderState << (C,#ADD1B2)>>
+participant CenterStartHandlerState << (C,#ADD1B2)>>
+participant WidthFinderState  << (C,#ADD1B2)>>
+participant LengthFinderState << (C,#ADD1B2)>>
+participant ReachCenterState  << (C,#ADD1B2)>>
+participant SpiralSearchState << (C,#ADD1B2)>>
+participant FatalErrorHandler << (C,#ADD1B2)>>
+
+activate Explorer
+loop : drone.isSafe() && closestCreekNotFound()
+Explorer -> DecisionMaker: takeDecision
+activate DecisionMaker
+
+group if 
+else DecisionMaker_IN_DANGER
+DecisionMaker -> FatalErrorHandler: handleDanger()
+activate FatalErrorHandler
+FatalErrorHandler --> DecisionMaker : Update Drone Direction
+deactivate FatalErrorHandler
+else GROUND_FINDER_STATE
+DecisionMaker -> GroundFinderState : handle(Drone) 
+activate GroundFinderState
+GroundFinderState --> DecisionMaker : updateDroneState()
+deactivate GroundFinderState
+else CENTER_START_STATE
+DecisionMaker -> CenterStartHandlerState : handle(Drone)
+activate CenterStartHandlerState
+CenterStartHandlerState --> DecisionMaker : updateDroneState()
+deactivate CenterStartHandlerState
+else WIDTH_STATE
+DecisionMaker -> WidthFinderState : handle(Drone)
+activate WidthFinderState
+WidthFinderState --> DecisionMaker : updateDroneState()
+deactivate WidthFinderState
+else LENGTH_STATE
+DecisionMaker -> LengthFinderState : handle(Drone)
+activate LengthFinderState
+LengthFinderState --> DecisionMaker : updateDroneState()
+deactivate LengthFinderState
+else MOVE_CENTER_STATE
+DecisionMaker -> ReachCenterState : handle(Drone)
+activate ReachCenterState
+ReachCenterState --> DecisionMaker : updateDroneState()
+deactivate ReachCenterState
+else CENTER_STATE
+DecisionMaker -> SpiralSearchState : handle(Drone)
+activate SpiralSearchState
+SpiralSearchState --> DecisionMaker : updateDroneState()
+deactivate SpiralSearchState
+end
+
+DecisionMaker --> Explorer : Made Decision
+
+Explorer -> ResultAcknowledger: acknowledgeResults()
+activate ResultAcknowledger
+ResultAcknowledger --> Explorer: displayResults()
+deactivate ResultAcknowledger
+end
+
+deactivate DecisionMaker
+
+Explorer -> Reporter: deliverFinalReport()
+activate Reporter
+Reporter --> Explorer: deliverReport()
+deactivate Reporter
+
+@enduml
