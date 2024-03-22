@@ -7,12 +7,8 @@ import ca.mcmaster.se2aa4.island.team106.DroneTools.FatalErrorHandler;
 import ca.mcmaster.se2aa4.island.team106.DroneTools.State;
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
 import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
-import ca.mcmaster.se2aa4.island.team106.States.CenterStartHandlerState;
-import ca.mcmaster.se2aa4.island.team106.States.GroundFinderState;
-import ca.mcmaster.se2aa4.island.team106.States.LengthFinderState;
-import ca.mcmaster.se2aa4.island.team106.States.ReachCenterState;
-import ca.mcmaster.se2aa4.island.team106.States.SpiralSearchState;
-import ca.mcmaster.se2aa4.island.team106.States.WidthFinderState;
+import ca.mcmaster.se2aa4.island.team106.States.*;
+
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,8 +50,10 @@ public class DecisionMaker {
             switch (drone.getStatus())
             {
                 case GROUND_FINDER_STATE:
+                if (logger.isDebugEnabled()) {
                     logger.info("STATE STATUS " + Status.GROUND_FINDER_STATE);
                     logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
+                    }
                     this.currentState = this.groundFinderState; 
                   
                     break;

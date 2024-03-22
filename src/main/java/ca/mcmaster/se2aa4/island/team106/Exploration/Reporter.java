@@ -47,14 +47,14 @@ public class Reporter {
                         bestDistance = distance; 
                     }
                 }
-                String cloestCreekID = mappings.get(bestDistance).getCreekID();
+                String cloestCreekID = mappings.get(bestDistance).getID();
                 logger.info("Closest Creek Found: "  + cloestCreekID + " Distance: " + bestDistance);
                 return cloestCreekID;
             } else {
                 // In case the emergency site is not found, but some creeks have
                 // been located, return any one of the creeks.
                 POI[] creekArray = creeks.toArray(new POI[0]);
-                return creekArray[0].getCreekID();
+                return creekArray[0].getID();
             }
         }
     }

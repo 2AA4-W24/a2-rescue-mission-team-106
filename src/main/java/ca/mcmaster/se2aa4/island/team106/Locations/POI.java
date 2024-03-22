@@ -13,9 +13,6 @@ public class POI {
         this.poiID = poiID;
     }
 
-    public String getCreekID(){
-        return this.poiID;
-    }
 
     public Point getCreekPoint(){
         return this.coordinate;

@@ -38,6 +38,7 @@ public class SpiralSearchState implements SearchAlgorithm, State{
         this.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
     }
 
+    
     private Direction turnDirection(Direction currentDirection) {
         Direction spiralDirection = this.mapArea.getSpiralTurnDirection();
         if (spiralDirection.equals(Direction.LEFT)) {
