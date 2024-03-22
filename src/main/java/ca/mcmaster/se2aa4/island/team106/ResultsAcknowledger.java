@@ -10,13 +10,13 @@ import org.apache.logging.log4j.Logger;
 public class ResultsAcknowledger {
 
     private final Logger logger = LogManager.getLogger();
-    Drone drone;
+    BaseDrone drone;
     MapArea mapArea;
     FatalErrorHandler fatalErrorHandler;
     
 
     public ResultsAcknowledger(BaseDrone baseDrone, MapArea mapArea, FatalErrorHandler handler) {
-        this.drone = (Drone) baseDrone;
+        this.drone = baseDrone;
         this.mapArea = mapArea;
         this.fatalErrorHandler = handler;
     }

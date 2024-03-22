@@ -10,7 +10,7 @@ public class FatalErrorHandler {
     private boolean rangeDanger;
     private boolean batteryDanger;
 
-    private Drone drone;
+    private BaseDrone drone;
     private MapArea mapArea;
     private int minOperationalBattery;
     
@@ -20,7 +20,7 @@ public class FatalErrorHandler {
     
     public FatalErrorHandler(int MINIMUM_BATTERY_TO_OPERATE, BaseDrone baseDrone, MapArea mapArea) {
         this.minOperationalBattery = MINIMUM_BATTERY_TO_OPERATE;
-        this.drone = (Drone) baseDrone;
+        this.drone = baseDrone;
         this.mapArea = mapArea;
     }
     

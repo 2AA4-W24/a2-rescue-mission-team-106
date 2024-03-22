@@ -20,9 +20,7 @@ public class ReachCenter implements DroneFlightManager{
     private int tilesTraversed = 0;
 
     @Override
-    public void fly(BaseDrone baseDrone, JSONObject decision, JSONObject parameter) {
-        Drone drone = (Drone) baseDrone; 
-        
+    public void fly(BaseDrone drone, JSONObject decision, JSONObject parameter) {        
         logger.info("WIDTH = " + mapArea.getWidthOfIsland());
         logger.info("LENGTH = " + mapArea.getLengthOfIsland());
         Direction currentDirection = mapArea.getHeading();

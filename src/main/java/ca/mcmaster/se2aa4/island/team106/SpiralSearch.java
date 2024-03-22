@@ -48,7 +48,6 @@ public class SpiralSearch implements Search{
 
     @Override
     public void search(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
-        // Drone drone = (Drone) baseDrone; 
 
         if (this.currentLength != this.maxLength || this.currentWidth != this.maxWidth)
         {

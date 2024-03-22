@@ -18,8 +18,7 @@ public class WidthFinder implements DimensionFinder{
 
 
     @Override
-    public void getDimension(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
-        Drone drone = (Drone) baseDrone; 
+    public void getDimension(BaseDrone drone, JSONObject decision, JSONObject parameters){
         Direction groundDirection = mapArea.getGroundEchoDirection(); 
 
 
@@ -105,7 +104,7 @@ public class WidthFinder implements DimensionFinder{
         }
     }
 
-    private void moveDrone(Drone drone, Direction direction, JSONObject decision, JSONObject parameters){
+    private void moveDrone(BaseDrone drone, Direction direction, JSONObject decision, JSONObject parameters){
         switch (this.counts % 3) {
             case 1:
                 echo(drone, direction, decision, parameters);
@@ -122,9 +121,7 @@ public class WidthFinder implements DimensionFinder{
 
     }
 
-
-
-    private void echo(Drone drone, Direction direction, JSONObject decision, JSONObject parameters){
+    private void echo(BaseDrone drone, Direction direction, JSONObject decision, JSONObject parameters){
         switch (direction) {
             case N:
             case S:
