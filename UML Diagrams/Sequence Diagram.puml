@@ -12,7 +12,7 @@ participant SpiralSearchState << (C,#ADD1B2)>>
 participant FatalErrorHandler << (C,#ADD1B2)>>
 
 activate Explorer
-loop : drone.isSafe() && closestCreekNotFound()
+loop : drone.hasBattery() && !closestCreekFound()
 Explorer -> DecisionMaker: takeDecision
 activate DecisionMaker
 
