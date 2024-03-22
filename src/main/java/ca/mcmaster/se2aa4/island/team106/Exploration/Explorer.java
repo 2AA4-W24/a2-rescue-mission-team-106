@@ -1,4 +1,4 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.Exploration;
 
 import java.io.StringReader;
 
@@ -9,13 +9,16 @@ import eu.ace_design.island.bot.IExplorerRaid;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.FatalErrorHandler;
+import ca.mcmaster.se2aa4.island.team106.Drones.*;
+
 public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
     private MapArea mapArea = new MapArea();
     private final int MINIMUM_BATTERY_TO_OPERATE = 20;
 
-    private Direction heading;
     private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, mapArea);
     private FatalErrorHandler fatalErrorHandler = new FatalErrorHandler(MINIMUM_BATTERY_TO_OPERATE, drone, mapArea);
     private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, fatalErrorHandler);
@@ -32,7 +35,7 @@ public class Explorer implements IExplorerRaid {
         String direction = info.getString("heading");
         Integer batteryLevel = info.getInt("budget");
 
-        heading = Direction.fromString(direction); 
+        Direction heading = mapArea.fromString(direction); 
         
         // update drone to starting battery and heading facing at start
         drone.updateDrone(batteryLevel.intValue(), heading);
@@ -72,13 +75,7 @@ public class Explorer implements IExplorerRaid {
     @Override
     public String deliverFinalReport() {
         String report = reporter.deliverReport();
-        logger.info("Start Direction: " + mapArea.getStartDirection());
-        logger.info("Spiral Turn Direction: " + mapArea.getSpiralTurnDirection());
         logger.info(report);
-        logger.info("HELLO SI THIS WORKING");
         return report; 
-        
-
-        // return "no creek found";
     }
 }

@@ -1,12 +1,13 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.Drones;
 import org.json.JSONObject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+
+
 
 public class Drone extends BaseDrone {
-    private final Logger logger = LogManager.getLogger();
-
 
     public Drone(int minimumBatteryToOperate, MapArea mapArea){
         super(minimumBatteryToOperate, mapArea);
@@ -85,12 +86,10 @@ public class Drone extends BaseDrone {
 
     @Override
     public void updateHeading(JSONObject parameter, JSONObject decision, Direction updatedHeading){
-        logger.info("HERE IS SOME INFORMATION ABOUT WHATS HAPPENING: UPDATED HEADING: " + updatedHeading +" droneHEADING " + this.mapArea.getHeading());
         if (updatedHeading != this.mapArea.getHeading()){
             this.mapArea.setHeading(updatedHeading); // update the status of our drones heading
             this.action.heading(parameter, decision, updatedHeading); // physically update the drone on our map
             this.mapArea.updateCoordinate(updatedHeading); // update the coordinates of the drone
-            logger.info("I HAVE OFFICIALLY TURNED THE DRONE! WITH STATUS OF " + mapArea.getHeading());
         }
     }
 
@@ -157,7 +156,6 @@ public class Drone extends BaseDrone {
 
     private void echoForwards(JSONObject parameter, JSONObject decision){
         Direction currentHeading = mapArea.getHeading();
-        logger.info("ECHOING DIRECTION : " + currentHeading);
         this.action.echo(parameter, decision, currentHeading);
         this.mapArea.setPrevEchoDirection(currentHeading);
     }

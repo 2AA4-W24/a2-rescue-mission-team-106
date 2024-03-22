@@ -1,7 +1,7 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.DroneTools;
 
 public enum Status {
-    START_STATE,
+    GROUND_FINDER_STATE,
     CENTER_START_STATE,
     WIDTH_STATE,
     LENGTH_STATE,
