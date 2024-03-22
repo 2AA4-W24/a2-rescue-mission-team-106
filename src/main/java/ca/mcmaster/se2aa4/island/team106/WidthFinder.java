@@ -125,27 +125,29 @@ public class WidthFinder implements DimensionFinder{
 
 
     private void echo(Drone drone, Direction direction, JSONObject decision, JSONObject parameters){
-        if (direction == Direction.N){
-            drone.echoNorth(parameters, decision);
-        }
-        else if(direction == Direction.S){
-            drone.echoSouth(parameters, decision);
-        }
-        else{
-            logger.info("This was an invalid echo attempted: " + direction);
-        }
+        switch (direction) {
+            case N:
+            case S:
+                drone.echo(parameters, decision, direction);
+                break;
+            default:
+                logger.info("This was an invalid echo attempted: " + direction);
+                break;
+        }        
     }
 
 
     private void setNewEchoGroundDirection(Direction priorDirection){
-        if (priorDirection == Direction.E){
-            mapArea.setGroundEchoDirection(Direction.W);
-        }
-        else if (priorDirection == Direction.W){
-            mapArea.setGroundEchoDirection(Direction.E);
-        }
-        else{
-            logger.info("Invalid echo direction, your prior direction should be E or W but it was: " + priorDirection);
+        switch (priorDirection) {
+            case E:
+                mapArea.setGroundEchoDirection(Direction.W);
+                break;
+            case W:
+                mapArea.setGroundEchoDirection(Direction.E);
+                break;
+            default:
+                logger.info("Invalid echo direction, your prior direction should be E or W but it was: " + priorDirection);
+                break;
         }
     }
 

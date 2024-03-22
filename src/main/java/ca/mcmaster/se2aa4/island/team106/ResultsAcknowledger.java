@@ -133,7 +133,7 @@ public class ResultsAcknowledger {
         Direction groundDirection = mapArea.getPrevEchoDirection(); // store the ground direction we have ground
 
         if (echoResult.equals("GROUND")) {
-            drone.setGroundStatus(true); // ground has been ground so notify drone that status of ground found is true
+            mapArea.setGroundStatus(true); // ground has been ground so notify drone that status of ground found is true
             logger.info("GROUND HAS BEEN FOUND AT " + groundDirection);
             
             //! map is updated to date with the heading the drone should be facing to go to ground
@@ -150,7 +150,7 @@ public class ResultsAcknowledger {
     private void widthStateHandler(String echoResult, int echoInt) {
         logger.info("CURRENT STATE: " + Status.WIDTH_STATE);
         if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
-            drone.setGroundStatus(true);
+            mapArea.setGroundStatus(true);
             mapArea.setIsAbove(true);
             logger.info("CURRENTLY OBTAINING THE WIDTH OF THE ISLAND");
 
@@ -172,7 +172,7 @@ public class ResultsAcknowledger {
     private void lengthStateHandler(String echoResult, int echoInt) {
         logger.info("CURRENT STATE: " + Status.LENGTH_STATE);
         if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
-            drone.setGroundStatus(true);
+            mapArea.setGroundStatus(true);
             logger.info("CURRENTLY OBTAINING THE LENGTH OF THE ISLAND");
             mapArea.setIsAbove(true);
 
@@ -191,7 +191,7 @@ public class ResultsAcknowledger {
     private void moveCenterStateHandler(String echoResult, int echoInt) {
         logger.info("CURRENT STATE: " + Status.MOVE_CENTER_STATE);
         if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
-            drone.setGroundStatus(true);
+            mapArea.setGroundStatus(true);
             logger.info("CURRENTLY REACHING THE CENTRE OF THE ISLAND");
         }
     }
@@ -199,7 +199,7 @@ public class ResultsAcknowledger {
     private void centerStateHandler(String echoResult, int echoInt) {
         logger.info("CURRENT STATE: " + Status.CENTER_STATE);
         if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
-            drone.setGroundStatus(true);
+            mapArea.setGroundStatus(true);
             logger.info("At Center of Island");
         }
     }
