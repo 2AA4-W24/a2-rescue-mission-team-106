@@ -1,8 +1,14 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.Exploration;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.FatalErrorHandler;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
+import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
+import ca.mcmaster.se2aa4.island.team106.Locations.POI;
+import ca.mcmaster.se2aa4.island.team106.Locations.Point;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

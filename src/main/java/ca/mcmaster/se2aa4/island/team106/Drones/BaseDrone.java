@@ -1,6 +1,13 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.Drones;
 
 import org.json.JSONObject;
+
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Actions;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+
+
 
 
 

@@ -1,8 +1,13 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.Exploration;
 import java.util.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.Locations.POI;
+import ca.mcmaster.se2aa4.island.team106.Locations.Point;
+
 
 public class MapArea {
     private final Logger logger = LogManager.getLogger();

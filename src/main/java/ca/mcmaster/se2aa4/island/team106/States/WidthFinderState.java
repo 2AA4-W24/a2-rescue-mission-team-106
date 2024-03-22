@@ -1,8 +1,16 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.States;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+
+import ca.mcmaster.se2aa4.island.team106.DroneTools.DimensionFinder;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.State;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
+import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+
 
 public class WidthFinderState implements DimensionFinder, State{
 
@@ -53,14 +61,9 @@ public class WidthFinderState implements DimensionFinder, State{
                 }
             }
             else {
-                // logger.info("i'm in the zoo with the lions and apes and bears !");
-                // drone.stop(decision);
-                // added new
                 logger.info("I have now obtained my WIDTH");
                 mapArea.setWidthEndPoint(mapArea.getDroneX());
                 
-                logger.info("Width of island achieved which is now: " + mapArea.getWidthOfIsland());
-
                 mapArea.getWidthOfIsland(); //internal mapArea memory we dont need to return this no relevance as its gonna be reffered to later via mapArea
 
                 mapArea.setObtainedWidth(true); // now we have obtained the length
@@ -72,18 +75,14 @@ public class WidthFinderState implements DimensionFinder, State{
             this.moveDrone(drone, groundDirection, decision, parameters);
         }
         else{
-            logger.info("I have now obtained my WIDTH");
             mapArea.setWidthEndPoint(mapArea.getDroneX());
             
-            logger.info("Width of island achieved which is now: " + mapArea.getWidthOfIsland());
-
             mapArea.setObtainedWidth(true); // now we have obtained the width
 
             // if we havent obtained the length, we need to transition to length state, and update our heading 
 
             if (!mapArea.hasObtainedLength())
             {
-                logger.info("WE have not found the length yet so now we are transitioning into the length state");
                 drone.updateHeading(parameters, decision, groundDirection);
 
                 Direction previousDirection = mapArea.getPrevHeading(); 

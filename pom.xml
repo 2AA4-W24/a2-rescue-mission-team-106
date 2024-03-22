@@ -23,7 +23,7 @@
   <name>McMaster :: SFWRENG :: 2AA4 :: Island :: ${project.artifactId}</name>
 
   <properties>
-    <mainClass>ca.mcmaster.se2aa4.island.${project.artifactId}.Runner</mainClass>
+    <mainClass>ca.mcmaster.se2aa4.island.${project.artifactId}.Exploration.Runner</mainClass>
     <timeout>2000</timeout>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>

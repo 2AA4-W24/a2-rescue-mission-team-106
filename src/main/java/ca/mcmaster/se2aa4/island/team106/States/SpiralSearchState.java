@@ -1,7 +1,16 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.States;
 
 import java.util.HashSet;
 import org.json.JSONObject;
+
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Compass;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.SearchAlgorithm;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.State;
+import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+import ca.mcmaster.se2aa4.island.team106.Locations.Point;
+
 
 public class SpiralSearchState implements SearchAlgorithm, State{
 

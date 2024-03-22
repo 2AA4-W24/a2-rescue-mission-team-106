@@ -1,8 +1,12 @@
-package ca.mcmaster.se2aa4.island.team106;
-import java.util.*;
+package ca.mcmaster.se2aa4.island.team106.Exploration;
+
+import java.util.HashMap;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import ca.mcmaster.se2aa4.island.team106.Locations.POI;
 
 
 public class Reporter {

@@ -1,4 +1,4 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.DroneTools;
 
 public enum Direction {
     N, 
@@ -10,7 +10,6 @@ public enum Direction {
     RIGHT; 
 
 
-    //! delete later
     public static  Direction fromString(String direction) {
         switch (direction.toUpperCase()) {
             case "E":
