@@ -8,18 +8,15 @@ public class LengthFinder implements DimensionFinder{
     private MapArea mapArea; 
     private int counts = 1; 
 
-
-
     private final Logger logger = LogManager.getLogger();
 
     public LengthFinder(MapArea mapArea){
         this.mapArea = mapArea; 
     }
 
+
     @Override
-    public void getDimension(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
-        Drone drone = (Drone) baseDrone; 
-        
+    public void getDimension(BaseDrone drone, JSONObject decision, JSONObject parameters){
         Direction groundDirection = mapArea.getGroundEchoDirection(); // Guaranteed to be East or West
 
         if (mapArea.hasObtainedWidth() && !mapArea.getIsAbove() && !mapArea.hasObtainedLength()){
@@ -116,29 +113,35 @@ public class LengthFinder implements DimensionFinder{
     }
 
 
-    private void echo(Drone drone, Direction direction, JSONObject decision, JSONObject parameters){
-        if (direction == Direction.W){
-            drone.echoWest(parameters, decision);
-        }
-        else if(direction == Direction.E){
-            drone.echoEast(parameters, decision);
-        }
-        else{
-            logger.info("This was an invalid echo attempted: " + direction);
+    private void echo(BaseDrone drone, Direction direction, JSONObject decision, JSONObject parameters){
+        switch (direction)
+        {
+            case W:
+                drone.echo(parameters, decision, Direction.W);
+                break;
+            case E:
+                drone.echo(parameters, decision, Direction.E);
+                break;
+            default:
+                logger.info("This was an invalid echo attempted: " + direction);
+                break;
         }
     }
 
 
     private void setNewEchoGroundDirection(Direction priorDirection){
-        if (priorDirection == Direction.N){
-            mapArea.setGroundEchoDirection(Direction.S);
+        switch (priorDirection) {
+            case N:
+                mapArea.setGroundEchoDirection(Direction.N);
+                break;
+            case S:
+                mapArea.setGroundEchoDirection(Direction.S);
+                break;
+            default:
+                logger.info("Invalid echo direction, your prior direction should be E or W but it was: " + priorDirection);
+                break;
         }
-        else if (priorDirection == Direction.S){
-            mapArea.setGroundEchoDirection(Direction.N);
-        }
-        else{
-            logger.info("Invalid echo direction, your prior direction should be E or W but it was: " + priorDirection);
-        }
+        
     }
 
 

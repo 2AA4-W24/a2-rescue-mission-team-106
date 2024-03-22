@@ -7,25 +7,26 @@ import org.apache.logging.log4j.Logger;
 public class MapArea {
     private final Logger logger = LogManager.getLogger();
 
+    private int initialX = 0, initialY = 0;
+
     private boolean isAboveGround = false; //initally drone is not above the island
-    private Point droneCoordinates = new Point(0, 0); // drone originally spawns at 0,0
+    private Point droneCoordinates = new Point(initialX, initialY); // drone originally spawns at 0,0
 
     //! Used for both the widthFinder and lengthFinder 
     private boolean isAbove; // not physically above the ground this just means we are perpendicular we to island we are still above water 
 
     //! These variables bellow  will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
     //! Save the coordinate point of starting width
-    private int widthStartX; 
-    private int widthEndX; 
+    private int widthStartX, widthEndX; 
 
     private boolean obtainedWidth = false; 
+    private boolean groundStatus = false; 
 
     //! These variables above will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
 
 
     //! These variables bellow  will be used for the LengthFinder Later we could just make a class that stores these relevant attributes
-    private int lengthStartY; 
-    private int lengthEndY;
+    private int lengthStartY, lengthEndY; 
 
     private boolean obtainedLength = false; 
 
@@ -45,12 +46,8 @@ public class MapArea {
     
     private boolean emergencySiteFound = false;
 
-    private int lastDistance; //! no potential use for so far
+    private int lastDistance; 
 
-
-    //? Maybe to rep the case of "OUT_OF_RANGE" we can put a negative distance because we know that value cannot be achieved
-    //? So that way when we want to check different cardinal directions if we get a negative distance, that tells us there is no land in that cardinal direction
-    //! Might remove later as no need as of right now and currently has a "primitive obssession"
     private int northDistance = 0; // GROUND/ OUT_OF_RANGE
     private int eastDistance = 0; 
     private int westDistance = 0; 
@@ -140,6 +137,16 @@ public class MapArea {
 
     public boolean hasObtainedLength(){
         return this.obtainedLength; 
+    }
+
+    
+    public boolean getGroundStatus() {
+        return this.groundStatus;
+    }
+
+
+    public void setGroundStatus(boolean status) {
+        this.groundStatus = status;
     }
 
 

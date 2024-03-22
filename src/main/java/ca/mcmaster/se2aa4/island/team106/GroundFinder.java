@@ -17,6 +17,7 @@ public class GroundFinder implements DroneFlightManager{
         this.previousDroneCoordinate = new Point(mapArea.getDroneX(), mapArea.getDroneY());
     }
 
+
     /*
      * The reason west distance is being set during east, or east distance is
      * being set during west is because of the asynchronous nature of the
@@ -28,11 +29,10 @@ public class GroundFinder implements DroneFlightManager{
      * record is being created.
      */
 
-    @Override
-    public void fly(BaseDrone baseDrone, JSONObject decision, JSONObject parameters) {
-        Drone drone = (Drone) baseDrone;
+     @Override
+    public void fly(BaseDrone drone, JSONObject decision, JSONObject parameters) {
 
-        if (drone.getGroundStatus()) {
+        if (mapArea.getGroundStatus()) {
             if (mapArea.getHeading() == mapArea.getGroundEchoDirection()) {
                 Direction nextHeading = turnDirection(mapArea.getHeading());
                 drone.updateHeading(parameters, decision, nextHeading);
@@ -61,28 +61,29 @@ public class GroundFinder implements DroneFlightManager{
                 drone.fly(decision);
             } else if (this.counts % 5 == 1) {
                 logger.info("ECHOING EAST");
-                drone.echoEast(parameters, decision);
+                drone.echo(parameters, decision, Direction.E);
                 this.mapArea.setWestDistance(this.mapArea.getLastDistance());
             } else if (this.counts % 5 == 2) {
                 logger.info("ECHOING SOUTH");
-                drone.echoSouth(parameters, decision);
+                drone.echo(parameters, decision, Direction.S);
                 this.mapArea.setEastDistance(this.mapArea.getLastDistance());
             } else if (this.counts % 5 == 3) {
                 logger.info("ECHOING NORTH");
-                drone.echoNorth(parameters, decision);
+                drone.echo(parameters, decision, Direction.N);
                 this.mapArea.setSouthDistance(this.mapArea.getLastDistance());
             } else if (this.counts % 5 == 4) {
                 logger.info("ECHOING WEST");
-                drone.echoWest(parameters, decision);
+                drone.echo(parameters, decision, Direction.W);
                 this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
             }
+          
 
             this.counts++;
         }
         logger.info("DRONE IS CURRENTLY FACING: " + mapArea.getHeading());
 
     }
-    
+
     private Direction turnDirection(Direction currentDirection) {
         switch (currentDirection) {
             case N:
@@ -113,5 +114,7 @@ public class GroundFinder implements DroneFlightManager{
                 return currentDirection;
         }
     }
+
+
 
 }

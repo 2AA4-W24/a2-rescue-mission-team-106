@@ -48,7 +48,7 @@ public class SpiralSearch implements Search{
 
     @Override
     public void search(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
-        Drone drone = (Drone) baseDrone; 
+        // Drone drone = (Drone) baseDrone; 
 
         if (this.currentLength != this.maxLength || this.currentWidth != this.maxWidth)
         {
@@ -61,7 +61,7 @@ public class SpiralSearch implements Search{
 
                 Direction newDirection = turnDirection(mapArea.getHeading()); 
                 logger.info("NOW WE ARE TURNINGGGGG SO OUR CURRENT HEADING IS: " + mapArea.getHeading()  + " FUCKING TURNED IS: " + newDirection);
-                drone.updateHeading(parameters, decision, newDirection);
+                baseDrone.updateHeading(parameters, decision, newDirection);
                 this.needToUpdateHeading = false; 
                 this.counter++; 
             
@@ -71,7 +71,7 @@ public class SpiralSearch implements Search{
                 logger.info("CurrentLength: " + this.currentLength + " Max Length: " + this.maxLength);
                 if (this.counter % 2 == 0){
                     logger.info("Drone is flying");
-                    drone.fly(decision);
+                    baseDrone.fly(decision);
                     this.tilesTraversed++; 
                 }
                 else{
@@ -79,12 +79,12 @@ public class SpiralSearch implements Search{
 
                     if (this.scannedTiles.contains(currentCoordinates)){
                         logger.info("AHHHHHH");
-                        drone.fly(decision);
+                        baseDrone.fly(decision);
                         this.tilesTraversed++; 
                     }
                     else{
                         logger.info("Drone is scanning");
-                        drone.scan(decision);
+                        baseDrone.scan(decision);
                         this.scannedTiles.add(currentCoordinates);
                     }
                     this.updateSegment();
@@ -95,7 +95,7 @@ public class SpiralSearch implements Search{
         }
         else{
             logger.info("I AM IN THE ZOO WITH THE LIONS, APES AND BEARS!");
-            drone.stop(decision);
+            baseDrone.stop(decision);
             //! need to add one extra spiral to ensure the island area is covered
         }
     }
