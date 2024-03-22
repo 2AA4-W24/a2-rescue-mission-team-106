@@ -64,6 +64,9 @@ public class Drone extends BaseDrone {
                 break; 
             case FORWARD: 
                 this.echoForwards(parameter, decision);
+                break;
+            default:
+                break;
         }
     }
 
