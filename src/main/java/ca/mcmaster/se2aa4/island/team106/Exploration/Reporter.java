@@ -1,6 +1,7 @@
 package ca.mcmaster.se2aa4.island.team106.Exploration;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +33,7 @@ public class Reporter {
             mapArea.viewCreeks();
             if (mapArea.getEmergencySiteStatus()) {
         
-                HashMap<Double, POI> mappings = new HashMap<>();
+                Map<Double, POI> mappings = new HashMap<>();
         
                 for (POI creek: creeks){
                     double distance = creek.getDistance(emergSite);

@@ -61,7 +61,7 @@ public class ResultsAcknowledger {
             int echoInt = extraInfo.getInt("range");
             mapArea.setLastDistance(echoInt); // Sets the last distance echoed till either out of range or ground.
 
-            if (echoResult.equals("OUT_OF_RANGE")) {
+            if ("OUT_OF_RANGE".equals(echoResult)) {
                 this.outOfRangeAction(echoInt);
             }
             
@@ -130,7 +130,7 @@ public class ResultsAcknowledger {
         logger.info("CURRENT STATE: " + Status.GROUND_FINDER_STATE);
         Direction groundDirection = mapArea.getPrevEchoDirection(); // store the ground direction we have ground
 
-        if (echoResult.equals("GROUND")) {
+        if ("GROUND".equals(echoResult)) {
             mapArea.setGroundStatus(true); // ground has been ground so notify drone that status of ground found is true
 
             mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
@@ -141,7 +141,7 @@ public class ResultsAcknowledger {
         logger.info("CURRENT STATE: " + Status.CENTER_START_STATE);
         Direction groundDirection = mapArea.getPrevEchoDirection(); // store the ground direction we have ground
 
-        if (echoResult.equals("GROUND")) {
+        if ("GROUND".equals(echoResult)) {
             mapArea.setGroundStatus(true); // ground has been ground so notify drone that status of ground found is true
 
             mapArea.setGroundEchoDirection(groundDirection); // sets the direction of where we have confirmed there is ground
@@ -155,7 +155,7 @@ public class ResultsAcknowledger {
 
     private void widthStateHandler(String echoResult, int echoInt) {
         logger.info("CURRENT STATE: " + Status.WIDTH_STATE);
-        if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
+        if ("GROUND".equals(echoResult)) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
             mapArea.setGroundStatus(true);
             mapArea.setIsAbove(true);
 
@@ -176,7 +176,7 @@ public class ResultsAcknowledger {
 
     private void lengthStateHandler(String echoResult, int echoInt) {
         logger.info("CURRENT STATE: " + Status.LENGTH_STATE);
-        if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
+        if ("GROUND".equals(echoResult)) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
             mapArea.setGroundStatus(true);
             mapArea.setIsAbove(true);
             if (mapArea.getPrevEchoDirection() == Direction.E) {
@@ -193,14 +193,14 @@ public class ResultsAcknowledger {
     
     private void moveCenterStateHandler(String echoResult) {
         logger.info("CURRENT STATE: " + Status.MOVE_CENTER_STATE);
-        if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
+        if ("GROUND".equals(echoResult)) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
             mapArea.setGroundStatus(true);
         }
     }
 
     private void centerStateHandler(String echoResult) {
         logger.info("CURRENT STATE: " + Status.CENTER_STATE);
-        if (echoResult.equals("GROUND")) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
+        if ("GROUND".equals(echoResult)) { // these echo results right here are in front of our drone since we are verifying after our turn that the ground is still in front of us
             mapArea.setGroundStatus(true);
         }
     }

@@ -1,6 +1,8 @@
 package ca.mcmaster.se2aa4.island.team106.States;
 
 import java.util.HashSet;
+import java.util.Set;
+
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Compass;
@@ -16,7 +18,7 @@ public class SpiralSearchState implements SearchAlgorithm, State{
 
     private MapArea mapArea; 
     private Compass compass = new Compass();
-    private HashSet<Point> scannedTiles = new HashSet<>();
+    private Set<Point> scannedTiles = new HashSet<>();
 
     private int maxLength; // the length we want to reach
     private int maxWidth; // the width we want to reach

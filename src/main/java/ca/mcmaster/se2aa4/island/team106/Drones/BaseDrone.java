@@ -19,9 +19,9 @@ public abstract class BaseDrone{
     protected MapArea mapArea;
 
 
-    public BaseDrone(int MINIMUM_BATTERY_TO_OPERATE,  MapArea mapArea) {
+    public BaseDrone(int minimumBatteryToOperate,  MapArea mapArea) {
         this.mapArea = mapArea;
-        this.minimumBatteryToOperate = MINIMUM_BATTERY_TO_OPERATE; 
+        this.minimumBatteryToOperate = minimumBatteryToOperate; 
         this.status = Status.GROUND_FINDER_STATE;
     }
     

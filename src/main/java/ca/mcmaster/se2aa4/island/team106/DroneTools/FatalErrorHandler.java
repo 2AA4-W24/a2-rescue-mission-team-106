@@ -21,8 +21,8 @@ public class FatalErrorHandler {
     // number of blocks we need for it to successfully turn.
     private final int RANGE_BORDER = 2;
     
-    public FatalErrorHandler(int MINIMUM_BATTERY_TO_OPERATE, BaseDrone baseDrone, MapArea mapArea) {
-        this.minOperationalBattery = MINIMUM_BATTERY_TO_OPERATE;
+    public FatalErrorHandler(int minimumBatteryToOperate, BaseDrone baseDrone, MapArea mapArea) {
+        this.minOperationalBattery = minimumBatteryToOperate;
         this.drone = baseDrone;
         this.mapArea = mapArea;
     }

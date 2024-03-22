@@ -20,7 +20,6 @@ public class Explorer implements IExplorerRaid {
     private MapArea mapArea = new MapArea();
     private final int MINIMUM_BATTERY_TO_OPERATE = 20;
 
-    private Direction heading;
     private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, mapArea);
     private FatalErrorHandler fatalErrorHandler = new FatalErrorHandler(MINIMUM_BATTERY_TO_OPERATE, drone, mapArea);
     private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, fatalErrorHandler);
@@ -37,7 +36,7 @@ public class Explorer implements IExplorerRaid {
         String direction = info.getString("heading");
         Integer batteryLevel = info.getInt("budget");
 
-        heading = Direction.fromString(direction); 
+        Direction heading = Direction.fromString(direction); 
         
         // update drone to starting battery and heading facing at start
         drone.updateDrone(batteryLevel.intValue(), heading);

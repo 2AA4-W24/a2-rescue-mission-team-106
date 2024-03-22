@@ -12,17 +12,19 @@ import ca.mcmaster.se2aa4.island.team106.Locations.Point;
 public class MapArea {
     private final Logger logger = LogManager.getLogger();
 
-    private int initialX = 0, initialY = 0;
+    private final int INITAL_X = 0;
+    private final int INITAL_Y = 0;
 
     private boolean isAboveGround = false; //initally drone is not above the island
-    private Point droneCoordinates = new Point(initialX, initialY); // drone originally spawns at 0,0
+    private Point droneCoordinates = new Point(INITAL_X, INITAL_Y); // drone originally spawns at 0,0
 
     //! Used for both the widthFinder and lengthFinder 
     private boolean isAbove; // not physically above the ground this just means we are perpendicular we to island we are still above water 
 
     //! These variables bellow  will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
     //! Save the coordinate point of starting width
-    private int widthStartX, widthEndX; 
+    private int widthStartX; 
+    private int widthEndX; 
 
     private boolean obtainedWidth = false; 
     private boolean groundStatus = false; 
@@ -31,7 +33,8 @@ public class MapArea {
 
 
     //! These variables bellow  will be used for the LengthFinder Later we could just make a class that stores these relevant attributes
-    private int lengthStartY, lengthEndY; 
+    private int lengthStartY;
+    private int lengthEndY; 
 
     private boolean obtainedLength = false; 
 
@@ -78,7 +81,8 @@ public class MapArea {
 
     
     public void updateCoordinate(Direction direction){
-        int newX, newY; 
+        int newX;
+        int newY; 
         switch(direction) {
             case E:
                 newX = this.droneCoordinates.getXCoordinate() + 1;
