@@ -3,7 +3,7 @@ package ca.mcmaster.se2aa4.island.team106;
 import java.util.HashSet;
 import org.json.JSONObject;
 
-public class SpiralSearch implements SearchAlgorithm, State{
+public class SpiralSearchState implements SearchAlgorithm, State{
 
     private MapArea mapArea; 
     private Compass compass = new Compass();
@@ -22,7 +22,7 @@ public class SpiralSearch implements SearchAlgorithm, State{
     private boolean needToUpdateHeading = false;
 
 
-    public SpiralSearch(MapArea mapArea) {
+    public SpiralSearchState(MapArea mapArea) {
         this.mapArea = mapArea;
         this.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
     }

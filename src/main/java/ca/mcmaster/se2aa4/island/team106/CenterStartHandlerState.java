@@ -3,13 +3,13 @@ package ca.mcmaster.se2aa4.island.team106;
 import org.json.JSONObject;
 
 
-public class CenterStartHandler implements DroneFlightManager, State{
+public class CenterStartHandlerState implements DroneFlightManager, State{
     private int counts = 1;
 
     private MapArea mapArea;
     private Point previousDroneCoordinate;
 
-    public CenterStartHandler(MapArea mapArea) {
+    public CenterStartHandlerState(MapArea mapArea) {
         this.mapArea = mapArea;
         this.previousDroneCoordinate = new Point(this.mapArea.getDroneX(), this.mapArea.getDroneY());
     }

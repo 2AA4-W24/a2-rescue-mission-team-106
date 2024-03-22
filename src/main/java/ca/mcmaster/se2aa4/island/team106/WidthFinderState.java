@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-public class WidthFinder implements DimensionFinder, State{
+public class WidthFinderState implements DimensionFinder, State{
 
     private MapArea mapArea; 
     private int counts = 1; 
@@ -12,7 +12,7 @@ public class WidthFinder implements DimensionFinder, State{
     private final Logger logger = LogManager.getLogger();
 
 
-    public WidthFinder(MapArea mapArea){
+    public WidthFinderState(MapArea mapArea){
         this.mapArea = mapArea; 
     }
 

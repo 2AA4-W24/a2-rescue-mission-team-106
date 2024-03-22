@@ -2,13 +2,13 @@ package ca.mcmaster.se2aa4.island.team106;
 
 import org.json.JSONObject;
 
-public class ReachCenter implements DroneFlightManager, State{
+public class ReachCenterState implements DroneFlightManager, State{
 
     private MapArea mapArea;
     private boolean reachedCenterLength = false;
     private boolean reachedCenterWidth = false;
 
-    public ReachCenter(MapArea mapArea) {
+    public ReachCenterState(MapArea mapArea) {
         this.mapArea = mapArea;
     }
     

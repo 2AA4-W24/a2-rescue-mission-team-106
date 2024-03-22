@@ -2,12 +2,12 @@ package ca.mcmaster.se2aa4.island.team106;
 
 import org.json.JSONObject;
 
-public class LengthFinder implements DimensionFinder, State{
+public class LengthFinderState implements DimensionFinder, State{
     private MapArea mapArea; 
     private int counts = 1; 
 
 
-    public LengthFinder(MapArea mapArea){
+    public LengthFinderState(MapArea mapArea){
         this.mapArea = mapArea; 
     }
 

@@ -13,12 +13,12 @@ public class DecisionMaker {
 
     private State currentState; 
 
-    private State groundFinder;
-    private State centerStartHandler;
-    private State widthFinder;
-    private State lengthFinder;
-    private State reachCenter; 
-    private State spiralSearch; 
+    private State groundFinderState;
+    private State centerStartHandlerState;
+    private State widthFinderState;
+    private State lengthFinderState;
+    private State reachCenterState; 
+    private State spiralSearchState; 
     
     private MapArea mapArea;
     private FatalErrorHandler fatalErrorHandler;
@@ -26,12 +26,12 @@ public class DecisionMaker {
     //! next test is to set it to groundFinder
     public DecisionMaker(BaseDrone drone, MapArea mapArea, FatalErrorHandler fatalErrorHandler){
         this.drone = drone; 
-        this.groundFinder = new GroundFinderState(mapArea);
-        this.centerStartHandler = new CenterStartHandler(mapArea);
-        this.widthFinder = new WidthFinder(mapArea);
-        this.lengthFinder = new LengthFinder(mapArea);
-        this.reachCenter = new ReachCenter(mapArea);
-        this.spiralSearch = new SpiralSearch(mapArea);
+        this.groundFinderState = new GroundFinderState(mapArea);
+        this.centerStartHandlerState = new CenterStartHandlerState(mapArea);
+        this.widthFinderState = new WidthFinderState(mapArea);
+        this.lengthFinderState = new LengthFinderState(mapArea);
+        this.reachCenterState = new ReachCenterState(mapArea);
+        this.spiralSearchState = new SpiralSearchState(mapArea);
         this.mapArea = mapArea;
         this.fatalErrorHandler = fatalErrorHandler;
     }
@@ -46,29 +46,29 @@ public class DecisionMaker {
                 case GROUND_FINDER_STATE:
                     logger.info("STATE STATUS " + Status.GROUND_FINDER_STATE);
                     logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
-                    this.currentState = this.groundFinder; 
+                    this.currentState = this.groundFinderState; 
                   
                     break;
                 case CENTER_START_STATE:
                     logger.info("STATE STATUS " + Status.CENTER_START_STATE);
                     logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
-                    this.currentState = this.centerStartHandler; 
+                    this.currentState = this.centerStartHandlerState; 
                     break;
                 case WIDTH_STATE:
                     logger.info("STATE STATUS " + Status.WIDTH_STATE);
-                    this.currentState = this.widthFinder; 
+                    this.currentState = this.widthFinderState; 
                     break;
                 case LENGTH_STATE:
                     logger.info("STATE STATUS " + Status.LENGTH_STATE);
-                    this.currentState = this.lengthFinder; 
+                    this.currentState = this.lengthFinderState; 
                     break;
                 case MOVE_CENTER_STATE:
                     logger.info("STATE STATUS " + Status.MOVE_CENTER_STATE);
-                    this.currentState = this.reachCenter; 
+                    this.currentState = this.reachCenterState; 
                     break;
                 case CENTER_STATE:
                     logger.info("STATE STATUS " + Status.CENTER_STATE);
-                    this.currentState = this.spiralSearch;  
+                    this.currentState = this.spiralSearchState;  
                     break;
                 default:
                     break;
