@@ -61,7 +61,6 @@ public class WidthFinderState implements DimensionFinder, State{
                 }
             }
             else {
-                logger.info("I have now obtained my WIDTH");
                 mapArea.setWidthEndPoint(mapArea.getDroneX());
                 
                 mapArea.getWidthOfIsland(); //internal mapArea memory we dont need to return this no relevance as its gonna be reffered to later via mapArea
@@ -119,6 +118,7 @@ public class WidthFinderState implements DimensionFinder, State{
             case 0:
                 drone.fly(decision);
                 break;
+            default: break; 
         }
         
         this.counts++;

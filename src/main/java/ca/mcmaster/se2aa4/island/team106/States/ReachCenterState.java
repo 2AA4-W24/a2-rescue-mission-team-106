@@ -16,12 +16,13 @@ public class ReachCenterState implements DroneFlightManager, State{
     private boolean reachedCenterLength = false;
     private boolean reachedCenterWidth = false;
 
+    private int tilesTraversed = 0;
+
 
     public ReachCenterState(MapArea mapArea) {
         this.mapArea = mapArea;
     }
     
-    private int tilesTraversed = 0;
 
     @Override
     public void handle(BaseDrone drone, JSONObject decision, JSONObject parameter){
@@ -34,7 +35,7 @@ public class ReachCenterState implements DroneFlightManager, State{
         Direction currentDirection = mapArea.getHeading();
         Direction startHeading = mapArea.getStartDirection();
         int tiles = determineTiles(currentDirection);
-        if ((currentDirection == Direction.E || currentDirection == Direction.W)) {
+        if (currentDirection == Direction.E || currentDirection == Direction.W) {
             if (!reachedCenterWidth) {
                 if (tilesTraversed < tiles) {
                     drone.fly(decision);
@@ -53,7 +54,7 @@ public class ReachCenterState implements DroneFlightManager, State{
                 drone.setStatus(Status.CENTER_STATE);
                 drone.scan(decision);
             }
-        } else if ((currentDirection == Direction.N || currentDirection == Direction.S)) {
+        } else if (currentDirection == Direction.N || currentDirection == Direction.S) {
             if (!reachedCenterLength) {
                 if (tilesTraversed < tiles) {
                     drone.fly(decision);
@@ -76,13 +77,15 @@ public class ReachCenterState implements DroneFlightManager, State{
         } 
     }
     
+
     private int determineTiles(Direction direction) {
         if (direction == Direction.E || direction == Direction.W) {
-            return (mapArea.getWidthOfIsland() / 2);
+            return mapArea.getWidthOfIsland() / 2;
         } else {
-            return (mapArea.getLengthOfIsland() / 2);
+            return mapArea.getLengthOfIsland() / 2;
         }
     }
+
 
     private Direction setHeading(Direction priorDirection) {
         if (priorDirection == Direction.W) {
@@ -95,6 +98,7 @@ public class ReachCenterState implements DroneFlightManager, State{
             return Direction.N;
         }
     }
+
 
     private void determineTurnDirection(Direction currentHeading, Direction startHeading) {
         if (currentHeading == Direction.N) {
@@ -125,6 +129,4 @@ public class ReachCenterState implements DroneFlightManager, State{
             mapArea.setSpiralTurnDirection(Direction.RIGHT);
         }
     }
-    
-
 }

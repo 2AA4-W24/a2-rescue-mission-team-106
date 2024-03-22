@@ -61,8 +61,6 @@ public class SpiralSearchState implements SearchAlgorithm, State{
             if (this.needToUpdateHeading)
             {
                 // gets the right cardinal direction of our current heading
-                //! if start @ (1,1) facing South then turn Left (your middle cardinal direction will be West)
-                //! Our first turn to begin in the spiral should be our very original starting direction ***
 
                 Direction newDirection = turnDirection(mapArea.getHeading()); 
                 baseDrone.updateHeading(parameters, decision, newDirection);

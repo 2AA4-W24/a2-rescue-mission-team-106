@@ -63,7 +63,7 @@ public class FatalErrorHandler {
     }
     
     public boolean getDanger() {
-        return (this.rangeDanger || this.batteryDanger);
+        return this.rangeDanger || this.batteryDanger;
     }
     
     /**
