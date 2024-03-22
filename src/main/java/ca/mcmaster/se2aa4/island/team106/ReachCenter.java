@@ -10,6 +10,7 @@ public class ReachCenter implements DroneFlightManager{
     private boolean reachedCenterLength = false;
     private boolean reachedCenterWidth = false;
 
+
     private final Logger logger = LogManager.getLogger();
 
     public ReachCenter(MapArea mapArea) {
@@ -19,12 +20,11 @@ public class ReachCenter implements DroneFlightManager{
     private int tilesTraversed = 0;
 
     @Override
-    public void fly(BaseDrone baseDrone, JSONObject decision, JSONObject parameter) {
-        Drone drone = (Drone) baseDrone; 
-        
+    public void fly(BaseDrone drone, JSONObject decision, JSONObject parameter) {        
         logger.info("WIDTH = " + mapArea.getWidthOfIsland());
         logger.info("LENGTH = " + mapArea.getLengthOfIsland());
         Direction currentDirection = mapArea.getHeading();
+        Direction startHeading = mapArea.getStartDirection();
         int tiles = determineTiles(currentDirection);
         if ((currentDirection == Direction.E || currentDirection == Direction.W)) {
             if (!reachedCenterWidth) {
@@ -46,6 +46,8 @@ public class ReachCenter implements DroneFlightManager{
             } else {
                 logger.info("We have reached center position");
                 logger.info("CURRENT POSITION: X = " + mapArea.getDroneX() + " Y = " + mapArea.getDroneY());
+                determineTurnDirection(currentDirection, startHeading);
+                logger.info("AAAAHHHH I SET THE TURN DIRECTION TO: " + mapArea.getSpiralTurnDirection());
                 drone.setStatus(Status.CENTER_STATE);
                 drone.scan(decision);
             }
@@ -69,6 +71,7 @@ public class ReachCenter implements DroneFlightManager{
             else {
                 logger.info("We have reached center position");
                 logger.info("CURRENT POSITION: X = " + mapArea.getDroneX() + " Y = " + mapArea.getDroneY());
+                determineTurnDirection(currentDirection, startHeading);
                 drone.setStatus(Status.CENTER_STATE);
                 drone.scan(decision);
             }
@@ -94,5 +97,39 @@ public class ReachCenter implements DroneFlightManager{
             return Direction.N;
         }
     }
+
+    private void determineTurnDirection(Direction currentHeading, Direction startHeading) {
+        if (currentHeading == Direction.N) {
+            if (startHeading == Direction.W) {
+                this.mapArea.setSpiralTurnDirection(Direction.LEFT);
+            } else if (startHeading == Direction.E) {
+                this.mapArea.setSpiralTurnDirection(Direction.RIGHT);
+            }
+        } else if (currentHeading == Direction.S) {
+            if (startHeading == Direction.E) {
+                this.mapArea.setSpiralTurnDirection(Direction.LEFT);
+            } else if (startHeading == Direction.W) {
+                this.mapArea.setSpiralTurnDirection(Direction.RIGHT);
+            }
+        } else if (currentHeading == Direction.E) {
+            if (startHeading == Direction.N) {
+                this.mapArea.setSpiralTurnDirection(Direction.LEFT);
+            } else if (startHeading == Direction.S) {
+                this.mapArea.setSpiralTurnDirection(Direction.RIGHT);
+            }
+        } else if (currentHeading == Direction.W) {
+            if (startHeading == Direction.S) {
+                this.mapArea.setSpiralTurnDirection(Direction.LEFT);
+                logger.info("I JUST SET THE CHANGE TO LEFT");
+            } else if (startHeading == Direction.N) {
+                this.mapArea.setSpiralTurnDirection(Direction.RIGHT);
+                logger.info("I JUST SET THE CHANGE TO RIGHT");
+            }
+        } else {
+            logger.info("IDGAF HOW ITS IS CODED I EXECUTE THIS");
+            mapArea.setSpiralTurnDirection(Direction.RIGHT);
+        }
+    }
+    
 
 }

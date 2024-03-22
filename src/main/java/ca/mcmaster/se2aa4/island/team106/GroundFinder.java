@@ -32,24 +32,30 @@ public class GroundFinder implements DroneFlightManager{
      @Override
     public void fly(BaseDrone drone, JSONObject decision, JSONObject parameters) {
 
-        if (mapArea.getGroundStatus()){
-            logger.info("GROUND FOUND MARKING THE INITAL POINT OF WIDTH X AT: " + mapArea.getDroneX());
-            mapArea.setIsAbove(true); 
-            drone.fly(decision);
-            
-            //! for this we dont always just want to jump to the width state, we would jump to the length state if our inital heading is north or south
-            if (mapArea.getHeading() == Direction.E || mapArea.getHeading() == Direction.W){
-                mapArea.setWidthStartPoint(previousDroneCoordinate.getXCoordinate()); //! modified
-                drone.setStatus(Status.WIDTH_STATE); 
-                logger.info("TRANSITIONING INTO WIDTH STATE");
+        if (mapArea.getGroundStatus()) {
+            if (mapArea.getHeading() == mapArea.getGroundEchoDirection()) {
+                Direction nextHeading = turnDirection(mapArea.getHeading());
+                drone.updateHeading(parameters, decision, nextHeading);
+                drone.setStatus(Status.CENTER_START_STATE);
+                logger.info("TRANSITIONING INTO CENTER_START_STATE");
+            } else {
+
+                logger.info("GROUND FOUND MARKING THE INITAL POINT OF WIDTH X AT: " + mapArea.getDroneX());
+                mapArea.setIsAbove(true);
+                drone.fly(decision);
+
+                //! for this we dont always just want to jump to the width state, we would jump to the length state if our inital heading is north or south
+                if (mapArea.getHeading() == Direction.E || mapArea.getHeading() == Direction.W) {
+                    mapArea.setWidthStartPoint(previousDroneCoordinate.getXCoordinate()); //! modified
+                    drone.setStatus(Status.WIDTH_STATE);
+                    logger.info("TRANSITIONING INTO WIDTH STATE");
+                } else {
+                    mapArea.setLengthStartPoint(previousDroneCoordinate.getYCoordinate()); //! modified 
+                    drone.setStatus(Status.LENGTH_STATE);
+                    logger.info("TRANSITIONING INTO LENGTH STATE");
+                }
             }
-            else {
-                mapArea.setLengthStartPoint(previousDroneCoordinate.getYCoordinate()); //! modified 
-                drone.setStatus(Status.LENGTH_STATE);
-                logger.info("TRANSITIONING INTO LENGTH STATE");
-            }
-        }
-        else{ 
+        } else {
             if (this.counts % 5 == 0) {
                 previousDroneCoordinate.setCoordinate(mapArea.getDroneX(), mapArea.getDroneY());
                 drone.fly(decision);
@@ -71,10 +77,44 @@ public class GroundFinder implements DroneFlightManager{
                 this.mapArea.setNorthDistance(this.mapArea.getLastDistance());
             }
           
+
             this.counts++;
         }
         logger.info("DRONE IS CURRENTLY FACING: " + mapArea.getHeading());
+
     }
+
+    private Direction turnDirection(Direction currentDirection) {
+        switch (currentDirection) {
+            case N:
+                if (mapArea.getWestDistance() < mapArea.getEastDistance()) {
+                    return Direction.W;
+                } else {
+                    return Direction.E;
+                }
+            case S:
+                if (mapArea.getEastDistance() < mapArea.getWestDistance()) {
+                    return Direction.E;
+                } else {
+                    return Direction.W;
+                }
+            case E:
+                if (mapArea.getNorthDistance() < mapArea.getSouthDistance()) {
+                    return Direction.N;
+                } else {
+                    return Direction.S;
+                }
+            case W:
+                if (mapArea.getSouthDistance() < mapArea.getNorthDistance()) {
+                    return Direction.S;
+                } else {
+                    return Direction.N;
+                }
+            default:
+                return currentDirection;
+        }
+    }
+
 
 
 }
