@@ -108,12 +108,9 @@ public class WidthFinderState implements DimensionFinder, State{
     }
 
     private void moveDrone(BaseDrone drone, Direction direction, JSONObject decision, JSONObject parameters){
-        switch (this.counts % 3) {
+        switch (this.counts % 2) {
             case 1:
                 echo(drone, direction, decision, parameters);
-                break;
-            case 2:
-                drone.scan(decision);
                 break;
             case 0:
                 drone.fly(decision);
