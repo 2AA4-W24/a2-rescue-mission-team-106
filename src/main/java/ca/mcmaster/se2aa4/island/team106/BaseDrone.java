@@ -15,7 +15,7 @@ public abstract class BaseDrone{
     public BaseDrone(int MINIMUM_BATTERY_TO_OPERATE,  MapArea mapArea) {
         this.mapArea = mapArea;
         this.minimumBatteryToOperate = MINIMUM_BATTERY_TO_OPERATE; 
-        this.status = Status.START_STATE;
+        this.status = Status.GROUND_FINDER_STATE;
     }
     
     public abstract void updateDrone(int batteryLevel, Direction direction);

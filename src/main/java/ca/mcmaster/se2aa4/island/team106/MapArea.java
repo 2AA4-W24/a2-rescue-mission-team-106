@@ -41,8 +41,8 @@ public class MapArea {
     private Direction startDirection; // direction the drone is facing when it first spawns
     private Direction spiralTurnDirection;
 
-    private Set<Creek> creeks = new HashSet<>();
-    private Creek emergencySitePoint;
+    private Set<POI> creeks = new HashSet<>();
+    private POI emergencySitePoint;
     
     private boolean emergencySiteFound = false;
 
@@ -54,19 +54,19 @@ public class MapArea {
     private int southDistance = 0; 
 
 
-    public void addCreek(Creek creek){
+    public void addCreek(POI creek){
         creeks.add(creek);
     }
 
 
     public void viewCreeks(){
-        logger.info("CREEK INFO TIME!");
-        for (Creek creek: this.creeks){
+        for (POI creek: this.creeks){
             logger.info(creek);
         }
+        logger.info("\n");
     }
 
-    public void setEmergencySite(Creek emergencySite){
+    public void setEmergencySite(POI emergencySite){
         this.emergencySitePoint = emergencySite;
         this.emergencySiteFound = true;
     }
@@ -150,11 +150,11 @@ public class MapArea {
     }
 
 
-    public Set<Creek> getCreeks(){
+    public Set<POI> getCreeks(){
         return this.creeks;
     }
 
-    public Creek getEmergencySite() {
+    public POI getEmergencySite() {
         return this.emergencySitePoint;
     }
 

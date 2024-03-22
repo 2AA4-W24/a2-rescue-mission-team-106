@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-public class WidthFinder implements DimensionFinder{
+public class WidthFinder implements DimensionFinder, State{
 
     private MapArea mapArea; 
     private int counts = 1; 
@@ -14,6 +14,11 @@ public class WidthFinder implements DimensionFinder{
 
     public WidthFinder(MapArea mapArea){
         this.mapArea = mapArea; 
+    }
+
+    @Override
+    public void handle(BaseDrone drone, JSONObject decision, JSONObject parameters){
+        this.getDimension(drone, decision, parameters);
     }
 
 

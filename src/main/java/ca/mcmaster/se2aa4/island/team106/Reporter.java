@@ -14,49 +14,41 @@ public class Reporter {
     }
 
     public String deliverReport(){
-        logger.info("Deliver called");
         return getClosestCreek(); 
     }
 
     
     private String getClosestCreek(){
-        logger.info("WAS THIS METHOD CALLED");
-        Set<Creek> creeks = mapArea.getCreeks();
-        Creek emergSite = mapArea.getEmergencySite();
+        Set<POI> creeks = mapArea.getCreeks();
+        POI emergSite = mapArea.getEmergencySite();
         
         if (creeks.isEmpty()) {
             return "No creek found";
         } else {
+            mapArea.viewCreeks();
             if (mapArea.getEmergencySiteStatus()) {
-                logger.info("Got creeks and stuff: " + emergSite.toString());
         
-                
-                HashMap<Double, Creek> mappings = new HashMap<>();
+                HashMap<Double, POI> mappings = new HashMap<>();
         
-                for (Creek creek: creeks){
+                for (POI creek: creeks){
                     double distance = creek.getDistance(emergSite);
                     mappings.put(distance, creek);
                 }
-        
-                logger.info("Computed distances");
-        
+                
                 Double bestDistance = Double.MAX_VALUE;
         
                 for (Double distance: mappings.keySet()){
                     if ( distance < bestDistance){
-                        logger.info("HEY A NEW BEST DISTANCE WAS FOUND: " + distance);
                         bestDistance = distance; 
                     }
                 }
-                
-        
-                logger.info("HEY I FOUND THE CLOEST CREEK? " + bestDistance);
-                logger.info("BIG BOY TEST: " + mappings.get(bestDistance).getCreekID());
-                return mappings.get(bestDistance).getCreekID();
+                String cloestCreekID = mappings.get(bestDistance).getCreekID();
+                logger.info("Closest Creek Found: "  + cloestCreekID + " Distance: " + bestDistance);
+                return cloestCreekID;
             } else {
                 // In case the emergency site is not found, but some creeks have
                 // been located, return any one of the creeks.
-                Creek[] creekArray = creeks.toArray(new Creek[0]);
+                POI[] creekArray = creeks.toArray(new POI[0]);
                 return creekArray[0].getCreekID();
             }
         }

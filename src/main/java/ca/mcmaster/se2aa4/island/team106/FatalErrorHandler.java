@@ -30,7 +30,7 @@ public class FatalErrorHandler {
             logger.info("BATTERY LEVEL CRITICAL");
         } else if (limit <= RANGE_BORDER && mapArea.getHeading() == mapArea.getPrevEchoDirection()) {
             this.rangeDanger = true;
-            logger.info("Approaching OUT OF RANGE area");
+            logger.info("Approaching OUT OF RANGE area changing direction");
         } else {
             this.rangeDanger = false;
             this.batteryDanger = false;
