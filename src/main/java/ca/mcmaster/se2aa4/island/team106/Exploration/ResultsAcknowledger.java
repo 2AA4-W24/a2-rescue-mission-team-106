@@ -40,7 +40,7 @@ public class ResultsAcknowledger {
             this.fatalErrorHandler.setBatteryDanger(false);
         } 
         else {
-            if (!("stop".equals(mapArea.getCurrentAction()))) {
+            if (!"stop".equals(mapArea.getCurrentAction())){
                 this.fatalErrorHandler.setBatteryDanger(true);
                 drone.useBattery(cost.intValue());
             }
