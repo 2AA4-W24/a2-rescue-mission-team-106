@@ -4,8 +4,6 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
 import ca.mcmaster.se2aa4.island.team106.Drones.Drone;
