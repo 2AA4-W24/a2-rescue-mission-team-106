@@ -28,7 +28,6 @@ public class DecisionMaker {
     private MapArea mapArea;
     private FatalErrorHandler fatalErrorHandler;
 
-    //! next test is to set it to groundFinder
     public DecisionMaker(BaseDrone drone, MapArea mapArea, FatalErrorHandler fatalErrorHandler){
         this.drone = drone; 
         this.groundFinderState = new GroundFinderState(mapArea);

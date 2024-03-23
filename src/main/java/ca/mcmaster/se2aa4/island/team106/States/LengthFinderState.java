@@ -68,7 +68,7 @@ public class LengthFinderState implements DimensionFinder, State{
 
             mapArea.setObtainedLength(true); // now we have obtained the length
 
-            // if we havent obtained the width, we need to transition to width state, and update our heading 
+            // if we haven't obtained the width, we need to transition to width state, and update our heading 
 
             if (!mapArea.hasObtainedWidth()) {
                 drone.updateHeading(parameters, decision, groundDirection);
@@ -79,9 +79,6 @@ public class LengthFinderState implements DimensionFinder, State{
 
                 drone.setStatus(Status.WIDTH_STATE);
             } else {
-                //! in this scenario, we would have already obtained our width 
-                //! we transition into a new state that makes our drone go to the middle of the island
-
                 // If we have found both the width and the length, we need to
                 // transition into the move to center state where we will move
                 // to the center point of the island. We will now update our
@@ -125,10 +122,10 @@ public class LengthFinderState implements DimensionFinder, State{
     private void setNewEchoGroundDirection(Direction priorDirection){
         switch (priorDirection) {
             case N:
-                mapArea.setGroundEchoDirection(Direction.N);
+                mapArea.setGroundEchoDirection(Direction.S);
                 break;
             case S:
-                mapArea.setGroundEchoDirection(Direction.S);
+                mapArea.setGroundEchoDirection(Direction.N);
                 break;
             default:
                 break;

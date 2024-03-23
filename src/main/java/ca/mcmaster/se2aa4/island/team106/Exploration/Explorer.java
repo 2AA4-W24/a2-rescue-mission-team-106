@@ -17,10 +17,10 @@ public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
     private MapArea mapArea = new MapArea();
-    private final int MINIMUM_BATTERY_TO_OPERATE = 20;
+    private final int MINIMUM_BATTERY_TO_OPERATE = 30;
 
     private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, mapArea);
-    private FatalErrorHandler fatalErrorHandler = new FatalErrorHandler(MINIMUM_BATTERY_TO_OPERATE, drone, mapArea);
+    private FatalErrorHandler fatalErrorHandler = new FatalErrorHandler(drone, mapArea);
     private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, fatalErrorHandler);
     private ResultsAcknowledger acknowledger = new ResultsAcknowledger(drone, mapArea, fatalErrorHandler);
     private Reporter reporter = new Reporter(mapArea);
