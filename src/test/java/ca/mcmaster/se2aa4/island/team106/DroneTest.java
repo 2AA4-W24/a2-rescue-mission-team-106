@@ -35,6 +35,27 @@ public class DroneTest {
         assertEquals(initialY + 1, mapArea.getDroneY());
     }
 
+    @Test
+    public void testFlySouth(){
+        int initialY = mapArea.getDroneY();
+        mapArea.updateCoordinate(Direction.S);
+        assertEquals(initialY - 1, mapArea.getDroneY());
+    }
+
+    @Test
+    public void testFlyWest(){
+        int initialX = mapArea.getDroneX();
+        mapArea.updateCoordinate(Direction.W);
+        assertEquals(initialX - 1, mapArea.getDroneX());
+    }
+
+    @Test
+    public void testFlyEast(){
+        int initialX = mapArea.getDroneX();
+        mapArea.updateCoordinate(Direction.E);
+        assertEquals(initialX + 1, mapArea.getDroneX());
+    }
+
     @Test 
     public void testDroneBattery(){
         drone = new Drone (500, mapArea);
