@@ -7,8 +7,8 @@ import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
 public interface DroneFlightManager {
 
     /**
-     * Execute the overall flight using the drone, and the specified decision
-     * and parameters JSONObjects.
+     * Execute the overall flight operation using the drone, and the specified
+     * decision and parameters JSONObjects.
      *
      * @param drone the drone being used to carry out the various actions
      * @param decision the decision JSON object to be modified
