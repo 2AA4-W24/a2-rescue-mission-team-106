@@ -33,7 +33,7 @@ public class ReporterTest {
     @Test
     public void EmergencySiteNotFound() {
         POI creek1 = new POI(new Point(10, 20), "Creek1");
-        POI.add(creek1);;
+        POI.add(creek1);
         String result = reporter.deliverReport();
         assertEquals("Creek1", result); 
     }
