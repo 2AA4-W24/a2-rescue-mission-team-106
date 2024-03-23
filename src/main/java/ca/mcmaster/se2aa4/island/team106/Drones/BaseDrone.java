@@ -35,7 +35,7 @@ public abstract class BaseDrone{
     
     public abstract void stop(JSONObject parameter);
 
-    public abstract void fly(JSONObject parameter);
+    public abstract void fly(JSONObject decision);
 
     public abstract boolean canMakeDecision(int batteryUsage);
 

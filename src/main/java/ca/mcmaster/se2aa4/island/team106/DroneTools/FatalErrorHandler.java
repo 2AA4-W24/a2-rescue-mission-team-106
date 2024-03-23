@@ -16,9 +16,7 @@ public class FatalErrorHandler {
     private BaseDrone drone;
     private MapArea mapArea;
     
-    // The reason it is 5 is to allow us some buffer to turn as 2 is the minimum
-    // number of blocks we need for it to successfully turn.
-    private final int RANGE_BORDER = 2;
+    private final int RANGE_BORDER = 1;
     
     public FatalErrorHandler(BaseDrone baseDrone, MapArea mapArea) {
         this.drone = baseDrone;
