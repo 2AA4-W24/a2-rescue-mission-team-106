@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import ca.mcmaster.se2aa4.island.team106.DroneTools.FatalErrorHandler;
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
 import ca.mcmaster.se2aa4.island.team106.Drones.Drone;
 import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
