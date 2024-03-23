@@ -24,14 +24,14 @@ public class ReporterTest {
     }
 
     @Test
-    public void NoCreeks() {
+    public void testNoCreeks() {
         POI = mapArea.getCreeks();
         String result = reporter.deliverReport();
         assertEquals("No creek found", result);
     }
 
     @Test
-    public void EmergencySiteNotFound() {
+    public void testEmergencySiteNotFound() {
         POI creek1 = new POI(new Point(10, 20), "Creek1");
         POI.add(creek1);
         String result = reporter.deliverReport();
@@ -39,7 +39,7 @@ public class ReporterTest {
     }
 
     @Test
-    public void EmergencySiteFound() {
+    public void testEmergencySiteFound() {
         POI creek1 = new POI(new Point(10, 20), "Creek1");
         POI emergency = new POI(new Point(15, 25), "emergency");
         POI.add(creek1);
