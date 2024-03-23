@@ -1,17 +1,28 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.States;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-public class LengthFinder implements DimensionFinder{
+import ca.mcmaster.se2aa4.island.team106.DroneTools.DimensionFinder;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.State;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
+import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+
+
+public class LengthFinderState implements DimensionFinder, State{
     private MapArea mapArea; 
     private int counts = 1; 
 
-    private final Logger logger = LogManager.getLogger();
 
-    public LengthFinder(MapArea mapArea){
+    public LengthFinderState(MapArea mapArea){
         this.mapArea = mapArea; 
+    }
+
+
+    @Override
+    public void handle(BaseDrone drone, JSONObject decision, JSONObject parameters){
+        this.getDimension(drone, decision, parameters);
     }
 
 
@@ -20,13 +31,11 @@ public class LengthFinder implements DimensionFinder{
         Direction groundDirection = mapArea.getGroundEchoDirection(); // Guaranteed to be East or West
 
         if (mapArea.hasObtainedWidth() && !mapArea.getIsAbove() && !mapArea.hasObtainedLength()){
-            logger.info("AT THIS POINT IVE OBTAINED MY WIDTH AND MY GET ISABOVE SHOULD BE FALSE: " + mapArea.hasObtainedWidth() +" " + mapArea.getIsAbove());
             if (mapArea.getHeading() == Direction.S && mapArea.getSouthDistance() > 0)
             {
                 drone.fly(decision);
                 int newSouthDistance = mapArea.getSouthDistance() -1;
                 mapArea.setSouthDistance(newSouthDistance);
-                logger.info("NEW SOUTH DISTANCE: " + newSouthDistance);
 
                 if (mapArea.getSouthDistance() == 0){
                     mapArea.setIsAbove(true);
@@ -46,14 +55,8 @@ public class LengthFinder implements DimensionFinder{
                 }
             }
             else {
-                // logger.info("i'm in the zoo with the lions and apes and bears !");
-                // drone.stop(decision);
-                // added new
-                logger.info("I have now obtained my LENGTH");
                 mapArea.setLengthEndPoint(mapArea.getDroneY());
                 
-                logger.info("Length of island achieved which is now: " + mapArea.getLengthOfIsland());
-
                 mapArea.getLengthOfIsland(); //internal mapArea memory we dont need to return this no relevance as its gonna be reffered to later via mapArea
 
                 mapArea.setObtainedLength(true); // now we have obtained the length
@@ -74,11 +77,8 @@ public class LengthFinder implements DimensionFinder{
             this.counts++;
         }
         else{
-            logger.info("I have now obtained my LENGTH");
             mapArea.setLengthEndPoint(mapArea.getDroneY());
             
-            logger.info("Length of island achieved which is now: " + mapArea.getLengthOfIsland());
-
             mapArea.getLengthOfIsland(); //internal mapArea memory we dont need to return this no relevance as its gonna be reffered to later via mapArea
 
             mapArea.setObtainedLength(true); // now we have obtained the length
@@ -87,7 +87,6 @@ public class LengthFinder implements DimensionFinder{
 
             if (!mapArea.hasObtainedWidth())
             {
-                logger.info("WE have not found the width yet so now we are transitioning into the width state");
                 drone.updateHeading(parameters, decision, groundDirection);
 
                 Direction previousDirection = mapArea.getPrevHeading(); 
@@ -99,14 +98,12 @@ public class LengthFinder implements DimensionFinder{
             else{
                 //! in this scenario, we would have already obtained our width 
                 //! we transition into a new state that makes our drone go to the middle of the island
-                logger.info("Both length and width have been found terminating for now!");
-                // drone.stop(decision);
+
                 // If we have found both the width and the length, we need to
                 // transition into the move to center state where we will move
                 // to the center point of the island. We will now update our
                 // heading to turn into the direction of the last echo.
                 drone.setStatus(Status.MOVE_CENTER_STATE);
-                logger.info("State Changed to:" + Status.MOVE_CENTER_STATE);
                 drone.updateHeading(parameters, decision, groundDirection);
             }
         }
@@ -123,7 +120,6 @@ public class LengthFinder implements DimensionFinder{
                 drone.echo(parameters, decision, Direction.E);
                 break;
             default:
-                logger.info("This was an invalid echo attempted: " + direction);
                 break;
         }
     }
@@ -138,13 +134,8 @@ public class LengthFinder implements DimensionFinder{
                 mapArea.setGroundEchoDirection(Direction.S);
                 break;
             default:
-                logger.info("Invalid echo direction, your prior direction should be E or W but it was: " + priorDirection);
                 break;
         }
         
     }
-
-
-
-
 }

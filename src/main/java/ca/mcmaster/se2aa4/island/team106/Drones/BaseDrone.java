@@ -1,6 +1,13 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.Drones;
 
 import org.json.JSONObject;
+
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Actions;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+
+
 
 
 
@@ -12,10 +19,10 @@ public abstract class BaseDrone{
     protected MapArea mapArea;
 
 
-    public BaseDrone(int MINIMUM_BATTERY_TO_OPERATE,  MapArea mapArea) {
+    public BaseDrone(int minimumBatteryToOperate,  MapArea mapArea) {
         this.mapArea = mapArea;
-        this.minimumBatteryToOperate = MINIMUM_BATTERY_TO_OPERATE; 
-        this.status = Status.START_STATE;
+        this.minimumBatteryToOperate = minimumBatteryToOperate; 
+        this.status = Status.GROUND_FINDER_STATE;
     }
     
     public abstract void updateDrone(int batteryLevel, Direction direction);

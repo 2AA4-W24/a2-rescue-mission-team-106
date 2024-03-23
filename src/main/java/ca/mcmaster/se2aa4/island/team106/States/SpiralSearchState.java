@@ -1,18 +1,24 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.States;
 
 import java.util.HashSet;
+import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-public class SpiralSearch implements Search{
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Compass;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.SearchAlgorithm;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.State;
+import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+import ca.mcmaster.se2aa4.island.team106.Locations.Point;
 
-    private final Logger logger = LogManager.getLogger(); 
+
+public class SpiralSearchState implements SearchAlgorithm, State{
 
     private MapArea mapArea; 
     private Compass compass = new Compass();
-    private HashSet<Point> scannedTiles = new HashSet<>();
+    private Set<Point> scannedTiles = new HashSet<>();
 
     private int maxLength; // the length we want to reach
     private int maxWidth; // the width we want to reach
@@ -26,18 +32,15 @@ public class SpiralSearch implements Search{
 
     private boolean needToUpdateHeading = false;
 
-    // String spiralDirection;
 
-    public SpiralSearch(MapArea mapArea) {
+    public SpiralSearchState(MapArea mapArea) {
         this.mapArea = mapArea;
         this.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
-
     }
-    // private String spiralDirection = mapArea.getSpiralTurnDirection();
 
+    
     private Direction turnDirection(Direction currentDirection) {
         Direction spiralDirection = this.mapArea.getSpiralTurnDirection();
-        logger.info("MY SPIRAL CHANGE IS " + spiralDirection);
         if (spiralDirection.equals(Direction.LEFT)) {
             return compass.getLeftDirection(currentDirection);
         } else {
@@ -47,42 +50,39 @@ public class SpiralSearch implements Search{
 
 
     @Override
+    public void handle(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
+        this.search(baseDrone, decision, parameters);
+    }
+
+
+    @Override
     public void search(BaseDrone baseDrone, JSONObject decision, JSONObject parameters){
+        this.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
 
         if (this.currentLength != this.maxLength || this.currentWidth != this.maxWidth)
         {
-            logger.info("CURRENT LENGTH: " + this.currentLength + " Max Length: " + this.maxLength + " Current Width: " + this.currentWidth + " Max Width: " + this.maxWidth);
             if (this.needToUpdateHeading)
             {
                 // gets the right cardinal direction of our current heading
-                //! if start @ (1,1) facing South then turn Left (your middle cardinal direction will be West)
-                //! Our first turn to begin in the spiral should be our very original starting direction ***
 
                 Direction newDirection = turnDirection(mapArea.getHeading()); 
-                logger.info("NOW WE ARE TURNINGGGGG SO OUR CURRENT HEADING IS: " + mapArea.getHeading()  + " FUCKING TURNED IS: " + newDirection);
                 baseDrone.updateHeading(parameters, decision, newDirection);
                 this.needToUpdateHeading = false; 
                 this.counter++; 
             
             }
             else{
-                logger.info("Tiles Traversed: " + this.tilesTraversed + " CurrentLength: " + this.currentLength);
-                logger.info("CurrentLength: " + this.currentLength + " Max Length: " + this.maxLength);
                 if (this.counter % 2 == 0){
-                    logger.info("Drone is flying");
                     baseDrone.fly(decision);
                     this.tilesTraversed++; 
                 }
                 else{
                     Point currentCoordinates = new Point(mapArea.getDroneX(), mapArea.getDroneY());
-
                     if (this.scannedTiles.contains(currentCoordinates)){
-                        logger.info("AHHHHHH");
                         baseDrone.fly(decision);
                         this.tilesTraversed++; 
                     }
                     else{
-                        logger.info("Drone is scanning");
                         baseDrone.scan(decision);
                         this.scannedTiles.add(currentCoordinates);
                     }
@@ -93,9 +93,7 @@ public class SpiralSearch implements Search{
             }
         }
         else{
-            logger.info("I AM IN THE ZOO WITH THE LIONS, APES AND BEARS!");
             baseDrone.stop(decision);
-            //! need to add one extra spiral to ensure the island area is covered
         }
     }
 
@@ -112,7 +110,6 @@ public class SpiralSearch implements Search{
             if (this.currentWidth != this.maxWidth) {
                 this.currentWidth++; // make our segment bigger for next run
             }
-            logger.info("We have finished our width segment so updating it now!");
             this.tilesTraversed = 0; // we need to reset tilesTraversed because now we have completed our segment
             this.needToUpdateHeading = true; 
         }
@@ -122,12 +119,12 @@ public class SpiralSearch implements Search{
             if (this.currentLength != this.maxLength) {
                 this.currentLength++; 
             }
-            logger.info("We have finished our length segment so updating it now!");
             this.tilesTraversed = 0; 
             this.needToUpdateHeading = true; 
             
         }
     }
+    
     
     @Override
     public void setDimensions(int maxWidth, int maxLength){

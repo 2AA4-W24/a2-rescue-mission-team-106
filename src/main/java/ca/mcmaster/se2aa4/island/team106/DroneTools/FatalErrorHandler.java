@@ -1,8 +1,11 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.DroneTools;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+
+import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
 
 public class FatalErrorHandler {
     private final Logger logger = LogManager.getLogger();
@@ -18,8 +21,8 @@ public class FatalErrorHandler {
     // number of blocks we need for it to successfully turn.
     private final int RANGE_BORDER = 2;
     
-    public FatalErrorHandler(int MINIMUM_BATTERY_TO_OPERATE, BaseDrone baseDrone, MapArea mapArea) {
-        this.minOperationalBattery = MINIMUM_BATTERY_TO_OPERATE;
+    public FatalErrorHandler(int minimumBatteryToOperate, BaseDrone baseDrone, MapArea mapArea) {
+        this.minOperationalBattery = minimumBatteryToOperate;
         this.drone = baseDrone;
         this.mapArea = mapArea;
     }
@@ -30,7 +33,7 @@ public class FatalErrorHandler {
             logger.info("BATTERY LEVEL CRITICAL");
         } else if (limit <= RANGE_BORDER && mapArea.getHeading() == mapArea.getPrevEchoDirection()) {
             this.rangeDanger = true;
-            logger.info("Approaching OUT OF RANGE area");
+            logger.info("Approaching OUT OF RANGE area changing direction");
         } else {
             this.rangeDanger = false;
             this.batteryDanger = false;
@@ -45,7 +48,6 @@ public class FatalErrorHandler {
         } else {
             Direction nextDirection = this.changeDirection(this.mapArea);
             logger.info("CHANGING DIRECTION TO " + nextDirection);
-    
             drone.updateHeading(parameters, decision, nextDirection);
             this.setRangeDanger(false);
         }
@@ -60,7 +62,7 @@ public class FatalErrorHandler {
     }
     
     public boolean getDanger() {
-        return (this.rangeDanger || this.batteryDanger);
+        return this.rangeDanger || this.batteryDanger;
     }
     
     /**

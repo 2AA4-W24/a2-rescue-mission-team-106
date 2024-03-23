@@ -1,28 +1,25 @@
-package ca.mcmaster.se2aa4.island.team106;
+package ca.mcmaster.se2aa4.island.team106.Locations;
 import java.text.DecimalFormat;
 
 
-public class Creek {
-    private String creekID;
+public class POI {
+    private String poiID;
     private Point coordinate;
     private DecimalFormat df = new DecimalFormat("#.#####"); // converter used to round decimals
 
 
-    public Creek(Point coordinate, String creekID){
+    public POI(Point coordinate, String poiID){
         this.coordinate = coordinate;
-        this.creekID = creekID;
+        this.poiID = poiID;
     }
 
-    public String getCreekID(){
-        return this.creekID;
-    }
 
     public Point getCreekPoint(){
         return this.coordinate;
     }
 
         
-    public double getDistance(Creek poi){
+    public double getDistance(POI poi){
         Point pointOne = this.getCreekPoint();
         Point pointTwo = poi.getCreekPoint();
 
@@ -34,13 +31,13 @@ public class Creek {
 
 
     public String getID(){
-        return this.creekID; 
+        return this.poiID; 
     }
 
 
     @Override
     public String toString(){
-        return "ID: " + this.creekID + " " + this.getCreekPoint();
+        return "ID: " + this.poiID + " " + this.getCreekPoint();
     }
 
 
