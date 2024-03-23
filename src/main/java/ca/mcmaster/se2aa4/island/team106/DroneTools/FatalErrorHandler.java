@@ -19,12 +19,6 @@ public class FatalErrorHandler {
     
     private final int RANGE_BORDER = 1;
     
-    /**
-     * Constructs a FatalErrorHandler with the specified base drone and map area.
-     *
-     * @param baseDrone the base drone to monitor
-     * @param mapArea the map area the drone operates in
-     */
     public FatalErrorHandler(BaseDrone baseDrone, MapArea mapArea) {
         this.drone = baseDrone;
         this.mapArea = mapArea;

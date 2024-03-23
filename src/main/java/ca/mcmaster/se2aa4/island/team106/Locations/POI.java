@@ -23,7 +23,7 @@ public class POI {
      * 
      * @return the coordinates of the POI.
      */
-    public Point getCreekPoint() {
+    public Point getPOIPoint() {
         return this.coordinate;
     }
 
@@ -34,8 +34,8 @@ public class POI {
      * @return the distance between this POI and the other POI.
      */
     public double getDistance(POI poi) {
-        Point pointOne = this.getCreekPoint();
-        Point pointTwo = poi.getCreekPoint();
+        Point pointOne = this.getPOIPoint();
+        Point pointTwo = poi.getPOIPoint();
 
         double distance = Math.sqrt(Math.pow(pointTwo.getXCoordinate() - pointOne.getXCoordinate(), 2)
                 + Math.pow(pointTwo.getYCoordinate() - pointOne.getYCoordinate(), 2));
@@ -59,6 +59,6 @@ public class POI {
      */
     @Override
     public String toString() {
-        return "ID: " + this.poiID + " " + this.getCreekPoint();
+        return "ID: " + this.poiID + " " + this.getPOIPoint();
     }
 }
