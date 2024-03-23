@@ -13,7 +13,7 @@ import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
 
 
 
-public class GroundFinderTest {
+public class GroundFinderStateTest {
     private MapArea mapArea;
     private BaseDrone drone;
     private GroundFinderState groundFinder;
