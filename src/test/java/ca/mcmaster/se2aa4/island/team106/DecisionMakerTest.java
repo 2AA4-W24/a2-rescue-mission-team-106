@@ -1,6 +1,5 @@
 package ca.mcmaster.se2aa4.island.team106;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,12 +8,10 @@ import ca.mcmaster.se2aa4.island.team106.DroneTools.FatalErrorHandler;
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
 import ca.mcmaster.se2aa4.island.team106.Drones.Drone;
 import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
-import ca.mcmaster.se2aa4.island.team106.Exploration.DecisionMaker;
 
 public class DecisionMakerTest {
     private MapArea mapArea;
     private Drone drone;
-    private FatalErrorHandler fatalErrorHandler;
 
     @BeforeEach
     public void initialize(){
