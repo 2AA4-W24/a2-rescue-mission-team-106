@@ -22,7 +22,7 @@ public class FatalErrorHandlerTest {
         drone = new Drone(30, new MapArea());
         drone.updateDrone(2, Direction.N);
         mapArea = new MapArea();
-        fatalErrorHandler = new FatalErrorHandler(10, drone, mapArea);
+        fatalErrorHandler = new FatalErrorHandler(drone, mapArea);
         decision = new JSONObject();
         parameters = new JSONObject();
         mapArea.setStartDirection(Direction.N);
@@ -32,7 +32,7 @@ public class FatalErrorHandlerTest {
 
     @Test
     public void testBatteryCritical() {
-        fatalErrorHandler.setDanger(0);
+        fatalErrorHandler.setBatteryDanger(true);
         assertTrue(fatalErrorHandler.getDanger());
         fatalErrorHandler.handleDanger(decision, parameters);
         assertTrue(decision.has("action"));
@@ -43,12 +43,11 @@ public class FatalErrorHandlerTest {
     public void testApproachingOutOfRange() {
         mapArea.setHeading(Direction.N);
         mapArea.setPrevEchoDirection(Direction.N);
-        mapArea.setEastDistance(1); // Assuming close to the border
-        fatalErrorHandler.setDanger(1);
-        assertTrue(fatalErrorHandler.getDanger());
+        mapArea.setEastDistance(1);
+        fatalErrorHandler.setRangeDanger(2);
         fatalErrorHandler.handleDanger(decision, parameters);
         assertTrue(decision.has("action"));
-        assertEquals("stop", decision.getString("action"));
+        assertEquals("heading", decision.getString("action"));
     }
 
     @Test

@@ -24,7 +24,7 @@ public class ResultsAcknowledgerTest {
     public void setUp() {
         drone = new Drone(30, mapArea);
         mapArea = new MapArea();
-        handler = new FatalErrorHandler(30, drone, mapArea);
+        handler = new FatalErrorHandler(drone, mapArea);
         acknowledger = new ResultsAcknowledger(drone, mapArea, handler);
     }
 
