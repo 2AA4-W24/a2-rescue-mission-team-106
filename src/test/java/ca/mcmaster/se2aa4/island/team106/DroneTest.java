@@ -7,6 +7,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+import ca.mcmaster.se2aa4.island.team106.Drones.Drone;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+
 public class DroneTest {
     private MapArea mapArea;
     private Drone drone;
@@ -34,7 +38,7 @@ public class DroneTest {
     @Test 
     public void testDroneBattery(){
         drone = new Drone (500, mapArea);
-        drone.currentBatteryLevel = 1000;
+        drone.updateDrone(1000, Direction.E); 
         assertTrue(drone.canMakeDecision(100));
         drone.useBattery(600);
         assertFalse(drone.canMakeDecision(6));

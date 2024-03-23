@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
-
-
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Compass;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
 public class CompassTest {
 
     private Compass compass;

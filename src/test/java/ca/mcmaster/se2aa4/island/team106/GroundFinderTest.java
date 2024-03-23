@@ -5,12 +5,18 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
+import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
+import ca.mcmaster.se2aa4.island.team106.Drones.*;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
+import ca.mcmaster.se2aa4.island.team106.States.GroundFinderState;
+import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
+
 
 
 public class GroundFinderTest {
     private MapArea mapArea;
     private BaseDrone drone;
-    private GroundFinder groundFinder;
+    private GroundFinderState groundFinder;
     private JSONObject decision;
     private JSONObject parameters;
 
@@ -18,7 +24,7 @@ public class GroundFinderTest {
     public void setUp() {
         mapArea = new MapArea();
         drone = new Drone(100, mapArea);
-        groundFinder = new GroundFinder(mapArea);
+        groundFinder = new GroundFinderState(mapArea);
         decision = new JSONObject();
         parameters = new JSONObject();
         mapArea.setStartDirection(Direction.N);
