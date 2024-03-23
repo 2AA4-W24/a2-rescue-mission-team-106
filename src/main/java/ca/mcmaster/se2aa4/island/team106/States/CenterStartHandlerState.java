@@ -13,7 +13,8 @@ import ca.mcmaster.se2aa4.island.team106.Locations.Point;
 
 
 
-public class CenterStartHandlerState implements DroneFlightManager, State{
+public class CenterStartHandlerState implements DroneFlightManager, State {
+
     private int counts = 1;
 
     private MapArea mapArea;
@@ -66,8 +67,13 @@ public class CenterStartHandlerState implements DroneFlightManager, State{
             this.counts++;
         } else {
             Direction groundDirection = this.mapArea.getStartDirection();
-            drone.updateHeading(parameters, decision, groundDirection);
             drone.setStatus(Status.GROUND_FINDER_STATE);
+            if (this.mapArea.getHeading() == groundDirection) {
+                previousDroneCoordinate.setCoordinate(this.mapArea.getDroneX(), this.mapArea.getDroneY());
+                drone.fly(decision);
+            } else {
+                drone.updateHeading(parameters, decision, groundDirection);
+            }
         }
     }
 }

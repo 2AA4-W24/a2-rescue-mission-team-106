@@ -1,4 +1,5 @@
 package ca.mcmaster.se2aa4.island.team106.Drones;
+
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
@@ -44,43 +45,46 @@ public class Drone extends BaseDrone {
         action.fly(decision);
         Direction currentHeading = mapArea.getHeading();
         this.mapArea.updateCoordinate(currentHeading);
+        this.mapArea.setCurrentAction("fly");
     }
 
 
     @Override
     public void echo(JSONObject parameter, JSONObject decision, Direction direction){
-        switch (direction)
-        {
-            case N: 
+        switch (direction) {
+            case N:
                 this.echoNorth(parameter, decision);
-                break; 
-            case E: 
+                break;
+            case E:
                 this.echoEast(parameter, decision);
-                break; 
+                break;
             case S:
                 this.echoSouth(parameter, decision);
-                break; 
-            case W: 
+                break;
+            case W:
                 this.echoWest(parameter, decision);
-                break; 
-            case FORWARD: 
+                break;
+            case FORWARD:
                 this.echoForwards(parameter, decision);
                 break;
             default:
                 break;
         }
+        this.mapArea.setCurrentAction("echo");
     }
 
 
     @Override
     public void stop(JSONObject decision){
         this.action.stop(decision);
+        this.mapArea.setCurrentAction("stop");
     }
 
 
     @Override
     public void scan(JSONObject decision){
         this.action.scan(decision);
+        this.mapArea.setCurrentAction("scan");
     }
 
 
@@ -90,13 +94,14 @@ public class Drone extends BaseDrone {
             this.mapArea.setHeading(updatedHeading); // update the status of our drones heading
             this.action.heading(parameter, decision, updatedHeading); // physically update the drone on our map
             this.mapArea.updateCoordinate(updatedHeading); // update the coordinates of the drone
+            this.mapArea.setCurrentAction("heading");
         }
     }
 
 
     @Override
-    public boolean canMakeDecision(int batteryUsage){
-        return (this.currentBatteryLevel - batteryUsage) >= this.minimumBatteryToOperate; 
+    public boolean canMakeDecision(int batteryUsage) {
+        return (this.currentBatteryLevel - batteryUsage) >= this.minimumBatteryToOperate;
     }
 
 

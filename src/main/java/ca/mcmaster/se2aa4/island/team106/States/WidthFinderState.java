@@ -71,7 +71,7 @@ public class WidthFinderState implements DimensionFinder, State{
         }
         else if (this.mapArea.getIsAbove())
         {
-            this.moveDrone(drone, groundDirection, decision, parameters);
+            moveDrone(drone, groundDirection, decision, parameters);
         }
         else{
             mapArea.setWidthEndPoint(mapArea.getDroneX());
@@ -91,10 +91,6 @@ public class WidthFinderState implements DimensionFinder, State{
                 drone.setStatus(Status.LENGTH_STATE);
             }
             else{
-                //! in this scenario, we would have already obtained our width 
-                //! we transition into a new state that makes our drone go to the middle of the island
-                logger.info("Both length and width have been found terminating for now!");
-                // drone.stop(decision);
                 // If we have found both the width and the length, we need to
                 // transition into the move to center state where we will move
                 // to the center point of the island. We will now update our
@@ -108,12 +104,9 @@ public class WidthFinderState implements DimensionFinder, State{
     }
 
     private void moveDrone(BaseDrone drone, Direction direction, JSONObject decision, JSONObject parameters){
-        switch (this.counts % 3) {
+        switch (this.counts % 2) {
             case 1:
                 echo(drone, direction, decision, parameters);
-                break;
-            case 2:
-                drone.scan(decision);
                 break;
             case 0:
                 drone.fly(decision);
