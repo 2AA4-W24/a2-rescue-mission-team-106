@@ -15,7 +15,7 @@ public class DecisionMakerTest {
     @BeforeEach
     public void initialize(){
         mapArea = new MapArea(); 
-        drone = new Drone(1000, mapArea); 
+        drone = new Drone(30, mapArea); 
 
     }
     @Test

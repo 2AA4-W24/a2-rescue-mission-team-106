@@ -21,7 +21,7 @@ public class ReachCenterStateTest {
     @BeforeEach
     public void initialize(){
         mapArea = new MapArea();
-        drone = new Drone(1000, mapArea);
+        drone = new Drone(30, mapArea);
         drone.updateDrone(2, Direction.N);
         reachCenterState = new ReachCenterState(mapArea);
         decision = new JSONObject();

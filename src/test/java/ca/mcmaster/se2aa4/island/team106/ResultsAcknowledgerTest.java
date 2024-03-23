@@ -22,9 +22,9 @@ public class ResultsAcknowledgerTest {
 
     @BeforeEach
     public void setUp() {
-        drone = new Drone(10000, mapArea);
+        drone = new Drone(30, mapArea);
         mapArea = new MapArea();
-        handler = new FatalErrorHandler(10000, drone, mapArea);
+        handler = new FatalErrorHandler(30, drone, mapArea);
         acknowledger = new ResultsAcknowledger(drone, mapArea, handler);
     }
 

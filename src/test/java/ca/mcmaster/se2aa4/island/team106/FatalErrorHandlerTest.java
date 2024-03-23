@@ -19,7 +19,7 @@ public class FatalErrorHandlerTest {
 
     @BeforeEach
     public void setUp() {
-        drone = new Drone(100, new MapArea());
+        drone = new Drone(30, new MapArea());
         drone.updateDrone(2, Direction.N);
         mapArea = new MapArea();
         fatalErrorHandler = new FatalErrorHandler(10, drone, mapArea);

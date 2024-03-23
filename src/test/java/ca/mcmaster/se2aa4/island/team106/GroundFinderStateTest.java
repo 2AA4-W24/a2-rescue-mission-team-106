@@ -23,7 +23,7 @@ public class GroundFinderStateTest {
     @BeforeEach
     public void setUp() {
         mapArea = new MapArea();
-        drone = new Drone(100, mapArea);
+        drone = new Drone(30, mapArea);
         groundFinder = new GroundFinderState(mapArea);
         decision = new JSONObject();
         parameters = new JSONObject();

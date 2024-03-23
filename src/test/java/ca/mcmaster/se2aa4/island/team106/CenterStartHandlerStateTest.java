@@ -19,7 +19,7 @@ public class CenterStartHandlerStateTest {
     @BeforeEach
     public void setUp() {
         mapArea = new MapArea();
-        drone = new Drone(50, mapArea);
+        drone = new Drone(30, mapArea);
         state = new CenterStartHandlerState(mapArea);
         drone.updateDrone(1000, Direction.N);
     }

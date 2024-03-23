@@ -18,7 +18,7 @@ public class SpiralSearchStateTest {
     @BeforeEach
     public void setUp() {
         mapArea = new MapArea();
-        drone = new Drone(1000, mapArea);
+        drone = new Drone(30, mapArea);
         state = new SpiralSearchState(mapArea);
         drone.updateDrone(1000, Direction.E);
         mapArea.setHeading(Direction.E);

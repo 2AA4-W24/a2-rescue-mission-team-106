@@ -22,7 +22,7 @@ public class DroneTest {
 
     @Test
     public void testUpdateDrone() {
-        drone = new Drone (1000, mapArea);
+        drone = new Drone (30, mapArea);
         drone.updateDrone(900, Direction.N);
         assertEquals(900, drone.getBatteryLevel());
         assertEquals(Direction.N, mapArea.getHeading());
