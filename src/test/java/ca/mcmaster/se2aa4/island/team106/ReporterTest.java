@@ -7,8 +7,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
-import ca.mcmaster.se2aa4.island.team106.Drones.Drone;
-import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
 import ca.mcmaster.se2aa4.island.team106.Exploration.Reporter;
 import ca.mcmaster.se2aa4.island.team106.Locations.*;
 
