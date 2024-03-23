@@ -52,8 +52,9 @@ public class ResultsAcknowledger {
         if (drone.canMakeDecision(cost.intValue())) {
             drone.useBattery(cost.intValue());
             this.fatalErrorHandler.setBatteryDanger(false);
-        } else {
-            if (!("stop".equals(mapArea.getCurrentAction()))) {
+        } 
+        else {
+            if (!"stop".equals(mapArea.getCurrentAction())){
                 this.fatalErrorHandler.setBatteryDanger(true);
                 drone.useBattery(cost.intValue());
             }
