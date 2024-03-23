@@ -13,34 +13,25 @@ import ca.mcmaster.se2aa4.island.team106.Locations.*;
 public class MapArea {
     private final Logger logger = LogManager.getLogger();
 
-    private final int INITAL_X = 0;
-    private final int INITAL_Y = 0;
+    private final int INITIAL_X = 0;
+    private final int INITIAL_Y = 0;
 
-    private boolean isAboveGround = false; //initally drone is not above the island
-    private Point droneCoordinates = new Point(INITAL_X, INITAL_Y); // drone originally spawns at 0,0
+    private boolean isAboveGround = false; //initially drone is not above the island
+    private Point droneCoordinates = new Point(INITIAL_X, INITIAL_Y); // drone originally spawns at 0,0
 
-    //! Used for both the widthFinder and lengthFinder 
+    // Used for both the widthFinder and lengthFinder 
     private boolean isAbove; // not physically above the ground this just means we are perpendicular we to island we are still above water 
 
-    //! These variables bellow  will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
-    //! Save the coordinate point of starting width
     private int widthStartX; 
     private int widthEndX; 
 
     private boolean obtainedWidth = false; 
-    private boolean groundStatus = false; 
-
-    //! These variables above will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
-
-
-    //! These variables bellow  will be used for the LengthFinder Later we could just make a class that stores these relevant attributes
+    private boolean groundStatus = false;
+    
     private int lengthStartY;
     private int lengthEndY; 
 
     private boolean obtainedLength = false; 
-
-    //! These variables above will be used for the WidthFinder Later we could just make a class that stores these relevant attributes
-
 
     private Direction heading; // direction the drone is facing
     private Direction prevHeading; // the previous direction the drone was facing 
@@ -54,6 +45,8 @@ public class MapArea {
     private POI emergencySitePoint;
     
     private boolean emergencySiteFound = false;
+
+    private String currentAction;
 
     private int lastDistance; 
 
@@ -175,6 +168,14 @@ public class MapArea {
 
     public void setGroundStatus(boolean status) {
         this.groundStatus = status;
+    }
+
+    public void setCurrentAction(String action) {
+        this.currentAction = action;
+    }
+
+    public String getCurrentAction() {
+        return this.currentAction;
     }
 
 

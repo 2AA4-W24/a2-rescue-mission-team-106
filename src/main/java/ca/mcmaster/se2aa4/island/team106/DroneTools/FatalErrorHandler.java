@@ -15,28 +15,20 @@ public class FatalErrorHandler {
 
     private BaseDrone drone;
     private MapArea mapArea;
-    private int minOperationalBattery;
     
-    // The reason it is 5 is to allow us some buffer to turn as 2 is the minimum
-    // number of blocks we need for it to successfully turn.
-    private final int RANGE_BORDER = 2;
+    private final int RANGE_BORDER = 1;
     
-    public FatalErrorHandler(int minimumBatteryToOperate, BaseDrone baseDrone, MapArea mapArea) {
-        this.minOperationalBattery = minimumBatteryToOperate;
+    public FatalErrorHandler(BaseDrone baseDrone, MapArea mapArea) {
         this.drone = baseDrone;
         this.mapArea = mapArea;
     }
     
-    public void setDanger(int limit) {
-        if (this.drone.getBatteryLevel() <= this.minOperationalBattery) {
-            this.batteryDanger = true;
-            logger.info("BATTERY LEVEL CRITICAL");
-        } else if (limit <= RANGE_BORDER && mapArea.getHeading() == mapArea.getPrevEchoDirection()) {
+    public void setRangeDanger(int limit) {
+        if (limit <= RANGE_BORDER && mapArea.getHeading() == mapArea.getPrevEchoDirection()) {
             this.rangeDanger = true;
             logger.info("Approaching OUT OF RANGE area changing direction");
         } else {
             this.rangeDanger = false;
-            this.batteryDanger = false;
         }
     }
 
@@ -49,15 +41,14 @@ public class FatalErrorHandler {
             Direction nextDirection = this.changeDirection(this.mapArea);
             logger.info("CHANGING DIRECTION TO " + nextDirection);
             drone.updateHeading(parameters, decision, nextDirection);
-            this.setRangeDanger(false);
+            this.rangeDanger = false;
         }
     }
 
-    public void setRangeDanger(boolean danger) {
-        this.rangeDanger = danger;
-    }
-
     public void setBatteryDanger(boolean danger) {
+        if (danger) {
+            logger.info("BATTERY LEVEL CRITICAL");
+        }
         this.batteryDanger = danger;
     }
     
