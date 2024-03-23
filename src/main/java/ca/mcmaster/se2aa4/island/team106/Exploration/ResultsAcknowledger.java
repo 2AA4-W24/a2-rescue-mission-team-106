@@ -37,6 +37,13 @@ public class ResultsAcknowledger {
 
         if (drone.canMakeDecision(cost.intValue())) {
             drone.useBattery(cost.intValue());
+            this.fatalErrorHandler.setBatteryDanger(false);
+        } 
+        else {
+            if (!("stop".equals(mapArea.getCurrentAction()))) {
+                this.fatalErrorHandler.setBatteryDanger(true);
+                drone.useBattery(cost.intValue());
+            }
         }
     }
     
@@ -64,18 +71,18 @@ public class ResultsAcknowledger {
             if ("OUT_OF_RANGE".equals(echoResult)) {
                 this.outOfRangeAction(echoInt);
             }
-            
+
             if (drone.getStatus() == Status.GROUND_FINDER_STATE) {
                 this.startStateHandler(echoResult);
             } else if (drone.getStatus() == Status.CENTER_START_STATE) {
                 this.centerStartStateHandler(echoResult);
             } else if (drone.getStatus() == Status.WIDTH_STATE) {
                 this.widthStateHandler(echoResult, echoInt);
-            } else if (drone.getStatus() == Status.LENGTH_STATE){
+            } else if (drone.getStatus() == Status.LENGTH_STATE) {
                 this.lengthStateHandler(echoResult, echoInt);
-            } else if (drone.getStatus() == Status.MOVE_CENTER_STATE){
+            } else if (drone.getStatus() == Status.MOVE_CENTER_STATE) {
                 this.moveCenterStateHandler(echoResult);
-            }else if (drone.getStatus() == Status.CENTER_STATE){
+            } else if (drone.getStatus() == Status.CENTER_STATE) {
                 this.centerStateHandler(echoResult);
             }
         }
@@ -119,12 +126,11 @@ public class ResultsAcknowledger {
 
 
     private void outOfRangeAction(int echoInt) {
-        fatalErrorHandler.setDanger(echoInt);
+        fatalErrorHandler.setRangeDanger(echoInt);
         if (fatalErrorHandler.getDanger()) {
             logger.info("Nearing Fatal Danger");
         }
     }
-
 
     private void startStateHandler(String echoResult) {
         logger.info("CURRENT STATE: " + Status.GROUND_FINDER_STATE);
