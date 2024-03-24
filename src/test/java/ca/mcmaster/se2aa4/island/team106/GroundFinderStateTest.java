@@ -32,6 +32,9 @@ public class GroundFinderStateTest {
         mapArea.setGroundEchoDirection(Direction.N);
     }
 
+    /** 
+     * Test contains {@link Drone}, {@link MapArea}, {@link Status}, {@link GroundFinderState}
+     */
     @Test
     public void testFlyOverGround() {
         mapArea.setGroundStatus(true);
@@ -42,6 +45,9 @@ public class GroundFinderStateTest {
         assertEquals("heading", decision.getString("action"));
     }
 
+    /** 
+     * Test contains {@link MapArea}, {@link Direction}, {@link GroundFinderState}
+     */
     @Test
     public void testEchoOperations() {
         mapArea.setGroundEchoDirection(Direction.E);
@@ -65,6 +71,9 @@ public class GroundFinderStateTest {
         assertEquals(Direction.W, mapArea.getPrevEchoDirection());
     }
 
+    /** 
+     * Test contains {@link MapArea}, {@link Direction}, {@link Status}, {@link Drone}, {@link GroundFinderState}
+     */
     @Test
     public void testTransitionToWidthState() {
         mapArea.setGroundStatus(false);
@@ -78,6 +87,9 @@ public class GroundFinderStateTest {
         assertEquals("echo", decision.getString("action"));
     }
 
+    /** 
+     * Test contains {@link MapArea}, {@link Direction}, {@link Status}, {@link Drone}, {@link GroundFinderState}
+     */
     @Test
     public void testTransitionToLengthState() {
         mapArea.setGroundStatus(false);
