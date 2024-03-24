@@ -24,6 +24,9 @@ public class SpiralSearchStateTest {
         mapArea.setHeading(Direction.E);
     }
 
+    /** 
+     * Test contains {@link SpiralSearchState}, {@link MapArea}, {@link Direction}
+    */
     @Test
     public void testHandle() {
         JSONObject decision = new JSONObject();
@@ -32,6 +35,9 @@ public class SpiralSearchStateTest {
         assertEquals(Direction.E, mapArea.getHeading());
     }
 
+    /** 
+     * Test contains {@link SpiralSearchState}, {@link MapArea}, {@link Status}, {@link Direction}, {@link Drone}
+    */
     @Test
     public void testSearch() {
         JSONObject decision = new JSONObject();
