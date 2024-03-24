@@ -13,14 +13,20 @@ package DroneTools <<Frame>> {
         + moveTo(JSONObject, JSONObject, Direction) : void
     }
 
+    Actions ..> Direction
+
     class Compass {
         + getLeftDirection(Direction) : Direction
         + getRightDirection(Direction) : Direction
     }
 
+    Compass ..> Direction
+
     interface DimensionFinder {
         getDimension(BaseDrone, JSONObject, JSONObject) : void
     }
+
+    DimensionFinder ..> BaseDrone
 
     enum Direction {
         N,
@@ -36,6 +42,8 @@ package DroneTools <<Frame>> {
         fly(BaseDrone, JSONObject, JSONObject) : void
     }
 
+    DroneFlightManager ..> BaseDrone
+
     class FatalErrorHandler {
         + FatalErrorHandler(BaseDrone, MapArea)
         + setRangeDanger(int) : void
@@ -45,14 +53,22 @@ package DroneTools <<Frame>> {
         + changeDirection(MapArea) : Direction
     }
 
+    FatalErrorHandler ..> BaseDrone
+    FatalErrorHandler ..> MapArea
+
+
     interface SearchAlgorithm {
         + search(BaseDrone, JSONObject, JSONObject) : void
         + setDimensions(int, int) : void
     }
 
+    SearchAlgorithm ..> BaseDrone
+
     interface State {
         + handle(BaseDrone, JSONObject, JSONObject) : void
     }
+
+    State ..> BaseDrone
 
     enum Status {
         GROUND_FINDER_STATE,
@@ -64,6 +80,7 @@ package DroneTools <<Frame>> {
     }
 }
 
+newpage
 package Drones <<Frame>> {
     abstract class BaseDrone {
         # minimumBatteryToOperate : int
@@ -84,6 +101,12 @@ package Drones <<Frame>> {
         + {abstract} scan(JSONObject) : void
     }
 
+    BaseDrone ..> Actions
+    BaseDrone ..> Direction
+    BaseDrone ..> Status
+    BaseDrone -- MapArea
+
+
     class Drone extends BaseDrone {
         + Drone(int, MapArea)
         + ^updateDrone(int, Direction) : void
@@ -98,13 +121,26 @@ package Drones <<Frame>> {
         + ^canMakeDecision(int) : boolean
         + ^useBattery(int) : void
     }
+
+    Drone ..> Direction
+    Drone ..> Status
+    Drone -- MapArea
+    Drone ..> Actions
+
 }
 
+newpage
 package Exploration <<Frame>> {
     class DecisionMaker {
         + DecisionMaker(BaseDrone, MapArea, FatalErrorHandler)
         + makeDecisions(JSONObject, JSONObject) : void
     }
+
+    DecisionMaker ..> BaseDrone
+    DecisionMaker ..> MapArea
+    DecisionMaker ..> FatalErrorHandler
+    DecisionMaker ..> State
+    DecisionMaker -- States
 
     class Explorer implements IExplorerRaid {
         + ^initialize(String) : void
@@ -112,6 +148,13 @@ package Exploration <<Frame>> {
         + ^acknowledgeResults(String) : void
         + ^deliverFinalReport() : String
     }
+
+    Explorer -- MapArea
+    Explorer -- BaseDrone
+    Explorer -- FatalErrorHandler
+    Explorer -- DecisionMaker
+    Explorer -- ResultsAcknowledger
+    Explorer -- Reporter
 
     class MapArea {
         + addCreek(POI) : void
@@ -165,11 +208,19 @@ package Exploration <<Frame>> {
         + getSouthDistance() : int
     }
 
+    MapArea -- POI
+    MapArea -- Point
+    MapArea ..> Direction
+
+
     class Reporter {
         + Reporter(MapArea)
         + deliverReport() : String
 
     }
+
+    Reporter ..> MapArea
+    Reporter -- POI
 
     class ResultsAcknowledger {
         + ResultsAcknowledger(BaseDrone, MapArea, FatalErrorHandler)
@@ -180,9 +231,17 @@ package Exploration <<Frame>> {
 
     }
 
+    ResultsAcknowledger ..> BaseDrone
+    ResultsAcknowledger ..> MapArea
+    ResultsAcknowledger ..> FatalErrorHandler
+    ResultsAcknowledger -- POI
+
+
     class Runner {
         + {static} main(String[] args) : void
     }
+
+    Runner ..> Explorer
 
     interface IExplorerRaid {
         + initialize(String) : void
@@ -192,6 +251,7 @@ package Exploration <<Frame>> {
     }
 }
 
+newpage
 package Locations <<Frame>> {
     class POI {
         + POI(Point, String)
@@ -200,6 +260,8 @@ package Locations <<Frame>> {
         + getID() : String
         + toString() : String
     }
+
+    POI --* Point
     
     class Point {
         + Point(int, int)
@@ -212,6 +274,7 @@ package Locations <<Frame>> {
     }
 }
 
+newpage
 package States <<Frame>> {
     class CenterStartHandlerState implements DroneFlightManager, State {
         + CenterStartHandlerState(MapArea)
@@ -219,11 +282,24 @@ package States <<Frame>> {
         + ^fly(BaseDrone, JSONObject, JSONObject) : void
     }
 
+    CenterStartHandlerState --* MapArea
+    CenterStartHandlerState -- Point
+    CenterStartHandlerState ..> BaseDrone
+    CenterStartHandlerState ..> Direction
+    CenterStartHandlerState ..> Status
+
+
     class GroundFinderState implements DroneFlightManager, State {
         + GroundFinderState(MapArea)
         + ^handle(BaseDrone, JSONObject, JSONObject) : void
         + ^fly(BaseDrone, JSONObject, JSONObject) : void
     }
+
+    GroundFinderState --* MapArea
+    GroundFinderState -- Point
+    GroundFinderState ..> BaseDrone
+    GroundFinderState ..> Direction
+    GroundFinderState ..> Status
 
     class LengthFinderState implements DimensionFinder, State {
         + LengthFinderState(MapArea)
@@ -231,11 +307,23 @@ package States <<Frame>> {
         + ^getDimension(BaseDrone, JSONObject, JSONObject) : void
     }
 
+    LengthFinderState --* MapArea
+    LengthFinderState -- Point
+    LengthFinderState ..> BaseDrone
+    LengthFinderState ..> Direction
+    LengthFinderState ..> Status
+
     class ReachCenterState implements DroneFlightManager, State {
         + ReachCenterState(MapArea)
         + ^handle(BaseDrone, JSONObject, JSONObject) : void
         + ^fly(BaseDrone, JSONObject, JSONObject) : void
     }
+
+    ReachCenterState --* MapArea
+    ReachCenterState -- Point
+    ReachCenterState ..> BaseDrone
+    ReachCenterState ..> Direction
+    ReachCenterState ..> Status
 
     class SpiralSearchState implements SearchAlgorithm, State {
         + SpiralSearchState(MapArea)
@@ -243,12 +331,23 @@ package States <<Frame>> {
         + ^search(BaseDrone, JSONObject, JSONObject)
     }
 
+    SpiralSearchState --* MapArea
+    SpiralSearchState -- Point
+    SpiralSearchState ..> BaseDrone
+    SpiralSearchState ..> Direction
+    SpiralSearchState ..> Status
+
     class WidthFinderState implements DimensionFinder, State {
         + WidthFinderState(MapArea)
         + ^handle(BaseDrone, JSONObject, JSONObject) : void
         + ^getDimension(BaseDrone, JSONObject, JSONObject) : void
     }
-    
+
+    WidthFinderState --* MapArea
+    WidthFinderState -- Point
+    WidthFinderState ..> BaseDrone
+    WidthFinderState ..> Direction
+    WidthFinderState ..> Status
 }
 
 @enduml
