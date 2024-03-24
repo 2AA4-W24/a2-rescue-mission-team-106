@@ -29,13 +29,14 @@ public class DimensionFinderTest {
         lengthFinder = new LengthFinderState(mapArea);
         decision = new JSONObject();
         parameters = new JSONObject();
-        
-        // Set initial direction for MapArea
         mapArea.setStartDirection(Direction.N);
         mapArea.setHeading(Direction.N);
         mapArea.setGroundEchoDirection(Direction.N);
     }
 
+    /**
+     * Test contains {@link MapArea}, {@link LengthFinderState}, {@link Drone}
+     */
     @Test
     public void testLengthObtained() {
         mapArea.setObtainedWidth(true);
@@ -54,7 +55,10 @@ public class DimensionFinderTest {
         assertEquals(1, mapArea.getSouthDistance());
         assertEquals(0, mapArea.getLengthOfIsland());
     }
-
+    
+    /**
+     * Test contains {@link MapArea}, {@link WidthFinderState}, {@link Drone}
+     */
     @Test
     public void testWidthObtained() {
         mapArea.setObtainedLength(true);
