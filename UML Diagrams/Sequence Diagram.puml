@@ -9,19 +9,21 @@ participant Reporter
 participant State 
 participant FatalErrorHandler 
 
+Explorer -> Explorer: initalize(String s)
+
 activate Explorer
 loop : drone.hasBattery() && !closestCreekFound()
-Explorer -> DecisionMaker: makeDecisions
+Explorer -> DecisionMaker: makeDecisions(JSONObject parameters, JSONObject decision)
 activate DecisionMaker
 
 group if 
 else fatalErrorHandler.getDanger()
 DecisionMaker -> FatalErrorHandler: handleDanger()
 activate FatalErrorHandler
-FatalErrorHandler --> DecisionMaker : Update Drone Direction
+FatalErrorHandler --> DecisionMaker : updateDrone()
 deactivate FatalErrorHandler
 else  drone.getStatus()
-DecisionMaker -> State : handle(Drone, Decision, Paramaters) 
+DecisionMaker -> State : handle(Drone drone, JSONObject Decision, JSONObject Paramaters) 
 activate State
 State --> DecisionMaker : updateDroneState()
 deactivate State
@@ -36,19 +38,19 @@ ResultAcknowledger --> Explorer: determineCost(JSON response)
 
 
 activate MapArea
-ResultAcknowledger -> MapArea: parseRecord()
+ResultAcknowledger -> MapArea: parseRecord(JSONObject response)
 deactivate MapArea
 
 group if
 else drone.canMakeDecision()
 activate Drone
 ResultAcknowledger -> Drone :useBattery()
-ResultAcknowledger -> FatalErrorHandler :setDanger(false)
+ResultAcknowledger -> FatalErrorHandler :setBatteryDanger(false)
 deactivate Drone
 else !drone.canMakeDecision()
 
 activate FatalErrorHandler
-ResultAcknowledger -> FatalErrorHandler: setDanger(true)
+ResultAcknowledger -> FatalErrorHandler: setBatteryDanger(true)
 deactivate FatalErrorHandler
 
 activate Drone
