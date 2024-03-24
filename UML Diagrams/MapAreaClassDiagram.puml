@@ -1,0 +1,89 @@
+@startuml "MapArea"
+
+left to right direction
+package Exploration {
+    class MapArea {
+        + addCreek(creek: POI): void
+        + viewCreeks(): void
+        + setEmergencySite(emergencySite: POI): void
+        + fromString(direction: String): Direction
+        + updateCoordinate(direction: Direction): void
+        + setObtainedWidth(flag: boolean): void
+        + setObtainedLength(flag: boolean): void
+        + setWidthStartPoint(xCoordinate: int): void
+        + setWidthEndPoint(xCoordinate: int): void
+        + setLengthStartPoint(yCoordinate: int): void
+        + setLengthEndPoint(yCoordinate: int): void
+        + setIsAbove(flag: boolean): void
+        + hasObtainedWidth(): boolean
+        + hasObtainedLength(): boolean
+        + getGroundStatus(): boolean
+        + setGroundStatus(status: boolean): void
+        + setCurrentAction(action: String): void
+        + getCurrentAction(): String
+        + getCreeks(): Set<POI>
+        + getEmergencySite(): POI
+        + getEmergencySiteStatus(): boolean
+        + getIsAbove(): boolean
+        + getDroneX(): int
+        + getDroneY(): int
+        + getPrevEchoDirection(): Direction
+        + getNewHeading(): Direction
+        + getGroundEchoDirection(): Direction
+        + getPrevHeading(): Direction
+        + getHeading(): Direction
+        + getWidthOfIsland(): int
+        + getLengthOfIsland(): int
+        + getStartDirection(): Direction
+        + getSpiralTurnDirection(): Direction
+        + setSpiralTurnDirection(direction: Direction): void
+        + setStartDirection(direction: Direction): void
+        + setGroundEchoDirection(echoDirection: Direction): void
+        + setNewHeading(newHeading: Direction): void
+        + setPrevEchoDirection(echoDirection: Direction): void
+        + setHeading(heading: Direction): void
+        + setLastDistance(distance: int): void
+        + getLastDistance(): int
+        + setNorthDistance(distance: int): void
+        + setEastDistance(distance: int): void
+        + setWestDistance(distance: int): void
+        + setSouthDistance(distance: int): void
+        + getNorthDistance(): int
+        + getEastDistance(): int
+        + getWestDistance(): int
+        + getSouthDistance(): int
+    }
+}
+
+package Locations {
+    class Point {
+        + setXCoordinate(xCoordinate: int): void
+        + setYCoordinate(yCoordinate: int): void
+        + setCoordinate(xCoordinate: int, yCoordinate: int): void
+        + getXCoordinate(): int
+        + getYCoordinate(): int
+    }
+    class POI {
+        + POI(poiPoint: Point, id: String)
+        + getPOIPoint(): Point
+        + getDistance(otherPOI: POI): double
+        + getID(): String
+        + toString(): String
+    }
+}
+
+enum Direction {
+    N
+    E
+    W
+    S
+    FORWARD
+    LEFT
+    RIGHT
+}
+
+MapArea *-- POI
+MapArea *-right- Point
+MapArea ..> Direction
+
+@enduml
