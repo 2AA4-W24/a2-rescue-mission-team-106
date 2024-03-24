@@ -16,7 +16,7 @@ public class Drone extends BaseDrone {
      * @param minimumBatteryToOperate the minimum battery level required to operate the drone
      * @param mapArea the map area on which the drone operates on
      *****************************************************************************************/
-    public Drone(int minimumBatteryToOperate, MapArea mapArea){
+    public Drone(int minimumBatteryToOperate, MapArea mapArea) {
         super(minimumBatteryToOperate, mapArea);
     }
 
@@ -28,7 +28,7 @@ public class Drone extends BaseDrone {
      * @param direction the current direction of the drone
      ************************************************************************************/
     @Override
-    public void updateDrone(int batteryLevel, Direction direction){
+    public void updateDrone(int batteryLevel, Direction direction) {
         this.currentBatteryLevel = batteryLevel; 
         this.mapArea.setHeading(direction);
     }
@@ -40,7 +40,7 @@ public class Drone extends BaseDrone {
      * @return the current battery level of the drone
      *************************************************/
     @Override
-    public int getBatteryLevel(){
+    public int getBatteryLevel() {
         return this.currentBatteryLevel; 
     }
 
@@ -51,7 +51,7 @@ public class Drone extends BaseDrone {
      * @return the status of the drone
      **********************************/
     @Override
-    public Status getStatus(){
+    public Status getStatus() {
         return this.status; 
     }
 
@@ -62,7 +62,7 @@ public class Drone extends BaseDrone {
      * @param status the new status of the drone
      ********************************************/
     @Override
-    public void setStatus(Status status){
+    public void setStatus(Status status) {
         this.status = status; 
     }
 
@@ -73,7 +73,7 @@ public class Drone extends BaseDrone {
      * @param decision  the decision JSON object to be modified
      ************************************************************/
     @Override
-    public void fly(JSONObject decision){
+    public void fly(JSONObject decision) {
         action.fly(decision);
         Direction currentHeading = mapArea.getHeading();
         this.mapArea.updateCoordinate(currentHeading);
@@ -90,7 +90,7 @@ public class Drone extends BaseDrone {
      * @param direction the direction for the echo action
      **************************************************************************/
     @Override
-    public void echo(JSONObject parameter, JSONObject decision, Direction direction){
+    public void echo(JSONObject parameter, JSONObject decision, Direction direction) {
         switch (direction) {
             case N:
                 this.echoNorth(parameter, decision);
@@ -121,7 +121,7 @@ public class Drone extends BaseDrone {
      * additional parameters for the action
      *************************************************************/
     @Override
-    public void stop(JSONObject decision){
+    public void stop(JSONObject decision) {
         this.action.stop(decision);
         this.mapArea.setCurrentAction("stop");
     }
@@ -133,7 +133,7 @@ public class Drone extends BaseDrone {
      * @param decision  the decision JSON object to be modified
      ************************************************************/
     @Override
-    public void scan(JSONObject decision){
+    public void scan(JSONObject decision) {
         this.action.scan(decision);
         this.mapArea.setCurrentAction("scan");
     }
@@ -148,7 +148,7 @@ public class Drone extends BaseDrone {
      * @param direction the new direction the drone should face
      *************************************************************/
     @Override
-    public void updateHeading(JSONObject parameter, JSONObject decision, Direction updatedHeading){
+    public void updateHeading(JSONObject parameter, JSONObject decision, Direction updatedHeading) {
         if (updatedHeading != this.mapArea.getHeading()){
             this.mapArea.setHeading(updatedHeading); // update the status of our drones heading
             this.action.heading(parameter, decision, updatedHeading); // physically update the drone on our map
@@ -166,7 +166,7 @@ public class Drone extends BaseDrone {
      * @return true if the drone can make the decision, otherwise false
      *******************************************************************/
     @Override
-    public boolean canMakeDecision(int batteryUsage){
+    public boolean canMakeDecision(int batteryUsage) {
         return (this.currentBatteryLevel - batteryUsage) >= this.minimumBatteryToOperate;
     }
 
@@ -189,7 +189,7 @@ public class Drone extends BaseDrone {
      *                 additional parameters for the action
      * @param decision the decision JSON object to be modified
      *******************************************************************/
-    private void echoEast(JSONObject parameter, JSONObject decision){
+    private void echoEast(JSONObject parameter, JSONObject decision) {
         if (this.mapArea.getHeading() != Direction.W){
             this.action.echo(parameter, decision, Direction.E);
             this.mapArea.setPrevEchoDirection(Direction.E);
@@ -208,7 +208,7 @@ public class Drone extends BaseDrone {
      * parameters for the action
      * @param decision  the decision JSON object to be modified
      ************************************************************************/
-    private void echoWest(JSONObject parameter, JSONObject decision){
+    private void echoWest(JSONObject parameter, JSONObject decision) {
         if (this.mapArea.getHeading() != Direction.E){
             this.action.echo(parameter, decision, Direction.W);
             this.mapArea.setPrevEchoDirection(Direction.W);
@@ -227,7 +227,7 @@ public class Drone extends BaseDrone {
      * parameters for the action
      * @param decision  the decision JSON object to be modified
      ************************************************************************/
-    private void echoNorth(JSONObject parameter, JSONObject decision){
+    private void echoNorth(JSONObject parameter, JSONObject decision) {
         if (this.mapArea.getHeading() != Direction.S){
             this.action.echo(parameter, decision, Direction.N);
             this.mapArea.setPrevEchoDirection(Direction.N);
@@ -246,7 +246,7 @@ public class Drone extends BaseDrone {
      * parameters for the action
      * @param decision  the decision JSON object to be modified
      ************************************************************************/
-    private void echoSouth(JSONObject parameter, JSONObject decision){
+    private void echoSouth(JSONObject parameter, JSONObject decision) {
         if (this.mapArea.getHeading() != Direction.N){
             this.action.echo(parameter, decision, Direction.S);
             this.mapArea.setPrevEchoDirection(Direction.S);
@@ -265,7 +265,7 @@ public class Drone extends BaseDrone {
      * parameters for the action
      * @param decision  the decision JSON object to be modified
      ************************************************************************/
-    private void echoForwards(JSONObject parameter, JSONObject decision){
+    private void echoForwards(JSONObject parameter, JSONObject decision) {
         Direction currentHeading = mapArea.getHeading();
         this.action.echo(parameter, decision, currentHeading);
         this.mapArea.setPrevEchoDirection(currentHeading);

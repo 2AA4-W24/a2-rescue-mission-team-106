@@ -8,7 +8,7 @@ import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
 import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
 
 
-public abstract class BaseDrone{
+public abstract class BaseDrone {
     protected int minimumBatteryToOperate;
     protected int currentBatteryLevel;
     protected Status status;
