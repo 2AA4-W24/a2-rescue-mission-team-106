@@ -18,37 +18,50 @@ public class StatusTest {
         drone = new Drone(30, mapArea); 
 
     }
+
+    /** 
+     * Test contains {@link Drone}, {@link Status}
+     */
     @Test
     public void testGroundFinderStatus(){
         drone.setStatus(Status.GROUND_FINDER_STATE);
         assertEquals(Status.GROUND_FINDER_STATE, drone.getStatus());
     }
 
+    /** 
+     * Test contains {@link Drone}, {@link Status}
+     */
     @Test
     public void testCenterStartStatus(){
         drone.setStatus(Status.CENTER_START_STATE);
         assertEquals(Status.CENTER_START_STATE, drone.getStatus());
     }
 
+    /** 
+     * Test contains {@link Drone}, {@link Status}
+     */
     @Test
     public void testCenterStatus(){
         drone.setStatus(Status.CENTER_STATE);
         assertEquals(Status.CENTER_STATE, drone.getStatus());
     }
 
+    /** 
+     * Test contains {@link Drone}, {@link Status}
+     */
     @Test
     public void testLengthStatus(){
         drone.setStatus(Status.LENGTH_STATE);
         assertEquals(Status.LENGTH_STATE, drone.getStatus());
     }
 
+    /** 
+     * Test contains {@link Drone}, {@link Status}
+     */
     @Test
     public void testWidthStatus(){
         drone.setStatus(Status.WIDTH_STATE);
         assertEquals(Status.WIDTH_STATE, drone.getStatus());
     }
-
-
-
 
 }
