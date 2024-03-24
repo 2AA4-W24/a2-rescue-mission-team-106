@@ -106,15 +106,83 @@ package Exploration <<Frame>> {
         + makeDecisions(JSONObject, JSONObject) : void
     }
 
-    class Explorer
+    class Explorer {
+        + ^initialize(String) : void
+        + ^takeDecision() : String
+        + ^acknowledgeResults(String) : void
+        + ^deliverFinalReport() : String
+    }
 
-    class MapArea
+    class MapArea {
+        + addCreek(POI) : void
+        + viewCreeks() : void
+        + setEmergencySite(POI) : void
+        + fromString(String) : Direction
+        + updateCoordinate(Direction) : void
+        + setObtainedWidth(boolean) : void
+        + setObtainedLength(boolean) : void
+        + setWidthStartPoint(int) : void
+        + setWidthEndPoint(int) : void
+        + setLengthStartPoint(int) : void
+        + setLengthEndPoint(int) : void
+        + setIsAbove(boolean) : void
+        + hasObtainedWidth() : boolean
+        + hasObtainedLength() : boolean
+        + getGroundStatus() : boolean
+        + setGroundStatus(boolean) : void
+        + setCurrentAction(String) : void
+        + getCurrentAction() : String
+        + getCreeks() : Set<POI>
+        + getEmergencySite() : POI
+        + getEmergencySiteStatus() : boolean
+        + getIsAbove() : boolean
+        + getDroneX() : int
+        + getDroneY() : int
+        + getPrevEchoDirection() : Direction
+        + getNewHeading() : Direction
+        + getGroundEchoDirection() : Direction
+        + getPrevHeading() : Direction
+        + getHeading() : Direction
+        + getWidthOfIsland() : int
+        + getLengthOfIsland() : int
+        + getStartDirection() : Direction
+        + getSpiralTurnDirection() : Direction
+        + setSpiralTurnDirection(Direction) : void
+        + setStartDirection(Direction) : void
+        + setGroundEchoDirection(Direction) : void
+        + setNewHeading(Direction) : void
+        + setPrevEchoDirection(Direction) : void
+        + setHeading(Direction) : void
+        + setLastDistance(int) : void
+        + getLastDistance() : int
+        + setNorthDistance(int) : void
+        + setEastDistance(int) : void
+        + setWestDistance(int) : void
+        + setSouthDistance(int) : void
+        + getNorthDistance() : int
+        + getEastDistance() : int
+        + getWestDistance() : int
+        + getSouthDistance() : int
+    }
 
-    class Reporter
+    class Reporter {
+        + Reporter(MapArea)
+        + deliverReport() : String
 
-    class ResultsAcknowledger
+    }
 
-    class Runner
+    class ResultsAcknowledger {
+        + ResultsAcknowledger(BaseDrone, MapArea, FatalErrorHandler)
+        + determineCost(JSONObject) : void
+        + displayStatus(JSONObject) : void
+        + parseRecord(JSONObject) : void
+        + displayBatteryHeading() : void
+
+    }
+
+    class Runner {
+        + {static} main(String[] args) : void
+    }
 
     interface IExplorerRaid {
         + initialize(String) : void
@@ -126,15 +194,23 @@ package Exploration <<Frame>> {
 
 package Locations <<Frame>> {
     class POI {
-        + Creek(Point, String)
-        + getCreekID() : String
-        + getCreekPoint() : Point
-        + getDistance(Creek) : double
+        + POI(Point, String)
+        + getPOIPoint() : Point
+        + getDistance(POI) : double
         + getID() : String
         + toString() : String
     }
     
-    class Point
+    class Point {
+        + Point(int, int)
+        + setXCoordinate(int) : void
+    + setYCoordinate(int) : void
+    + setCoordinate(int, int) : void
+    + getXCoordinate() : int
+    + getYCoordinate() : int
+    + toString() : String
+
+    }
 }
 
 package States <<Frame>> {
@@ -153,17 +229,5 @@ package States <<Frame>> {
     class WidthFinderState
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 @enduml
