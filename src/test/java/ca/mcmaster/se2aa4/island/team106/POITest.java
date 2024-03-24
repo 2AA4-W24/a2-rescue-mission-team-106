@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import ca.mcmaster.se2aa4.island.team106.Locations.*;
 
-
+/** 
+ * Test contains {@link Point}, {@link POI}
+ */
 public class POITest {
     @Test
     public void testGetDistance() {
