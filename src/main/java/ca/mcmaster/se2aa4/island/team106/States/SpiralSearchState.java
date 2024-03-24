@@ -13,6 +13,7 @@ import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
 import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
 import ca.mcmaster.se2aa4.island.team106.Locations.Point;
 
+
 public class SpiralSearchState implements SearchAlgorithm, State {
 
     private MapArea mapArea;
@@ -31,33 +32,19 @@ public class SpiralSearchState implements SearchAlgorithm, State {
 
     private boolean needToUpdateHeading = false;
 
-    /**
+
+    /**************************************************************************
      * Constructs a SpiralSearchState object with the given map area.
      * 
      * @param mapArea The map area used to store the details found on the map.
-     */
+     **************************************************************************/
     public SpiralSearchState(MapArea mapArea) {
         this.mapArea = mapArea;
         this.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
     }
 
-    /**
-    * Determines the direction of the next turn based on the current direction
-    * and the spiral turn direction determined in mapArea.
-    *
-    * @param currentDirection the current direction of the drone.
-    * @return the direction of the next turn.
-    */
-    private Direction turnDirection(Direction currentDirection) {
-        Direction spiralDirection = this.mapArea.getSpiralTurnDirection();
-        if (spiralDirection.equals(Direction.LEFT)) {
-            return compass.getLeftDirection(currentDirection);
-        } else {
-            return compass.getRightDirection(currentDirection);
-        }
-    }
 
-    /**
+    /*************************************************************************
      * Handles the operations carried out by the SpiralSearchState using the
      * drone, and the specified decision and parameters JSONObjects.
      *
@@ -65,13 +52,14 @@ public class SpiralSearchState implements SearchAlgorithm, State {
      * @param decision the decision JSON object to be modified
      * @param parameters the parameter JSON object that stores the additional
      * parameters for the action
-     */
+     *************************************************************************/
     @Override
     public void handle(BaseDrone baseDrone, JSONObject decision, JSONObject parameters) {
         this.search(baseDrone, decision, parameters);
     }
 
-    /**
+
+    /*************************************************************************
      * Performs a search operation on a given area using the drone, and the
      * specified decision and parameters JSONObjects.
      *
@@ -79,7 +67,7 @@ public class SpiralSearchState implements SearchAlgorithm, State {
      * @param decision the decision JSON object to be modified
      * @param parameters the parameter JSON object that stores the additional
      * parameters for the action
-     */
+     *************************************************************************/
     @Override
     public void search(BaseDrone baseDrone, JSONObject decision, JSONObject parameters) {
         this.setDimensions(mapArea.getWidthOfIsland(), mapArea.getLengthOfIsland());
@@ -87,12 +75,10 @@ public class SpiralSearchState implements SearchAlgorithm, State {
         if (this.currentLength != this.maxLength || this.currentWidth != this.maxWidth) {
             if (this.needToUpdateHeading) {
                 // gets the right cardinal direction of our current heading
-
                 Direction newDirection = turnDirection(mapArea.getHeading());
                 baseDrone.updateHeading(parameters, decision, newDirection);
                 this.needToUpdateHeading = false;
                 this.counter++;
-
             } else {
                 if (this.counter % 2 == 0) {
                     baseDrone.fly(decision);
@@ -108,7 +94,6 @@ public class SpiralSearchState implements SearchAlgorithm, State {
                     }
                     this.updateSegment();
                 }
-
                 this.counter++;
             }
         } else {
@@ -116,9 +101,23 @@ public class SpiralSearchState implements SearchAlgorithm, State {
         }
     }
 
-    /**
+
+    /*************************************************************************
+     * Sets the dimensions for the search area.
+     *
+     * @param width the width of the search area
+     * @param height the height of the search area
+     *************************************************************************/
+    @Override
+    public void setDimensions(int maxWidth, int maxLength) {
+        this.maxWidth = maxWidth;
+        this.maxLength = maxLength;
+    }
+
+
+    /*************************************************************************
      * Updates the current segment of the drone's spiral search movement.
-     */
+     *************************************************************************/
     private void updateSegment() {
         // Only increment currentWidth, once our tilesTraversed = currentWidth
         // -1, then we move on to the next segment where currentWidth increments
@@ -144,15 +143,20 @@ public class SpiralSearchState implements SearchAlgorithm, State {
         }
     }
 
-    /**
-     * Sets the dimensions for the search area.
+
+    /**************************************************************************
+     * Determines the direction of the next turn based on the current direction
+     * and the spiral turn direction determined in mapArea.
      *
-     * @param width the width of the search area
-     * @param height the height of the search area
-     */
-    @Override
-    public void setDimensions(int maxWidth, int maxLength) {
-        this.maxWidth = maxWidth;
-        this.maxLength = maxLength;
+     * @param currentDirection the current direction of the drone.
+     * @return the direction of the next turn.
+     **************************************************************************/
+    private Direction turnDirection(Direction currentDirection) {
+        Direction spiralDirection = this.mapArea.getSpiralTurnDirection();
+        if (spiralDirection.equals(Direction.LEFT)) {
+            return compass.getLeftDirection(currentDirection);
+        } else {
+            return compass.getRightDirection(currentDirection);
+        }
     }
 }

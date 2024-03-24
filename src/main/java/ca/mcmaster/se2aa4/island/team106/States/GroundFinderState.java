@@ -11,23 +11,26 @@ import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
 import ca.mcmaster.se2aa4.island.team106.Locations.Point;
 
 
+
 public class GroundFinderState implements DroneFlightManager, State {
     private int counts = 1;
 
     private MapArea mapArea;
     private Point previousDroneCoordinate;
+    
 
-    /**
+    /**************************************************************************
      * Constructs a GroundFinderState object with the given map area.
      * 
      * @param mapArea The map area used to store the details found on the map.
-     */
+     **************************************************************************/
     public GroundFinderState(MapArea mapArea) {
         this.mapArea = mapArea;
         this.previousDroneCoordinate = new Point(this.mapArea.getDroneX(), this.mapArea.getDroneY());
     }
 
-    /**
+
+    /*************************************************************************
      * Handles the operations carried out by the GroundFinderState using the
      * drone, and the specified decision and parameters JSONObjects.
      *
@@ -35,32 +38,22 @@ public class GroundFinderState implements DroneFlightManager, State {
      * @param decision the decision JSON object to be modified
      * @param parameters the parameter JSON object that stores the additional
      * parameters for the action
-     */
+     *************************************************************************/
     @Override
     public void handle(BaseDrone baseDrone, JSONObject decision, JSONObject parameters) {
         this.fly(baseDrone, decision, parameters);
     }
 
-    /*
-     * The reason west distance is being set during east, or east distance is
-     * being set during west is because of the asynchronous nature of the
-     * operation. When u call the 'fly' method, it creates a record in the JSON
-     * file. However, you can only read from the record during the acknowledge
-     * results call. Since the 'fly' method does not get called until the next
-     * call of take decision which happens after the acknowledge results method,
-     * the moment during which the distance can be updated is when the next
-     * record is being created.
-     */
 
-    /**
-    * Execute the overall flight operation using the drone, and the specified
-    * decision and parameters JSONObjects.
-    *
-    * @param drone the drone being used to carry out the various actions
-    * @param decision the decision JSON object to be modified
-    * @param parameters the parameter JSON object that stores the additional
-    * parameters for the action
-    */
+    /*************************************************************************
+     * Execute the overall flight operation using the drone, and the specified
+     * decision and parameters JSONObjects.
+     *
+     * @param drone the drone being used to carry out the various actions
+     * @param decision the decision JSON object to be modified
+     * @param parameters the parameter JSON object that stores the additional
+     * parameters for the action
+     *************************************************************************/
     @Override
     public void fly(BaseDrone drone, JSONObject decision, JSONObject parameters) {
 
@@ -108,13 +101,14 @@ public class GroundFinderState implements DroneFlightManager, State {
         }
     }
 
-    /**
+
+    /**************************************************************************
      * Determines the direction for the drone to turn based on the current
      * direction and the distance to the borders or ground in each direction.
      *
      * @param currentDirection The current direction of the drone.
      * @return The direction the drone must turn in.
-     */
+     **************************************************************************/
     private Direction turnDirection(Direction currentDirection) {
         switch (currentDirection) {
             case N:

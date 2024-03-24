@@ -13,6 +13,7 @@ import ca.mcmaster.se2aa4.island.team106.Locations.Point;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 public class ResultsAcknowledger {
 
     private final Logger logger = LogManager.getLogger();
@@ -20,7 +21,8 @@ public class ResultsAcknowledger {
     MapArea mapArea;
     FatalErrorHandler fatalErrorHandler;
 
-    /**
+
+    /*****************************************************************************
      * Constructs a ResultsAcknowledger object with the given parameters.
      *
      * @param baseDrone the drone being used to carry out the various actions
@@ -28,22 +30,22 @@ public class ResultsAcknowledger {
      * map area are stored
      * @param handler the FatalErrorHandler object that detects any dangerous
      * situations.
-     */
+     *****************************************************************************/
     public ResultsAcknowledger(BaseDrone baseDrone, MapArea mapArea, FatalErrorHandler handler) {
         this.drone = baseDrone;
         this.mapArea = mapArea;
         this.fatalErrorHandler = handler;
     }
 
-    /**
+
+    /*****************************************************************************
      * Determines the cost of the action and updates drone's battery level. It
      * also checks if the battery is critical and takes appropriate action if
      * that is the case.
      * 
      * @param response the response JSON Object received
-     */
+     *****************************************************************************/
     public void determineCost(JSONObject response) {
-
         logger.info("** Response received:\n" + response.toString(2));
 
         Integer cost = response.getInt("cost");
@@ -61,22 +63,24 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
-     * Displays the status of the drone.
+
+    /*****************************************************************************
+     * Displays the status of the drone showing state of exploration phase. 
      * 
      * @param response the response JSON object received
-     */
+     *****************************************************************************/
     public void displayStatus(JSONObject response) {
         //get the status same idea as above
         String status = response.getString("status");
         logger.info("the status of the drone is {}", status);
     }
 
-    /**
+
+    /*****************************************************************************
      * Parses the additional information received in the JSON response.
      * 
      * @param response the response JSON object received
-     */
+     *****************************************************************************/
     public void parseRecord(JSONObject response) {
         // get the 'extras' value same idea as above
         JSONObject extraInfo = response.getJSONObject("extras");
@@ -112,21 +116,23 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
+
+    /*****************************************************************************
      * Displays the battery level and current heading of the drone.
-     */
+     *****************************************************************************/
     public void displayBatteryHeading() {
         logger.info("Drone Battery:" + drone.getBatteryLevel() + " Heading: " + mapArea.getHeading() + " X: "
                 + mapArea.getDroneX() + " Y:" + mapArea.getDroneY());
         logger.info("\n");
     }
 
-    /**
-    * Extracts creek information from the response JSON object and updates the
-    * map area accordingly.
-    *
-    * @param extraInfo the JSON object containing extra information.
-    */
+
+    /*****************************************************************************
+     * Extracts creek information from the response JSON object and updates the
+     * map area accordingly.
+     *
+     * @param extraInfo the JSON object containing extra information.
+     *****************************************************************************/
     private void extractCreeks(JSONObject extraInfo) {
         if (extraInfo.has("creeks")) {
             JSONArray creeksArray = extraInfo.getJSONArray("creeks");
@@ -140,11 +146,12 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
+
+    /**********************************************************************************************************
      * Extracts emergency site information from the response JSON object and updates the map area accordingly.
      * 
      * @param extraInfo the JSON object containing extra information.
-     */
+     **********************************************************************************************************/
     private void extractEmergencySite(JSONObject extraInfo) {
         if (extraInfo.has("sites")) {
             JSONArray emergencySiteArray = extraInfo.getJSONArray("sites");
@@ -157,12 +164,13 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
+
+    /*****************************************************************************
      * Handles actions when the echo result indicates that the object is nearing
-     * OUT OF RANGE.
+     * OUT OF RANGE. Displays relevant information to user. 
      * 
      * @param echoInt the range obtained by echoing in a direction
-     */
+     *****************************************************************************/
     private void outOfRangeAction(int echoInt) {
         fatalErrorHandler.setRangeDanger(echoInt);
         if (fatalErrorHandler.getDanger()) {
@@ -170,11 +178,13 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
-     * Handles actions when the drone is in the start state.
+
+    /*****************************************************************************
+     * Handles actions when the drone is in the start state, updates map area
+     * with acknowledged results. 
      * 
      * @param echoResult the results of the echo action.
-     */
+     *****************************************************************************/
     private void groundFinderStateHandler(String echoResult) {
         logger.info("CURRENT STATE: " + Status.GROUND_FINDER_STATE);
         Direction groundDirection = mapArea.getPrevEchoDirection();
@@ -184,11 +194,13 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
-     * Handles actions when the drone is in the center start state.
+
+    /*********************************************************************************
+     * Handles actions when the drone is in the center start state, updates map area
+     * with acknowledged results. 
      * 
      * @param echoResult the results of the echo action.
-     */
+     *********************************************************************************/
     private void centerStartStateHandler(String echoResult) {
         logger.info("CURRENT STATE: " + Status.CENTER_START_STATE);
         Direction groundDirection = mapArea.getPrevEchoDirection();
@@ -202,12 +214,13 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
-     * Handles actions when the drone is in the width state.
+
+    /*********************************************************************************
+     * Handles actions when the drone is in the width state, updates map area
+     * with acknowledged results. 
      * 
      * @param echoResult the results of the echo action.
-     * @param echoInt the range obtained by echoing in a direction
-     */
+     *********************************************************************************/
     private void widthStateHandler(String echoResult, int echoInt) {
         logger.info("CURRENT STATE: " + Status.WIDTH_STATE);
         if ("GROUND".equals(echoResult)) {
@@ -225,12 +238,13 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
-     * Handles actions when the drone is in the length state.
+
+    /*********************************************************************************
+     * Handles actions when the drone is in the length state, updates map area
+     * with acknowledged results. 
      * 
      * @param echoResult the results of the echo action.
-     * @param echoInt the range obtained by echoing in a direction
-     */
+     *********************************************************************************/
     private void lengthStateHandler(String echoResult, int echoInt) {
         logger.info("CURRENT STATE: " + Status.LENGTH_STATE);
         if ("GROUND".equals(echoResult)) {
@@ -248,11 +262,13 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
-     * Handles actions when the drone is in the move center state.
+
+    /*********************************************************************************
+     * Handles actions when the drone is in the move center state, updates map area
+     * with acknowledged results. 
      * 
      * @param echoResult the results of the echo action.
-     */
+     *********************************************************************************/
     private void moveCenterStateHandler(String echoResult) {
         logger.info("CURRENT STATE: " + Status.MOVE_CENTER_STATE);
         if ("GROUND".equals(echoResult)) {
@@ -260,11 +276,13 @@ public class ResultsAcknowledger {
         }
     }
 
-    /**
-     * Handles actions when the drone is in the center state.
+
+    /*********************************************************************************
+     * Handles actions when the drone is in the spiral search state, updates map area
+     * with acknowledged results. 
      * 
      * @param echoResult the results of the echo action.
-     */
+     *********************************************************************************/
     private void centerStateHandler(String echoResult) {
         logger.info("CURRENT STATE: " + Status.CENTER_STATE);
         if ("GROUND".equals(echoResult)) {

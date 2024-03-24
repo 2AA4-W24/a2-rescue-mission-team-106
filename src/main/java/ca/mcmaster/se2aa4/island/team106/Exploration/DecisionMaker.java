@@ -28,13 +28,13 @@ public class DecisionMaker {
     private FatalErrorHandler fatalErrorHandler;
 
 
-    /**
+    /******************************************************************************************
      * Constructs a DecisionMaker with the specified drone, map area, and fatal error handler.
      *
-     * @param drone the drone being used to carry out the various actions
+     * @param drone the drone being used to carry out the various actions for exploration
      * @param mapArea the map area the drone operates in
      * @param fatalErrorHandler the fatal error handler for managing dangerous situations
-     */
+     *******************************************************************************************/
     public DecisionMaker(BaseDrone drone, MapArea mapArea, FatalErrorHandler fatalErrorHandler){
         this.drone = drone; 
         this.groundFinderState = new GroundFinderState(mapArea);
@@ -48,15 +48,15 @@ public class DecisionMaker {
     }
 
 
-    /**
+    /*****************************************************************************
      * Makes decisions based on the current state of the drone. It first checks
      * if a danger exists, if it does then it handles the danger; otherwise, it
      * delegates the task to the current state handler.
      *
      * @param parameters the parameter JSON object that stores the additional
-     * parameters for the action
+     *                  parameters for the action
      * @param decision the decision JSON object to be modified
-     */
+     *****************************************************************************/
     public void makeDecisions(JSONObject parameters, JSONObject decision) {
         if (this.fatalErrorHandler.getDanger()) {
             this.fatalErrorHandler.handleDanger(decision, parameters);
@@ -94,6 +94,5 @@ public class DecisionMaker {
             }
             this.currentState.handle(drone, decision, parameters);
         }
-        
     }
 }
