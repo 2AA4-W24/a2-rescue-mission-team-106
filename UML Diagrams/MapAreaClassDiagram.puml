@@ -1,5 +1,6 @@
 @startuml "MapArea"
 
+left to right direction
 package Exploration {
     class MapArea {
         + addCreek(creek: POI): void
@@ -82,7 +83,7 @@ enum Direction {
 }
 
 MapArea *-- POI
-MapArea *-- Point
+MapArea *-right- Point
 MapArea ..> Direction
 
 @enduml
