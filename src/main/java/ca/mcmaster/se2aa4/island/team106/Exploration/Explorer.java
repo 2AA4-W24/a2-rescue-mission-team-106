@@ -16,9 +16,10 @@ import ca.mcmaster.se2aa4.island.team106.Drones.*;
 public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
-    private MapArea mapArea = new MapArea();
-    private final int MINIMUM_BATTERY_TO_OPERATE = 30;
 
+    private final int MINIMUM_BATTERY_TO_OPERATE = 30;
+    
+    private MapArea mapArea = new MapArea();
     private BaseDrone drone = new Drone(MINIMUM_BATTERY_TO_OPERATE, mapArea);
     private FatalErrorHandler fatalErrorHandler = new FatalErrorHandler(drone, mapArea);
     private DecisionMaker decisionMaker = new DecisionMaker(drone, mapArea, fatalErrorHandler);
@@ -49,7 +50,7 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String takeDecision() {
-        // create a brand new json object this is not initialized with any data from before hand
+        // Create a brand new json object. This is not initialized with any data from before hand.
         JSONObject decision = new JSONObject(); 
         JSONObject parameters = new JSONObject();
 
