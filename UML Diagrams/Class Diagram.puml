@@ -204,29 +204,50 @@ package Locations <<Frame>> {
     class Point {
         + Point(int, int)
         + setXCoordinate(int) : void
-    + setYCoordinate(int) : void
-    + setCoordinate(int, int) : void
-    + getXCoordinate() : int
-    + getYCoordinate() : int
-    + toString() : String
-
+        + setYCoordinate(int) : void
+        + setCoordinate(int, int) : void
+        + getXCoordinate() : int
+        + getYCoordinate() : int
+        + toString() : String
     }
 }
 
 package States <<Frame>> {
     class CenterStartHandlerState {
-        + fly(BaseDrone, JSONObject, JSONObject) : void
+        + CenterStartHandlerState(MapArea)
+        + ^handle(BaseDrone, JSONObject, JSONObject) : void
+        + ^fly(BaseDrone, JSONObject, JSONObject) : void
     }
 
-    class GroundFinderState
+    class GroundFinderState {
+        + GroundFinderState(MapArea)
+        + ^handle(BaseDrone, JSONObject, JSONObject) : void
+        + ^fly(BaseDrone, JSONObject, JSONObject) : void
+    }
 
-    class LengthFinderState
+    class LengthFinderState {
+        + LengthFinderState(MapArea)
+        + ^handle(BaseDrone, JSONObject, JSONObject) : void
+        + ^getDimension(BaseDrone, JSONObject, JSONObject) : void
+    }
 
-    class ReachCenterState
+    class ReachCenterState {
+        + ReachCenterState(MapArea)
+        + ^handle(BaseDrone, JSONObject, JSONObject) : void
+        + ^fly(BaseDrone, JSONObject, JSONObject) : void
+    }
 
-    class SpiralSearchState
+    class SpiralSearchState {
+        + SpiralSearchState(MapArea)
+        + ^handle(BaseDrone, JSONObject, JSONObject) : void
+        + ^search(BaseDrone, JSONObject, JSONObject)
+    }
 
-    class WidthFinderState
+    class WidthFinderState {
+        + WidthFinderState(MapArea)
+        + ^handle(BaseDrone, JSONObject, JSONObject) : void
+        + ^getDimension(BaseDrone, JSONObject, JSONObject) : void
+    }
     
 }
 
