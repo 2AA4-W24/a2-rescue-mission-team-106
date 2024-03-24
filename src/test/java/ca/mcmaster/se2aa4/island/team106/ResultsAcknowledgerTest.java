@@ -28,13 +28,18 @@ public class ResultsAcknowledgerTest {
         acknowledger = new ResultsAcknowledger(drone, mapArea, handler);
     }
 
-
+    /** 
+     * Test contains {@link ResultsAcknowledger}
+    */
     @Test
     public void testDisplayStatus() {
         JSONObject response = new JSONObject("{\"status\": \"OK\"}");
         acknowledger.displayStatus(response);
     }
 
+    /** 
+     * Test contains {@link ResultsAcknowledger}, {@link MapArea}
+    */
     @Test
     public void testParseRecordGroundFound() {
         JSONObject response = new JSONObject("{\"extras\": {\"found\": \"GROUND\", \"range\": 10}}");
@@ -43,7 +48,9 @@ public class ResultsAcknowledgerTest {
         assertEquals(10, mapArea.getLastDistance());
     }
 
-
+    /** 
+     * Test contains {@link ResultsAcknowledger}, {@link MapArea}
+    */
     @Test
     public void testExtractCreeks() {
         JSONObject response = new JSONObject("{\"extras\": {\"creeks\": [\"creek1\", \"creek2\"]}}");
@@ -51,6 +58,9 @@ public class ResultsAcknowledgerTest {
         assertEquals(2, mapArea.getCreeks().size());
     }
 
+    /** 
+     * Test contains {@link ResultsAcknowledger}, {@link MapArea}
+    */
     @Test
     public void testExtractEmergencySite() {
         JSONObject response = new JSONObject("{\"extras\": {\"sites\": [\"emergencySite\"]}}");

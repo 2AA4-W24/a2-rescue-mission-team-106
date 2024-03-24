@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
 import ca.mcmaster.se2aa4.island.team106.Exploration.Reporter;
 import ca.mcmaster.se2aa4.island.team106.Locations.*;
@@ -23,6 +24,9 @@ public class ReporterTest {
 
     }
 
+    /** 
+     * Test contains {@link POI}, {@link MapArea}, {@link Reporter}
+    */
     @Test
     public void testNoCreeks() {
         POI = mapArea.getCreeks();
@@ -30,6 +34,9 @@ public class ReporterTest {
         assertEquals("No creek found", result);
     }
 
+    /** 
+     * Test contains {@link POI}, {@link Reporter}, {@link Point}
+    */
     @Test
     public void testEmergencySiteNotFound() {
         POI creek1 = new POI(new Point(10, 20), "Creek1");
@@ -38,6 +45,9 @@ public class ReporterTest {
         assertEquals("Creek1", result); 
     }
 
+    /** 
+     * Test contains {@link POI}, {@link Reporter}, {@link Point}
+    */
     @Test
     public void testEmergencySiteFound() {
         POI creek1 = new POI(new Point(10, 20), "Creek1");

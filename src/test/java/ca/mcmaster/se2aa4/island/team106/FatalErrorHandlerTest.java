@@ -30,6 +30,10 @@ public class FatalErrorHandlerTest {
         mapArea.setGroundEchoDirection(Direction.N);
     }
 
+    /**
+     * This test checks if the drone stops when at the battery danger level
+     * Test contains {@link FatalErrorHandler}
+     */
     @Test
     public void testBatteryCritical() {
         fatalErrorHandler.setBatteryDanger(true);
@@ -39,6 +43,10 @@ public class FatalErrorHandlerTest {
         assertEquals("stop", decision.getString("action"));
     }
 
+    /**
+     * This test checks how the drone handles reaching out of range 
+     * Test contains {@link FatalErrorHandler}, {@link MapArea}, {@link Direction}
+     */
     @Test
     public void testApproachingOutOfRange() {
         mapArea.setHeading(Direction.N);
@@ -50,6 +58,10 @@ public class FatalErrorHandlerTest {
         assertEquals("heading", decision.getString("action"));
     }
 
+    /**
+     * This test checks if the drone turns in the correct direction when reaching out of range 
+     * Test contains {@link FatalErrorHandler}, {@link MapArea}, {@link Direction}
+     */
     @Test
     public void testChangeDirection() {
         mapArea.setHeading(Direction.N);

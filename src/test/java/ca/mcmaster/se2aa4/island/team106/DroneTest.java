@@ -20,6 +20,10 @@ public class DroneTest {
         mapArea = new MapArea();
     }
 
+    /**
+     * This test checks the updateDrone() method, battery Level and Direction
+     * Test contains {@link MapArea}, {@link Drone}
+     */
     @Test
     public void testUpdateDrone() {
         drone = new Drone (30, mapArea);
@@ -28,6 +32,10 @@ public class DroneTest {
         assertEquals(Direction.N, mapArea.getHeading());
     }
 
+    /**
+     * This following test checks map area coordinate system
+     * Test contains {@link MapArea}, {@link Direction}
+     */
     @Test
     public void testFlyNorth(){
         int initialY = mapArea.getDroneY();
@@ -56,6 +64,10 @@ public class DroneTest {
         assertEquals(initialX + 1, mapArea.getDroneX());
     }
 
+    /**
+     * This test checks the boundary cases of the drone's minimum battery to operate
+     * Test contains {@link MapArea}, {@link Direction}, {@link Drone}
+     */
     @Test 
     public void testDroneBattery(){
         drone = new Drone (500, mapArea);
@@ -66,6 +78,9 @@ public class DroneTest {
         
     }
 
+    /**
+     * Test contains {@link MapArea}, {@link Direction}, {@link Drone}
+     */
     @Test 
     public void testUpdateHeading(){
         JSONObject parameter = new JSONObject();

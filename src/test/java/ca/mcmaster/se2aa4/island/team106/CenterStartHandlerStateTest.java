@@ -24,6 +24,10 @@ public class CenterStartHandlerStateTest {
         drone.updateDrone(1000, Direction.N);
     }
 
+    /**
+     * This tests checks if it handles the center start state with GroundStatus set to true
+     * Test contains {@link CenterStartHandlerState}, {@link Drone}, {@link MapArea}.
+     */
     @Test
     public void testHandleWithGroundStatusTrue() {
         JSONObject decision = new JSONObject();
@@ -34,7 +38,10 @@ public class CenterStartHandlerStateTest {
         assertEquals(Status.CENTER_START_STATE, drone.getStatus());
     }
 
-
+    /**
+     * This tests checks if the drone flies as expected with GroundStatus set to true
+     * Test contains {@link CenterStartHandlerState}, {@link Drone}, {@link MapArea}.
+     */
     @Test
     public void testFly() {
         JSONObject decision = new JSONObject();
