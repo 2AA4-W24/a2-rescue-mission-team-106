@@ -8,6 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Compass;
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
 public class CompassTest {
+    
+    /**
+     * The following tests check if the relative left and right directions
+     * Test contains {@link compass}
+     */
 
     private Compass compass;
     
