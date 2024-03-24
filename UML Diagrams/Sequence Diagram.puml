@@ -1,7 +1,10 @@
 @startuml
+
 participant Explorer << (C,#ADD1B2)>>
 participant DecisionMaker << (C,#ADD1B2)>>
 participant ResultAcknowledger << (C,#ADD1B2)>>
+participant Drone << (C,#ADD1B2)>>
+participant MapArea << (C,#ADD1B2)>>
 participant Reporter << (C,#ADD1B2)>>
 participant GroundFinderState << (C,#ADD1B2)>>
 participant CenterStartHandlerState << (C,#ADD1B2)>>
@@ -13,7 +16,7 @@ participant FatalErrorHandler << (C,#ADD1B2)>>
 
 activate Explorer
 loop : drone.hasBattery() && !closestCreekFound()
-Explorer -> DecisionMaker: takeDecision
+Explorer -> DecisionMaker: makeDecisions
 activate DecisionMaker
 
 group if 
@@ -53,20 +56,47 @@ activate SpiralSearchState
 SpiralSearchState --> DecisionMaker : updateDroneState()
 deactivate SpiralSearchState
 end
-
 DecisionMaker --> Explorer : Made Decision
 
 Explorer -> ResultAcknowledger: acknowledgeResults()
 activate ResultAcknowledger
-ResultAcknowledger --> Explorer: displayResults()
-deactivate ResultAcknowledger
+ResultAcknowledger --> Explorer: displayBatteryHeading()
+ResultAcknowledger --> Explorer: displayStatus()
+ResultAcknowledger --> Explorer: determineCost()
+
+
+
+activate MapArea
+ResultAcknowledger -> MapArea: parseRecord()
+deactivate MapArea
+
+group if
+else drone.canMakeDecision()
+activate Drone
+ResultAcknowledger -> Drone :useBattery()
+ResultAcknowledger -> FatalErrorHandler :setDanger(false)
+deactivate Drone
+else !drone.canMakeDecision()
+
+group if 
+else !"stop".equals(mapArea.getCurrentAction())
+
+activate FatalErrorHandler
+ResultAcknowledger -> FatalErrorHandler: setDanger(true)
+deactivate FatalErrorHandler
+
+activate Drone
+ResultAcknowledger -> Drone :useBattery()
+deactivate Drone
+end
 end
 
+deactivate ResultAcknowledger
+end
 deactivate DecisionMaker
 
 Explorer -> Reporter: deliverFinalReport()
 activate Reporter
 Reporter --> Explorer: deliverReport()
 deactivate Reporter
-
 @enduml
