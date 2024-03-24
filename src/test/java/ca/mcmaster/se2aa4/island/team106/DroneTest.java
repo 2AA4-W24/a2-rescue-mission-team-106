@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 
 import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
-import ca.mcmaster.se2aa4.island.team106.States.LengthFinderState;
 import ca.mcmaster.se2aa4.island.team106.Drones.Drone;
 import ca.mcmaster.se2aa4.island.team106.DroneTools.Direction;
 
