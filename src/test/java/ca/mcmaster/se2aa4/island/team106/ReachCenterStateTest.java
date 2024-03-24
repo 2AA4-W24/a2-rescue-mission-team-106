@@ -28,6 +28,9 @@ public class ReachCenterStateTest {
         parameter = new JSONObject();
     }
 
+    /** 
+     * Test contains {@link MapArea}, {@link Drone}, {@link ReachCenterState}, {@link Status}
+    */
     @Test
     public void testFlyReachingCenterWidth() {
         mapArea.setWidthStartPoint(0);
@@ -38,6 +41,9 @@ public class ReachCenterStateTest {
         assertEquals(Status.MOVE_CENTER_STATE, drone.getStatus());
     }
 
+    /** 
+     * Test contains {@link MapArea}, {@link Drone}, {@link ReachCenterState}, {@link Status}
+    */
     @Test
     public void testFlyReachingCenterLength() {
         mapArea.setLengthStartPoint(0);
