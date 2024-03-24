@@ -1,5 +1,5 @@
 @startuml "Class Diagram"
-
+left to right direction
 package DroneTools <<Frame>> {
     class Actions {
         + echo(JSONObject, JSONObject, Direction) : void
@@ -78,11 +78,17 @@ package DroneTools <<Frame>> {
         MOVE_CENTER_STATE,
         CENTER_STATE
     }
+
+    ' The following classes were added just to help in the diagram building even
+    ' though they are not part of the package. The package in which they truly
+    ' belong has their expanded version.
+    abstract class BaseDrone
+    class MapArea
 }
 
 newpage
 package Drones <<Frame>> {
-    abstract class BaseDrone {
+abstract class BaseDrone {
         # minimumBatteryToOperate : int
         # currentBatteryLevel : int
         # status : Status
@@ -107,7 +113,7 @@ package Drones <<Frame>> {
     BaseDrone -- MapArea
 
 
-    class Drone extends BaseDrone {
+    class Drone{
         + Drone(int, MapArea)
         + ^updateDrone(int, Direction) : void
         + ^getBatteryLevel() : int
@@ -122,33 +128,44 @@ package Drones <<Frame>> {
         + ^useBattery(int) : void
     }
 
+    Drone -left-|> BaseDrone
     Drone ..> Direction
     Drone ..> Status
     Drone -- MapArea
     Drone ..> Actions
 
+    ' The following classes were added just to help in the diagram building even
+    ' though they are not part of the package. The package in which they truly
+    ' belong has their expanded version.
+    class Actions
+    class MapArea
+    enum Direction
+    enum Status
+
 }
 
 newpage
+left to right direction
 package Exploration <<Frame>> {
     class DecisionMaker {
         + DecisionMaker(BaseDrone, MapArea, FatalErrorHandler)
         + makeDecisions(JSONObject, JSONObject) : void
     }
 
-    DecisionMaker ..> BaseDrone
+    DecisionMaker .right.> BaseDrone
     DecisionMaker ..> MapArea
     DecisionMaker ..> FatalErrorHandler
     DecisionMaker ..> State
     DecisionMaker -- States
 
-    class Explorer implements IExplorerRaid {
+    class Explorer {
         + ^initialize(String) : void
         + ^takeDecision() : String
         + ^acknowledgeResults(String) : void
         + ^deliverFinalReport() : String
     }
 
+    Explorer .left.|> IExplorerRaid
     Explorer -- MapArea
     Explorer -- BaseDrone
     Explorer -- FatalErrorHandler
@@ -208,9 +225,9 @@ package Exploration <<Frame>> {
         + getSouthDistance() : int
     }
 
-    MapArea -- POI
-    MapArea -- Point
-    MapArea ..> Direction
+    MapArea -up- POI
+    MapArea -up- Point
+    MapArea .up.> Direction
 
 
     class Reporter {
@@ -233,7 +250,7 @@ package Exploration <<Frame>> {
 
     ResultsAcknowledger ..> BaseDrone
     ResultsAcknowledger ..> MapArea
-    ResultsAcknowledger ..> FatalErrorHandler
+    ResultsAcknowledger .right.> FatalErrorHandler
     ResultsAcknowledger -- POI
 
 
@@ -241,7 +258,7 @@ package Exploration <<Frame>> {
         + {static} main(String[] args) : void
     }
 
-    Runner ..> Explorer
+    Runner .left.> Explorer
 
     interface IExplorerRaid {
         + initialize(String) : void
@@ -249,9 +266,21 @@ package Exploration <<Frame>> {
         + acknowledgeResults() : void
         + deliverFinalReport() : String
     }
+
+    ' The following package and classes were added just to help in the diagram
+    ' building even though they are not part of the package. The package in
+    ' which they truly belong has their expanded version.
+    abstract class BaseDrone
+    class POI
+    package States <<Frame>>{
+
+    }
+    interface State
+    enum Direction
 }
 
 newpage
+left to right direction
 package Locations <<Frame>> {
     class POI {
         + POI(Point, String)
@@ -276,78 +305,108 @@ package Locations <<Frame>> {
 
 newpage
 package States <<Frame>> {
-    class CenterStartHandlerState implements DroneFlightManager, State {
+    class CenterStartHandlerState implements State {
         + CenterStartHandlerState(MapArea)
         + ^handle(BaseDrone, JSONObject, JSONObject) : void
         + ^fly(BaseDrone, JSONObject, JSONObject) : void
     }
 
-    CenterStartHandlerState --* MapArea
-    CenterStartHandlerState -- Point
-    CenterStartHandlerState ..> BaseDrone
+    CenterStartHandlerState .up.|> DroneFlightManager
+    CenterStartHandlerState -up-* MapArea
+    CenterStartHandlerState -up- Point
+    CenterStartHandlerState .up.> BaseDrone
     CenterStartHandlerState ..> Direction
-    CenterStartHandlerState ..> Status
+    CenterStartHandlerState .up.> Status
 
 
-    class GroundFinderState implements DroneFlightManager, State {
+    class GroundFinderState implements State {
         + GroundFinderState(MapArea)
         + ^handle(BaseDrone, JSONObject, JSONObject) : void
         + ^fly(BaseDrone, JSONObject, JSONObject) : void
     }
 
-    GroundFinderState --* MapArea
-    GroundFinderState -- Point
-    GroundFinderState ..> BaseDrone
+    GroundFinderState .up.|> DroneFlightManager
+    GroundFinderState -up-* MapArea
+    GroundFinderState -up- Point
+    GroundFinderState .up.> BaseDrone
     GroundFinderState ..> Direction
-    GroundFinderState ..> Status
+    GroundFinderState .up.> Status
 
-    class LengthFinderState implements DimensionFinder, State {
+    class LengthFinderState implements State {
         + LengthFinderState(MapArea)
         + ^handle(BaseDrone, JSONObject, JSONObject) : void
         + ^getDimension(BaseDrone, JSONObject, JSONObject) : void
     }
 
-    LengthFinderState --* MapArea
-    LengthFinderState -- Point
-    LengthFinderState ..> BaseDrone
+    LengthFinderState .left.|> DimensionFinder
+    LengthFinderState -up-* MapArea
+    LengthFinderState .up.> BaseDrone
     LengthFinderState ..> Direction
-    LengthFinderState ..> Status
+    LengthFinderState .up.> Status
 
-    class ReachCenterState implements DroneFlightManager, State {
+    class ReachCenterState implements State {
         + ReachCenterState(MapArea)
         + ^handle(BaseDrone, JSONObject, JSONObject) : void
         + ^fly(BaseDrone, JSONObject, JSONObject) : void
     }
 
-    ReachCenterState --* MapArea
-    ReachCenterState -- Point
-    ReachCenterState ..> BaseDrone
+    ReachCenterState .down.|> DroneFlightManager
+    ReachCenterState -up-* MapArea
+    ReachCenterState .up.> BaseDrone
     ReachCenterState ..> Direction
-    ReachCenterState ..> Status
+    ReachCenterState .up.> Status
 
-    class SpiralSearchState implements SearchAlgorithm, State {
+    class SpiralSearchState implements State {
         + SpiralSearchState(MapArea)
         + ^handle(BaseDrone, JSONObject, JSONObject) : void
         + ^search(BaseDrone, JSONObject, JSONObject)
     }
 
-    SpiralSearchState --* MapArea
+    SpiralSearchState .up.|> SearchAlgorithm
+    SpiralSearchState -up-* MapArea
     SpiralSearchState -- Point
-    SpiralSearchState ..> BaseDrone
+    SpiralSearchState .up.> BaseDrone
     SpiralSearchState ..> Direction
-    SpiralSearchState ..> Status
+    SpiralSearchState .down.> Status
+    SpiralSearchState .up.o Compass
 
-    class WidthFinderState implements DimensionFinder, State {
+    class WidthFinderState implements State {
         + WidthFinderState(MapArea)
         + ^handle(BaseDrone, JSONObject, JSONObject) : void
         + ^getDimension(BaseDrone, JSONObject, JSONObject) : void
     }
 
-    WidthFinderState --* MapArea
-    WidthFinderState -- Point
-    WidthFinderState ..> BaseDrone
+    WidthFinderState .down.|> DimensionFinder
+    WidthFinderState -up-* MapArea
+    WidthFinderState .up.> BaseDrone
     WidthFinderState ..> Direction
-    WidthFinderState ..> Status
+    WidthFinderState .up.> Status
+
+    ' The following classes were added just to help in the diagram building even
+    ' though they are not part of the package. The package in which they truly
+    ' belong has their expanded version.
+    abstract class BaseDrone
+    class Point
+    enum Status
+    class MapArea
+    enum Direction
+    class Compass
+    interface SearchAlgorithm
+    interface DroneFlightManager
+    interface DimensionFinder
+
 }
+
+State -[hidden]down- BaseDrone
+State -[hidden]left- DroneFlightManager
+State -[hidden]down- BaseDrone
+BaseDrone -[hidden]down- Status
+BaseDrone -[hidden]down- MapArea
+
+LengthFinderState -[hidden]up- WidthFinderState
+LengthFinderState -[hidden]right- GroundFinderState
+WidthFinderState -[hidden]right- ReachCenterState
+ReachCenterState -[hidden]right- SpiralSearchState
+CenterStartHandlerState -[hidden]left- GroundFinderState
 
 @enduml
