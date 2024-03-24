@@ -9,20 +9,23 @@ import ca.mcmaster.se2aa4.island.team106.DroneTools.Status;
 import ca.mcmaster.se2aa4.island.team106.Drones.BaseDrone;
 import ca.mcmaster.se2aa4.island.team106.Exploration.MapArea;
 
+
 public class LengthFinderState implements DimensionFinder, State {
     private MapArea mapArea;
     private int counts = 1;
 
-    /**
+
+    /**************************************************************************
      * Constructs a LengthFinderState object with the given map area.
      * 
      * @param mapArea The map area used to store the details found on the map.
-     */
+     **************************************************************************/
     public LengthFinderState(MapArea mapArea) {
         this.mapArea = mapArea;
     }
 
-    /**
+
+    /*************************************************************************
      * Handles the operations carried out by the LengthFinderState using the
      * drone, and the specified decision and parameters JSONObjects.
      *
@@ -30,13 +33,14 @@ public class LengthFinderState implements DimensionFinder, State {
      * @param decision the decision JSON object to be modified
      * @param parameters the parameter JSON object that stores the additional
      * parameters for the action
-     */
+     *************************************************************************/
     @Override
     public void handle(BaseDrone drone, JSONObject decision, JSONObject parameters) {
         this.getDimension(drone, decision, parameters);
     }
 
-    /**
+
+    /**************************************************************************
      * Gets the dimensions of a given area using the drone, and the specified
      * decision and parameters JSONObjects.
      * 
@@ -44,7 +48,7 @@ public class LengthFinderState implements DimensionFinder, State {
      * @param decision the decision JSON object to be modified
      * @param parameters the parameter JSON object that stores the additional
      * parameters for the action
-     */
+     **************************************************************************/
     @Override
     public void getDimension(BaseDrone drone, JSONObject decision, JSONObject parameters) {
         Direction groundDirection = mapArea.getGroundEchoDirection(); // Guaranteed to be East or West
@@ -110,7 +114,8 @@ public class LengthFinderState implements DimensionFinder, State {
         }
     }
 
-    /**
+
+    /**************************************************************************
      * Fly the drone and echo in the current direction of the drone.
      *
      * @param drone the drone being used to carry out the various actions
@@ -118,7 +123,7 @@ public class LengthFinderState implements DimensionFinder, State {
      * @param decision the decision JSON object to be modified
      * @param parameters the parameter JSON object that stores the additional
      * parameters for the action
-     */
+     **************************************************************************/
     private void moveDrone(BaseDrone drone, Direction direction, JSONObject decision, JSONObject parameters) {
         switch (this.counts % 2) {
             case 1:
@@ -130,12 +135,11 @@ public class LengthFinderState implements DimensionFinder, State {
             default:
                 break;
         }
-
         this.counts++;
-
     }
 
-    /**
+
+    /**************************************************************************
      * Echo in the current direction of the drone.
      *
      * @param drone the drone being used to carry out the various actions
@@ -143,7 +147,7 @@ public class LengthFinderState implements DimensionFinder, State {
      * @param decision the decision JSON object to be modified
      * @param parameters the parameter JSON object that stores the additional
      * parameters for the action
-     */
+     **************************************************************************/
     private void echo(BaseDrone drone, Direction direction, JSONObject decision, JSONObject parameters) {
         switch (direction) {
             case W:
@@ -157,12 +161,13 @@ public class LengthFinderState implements DimensionFinder, State {
         }
     }
 
-    /**
+
+    /*************************************************************************
      * Set the direction where the ground will be located based on the original
      * prior direction of the drone.
      * 
      * @param priorDirection the previous direction of the drone.
-     */
+     *************************************************************************/
     private void setNewEchoGroundDirection(Direction priorDirection) {
         switch (priorDirection) {
             case N:
