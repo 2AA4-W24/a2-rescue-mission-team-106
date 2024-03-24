@@ -9,20 +9,34 @@ import org.apache.logging.log4j.Logger;
 
 import ca.mcmaster.se2aa4.island.team106.Locations.POI;
 
-
 public class Reporter {
     private MapArea mapArea;
     private final Logger logger = LogManager.getLogger();
 
+    /**
+     * Constructs a Reporter object with a given MapArea.
+     *
+     * @param mapArea The MapArea object to obtain details from to generate
+     * reports.
+     */
     public Reporter(MapArea mapArea){
         this.mapArea = mapArea;
     }
 
+    /**
+     * Delivers a report based on exploration results.
+     * 
+     * @return A string containing the UID (unique identifier) of the closest creek
+     */
     public String deliverReport(){
         return getClosestCreek(); 
     }
 
-    
+    /**
+     * Obtains the closest creek to the emergency site.
+     * 
+     * @return A string representing the UID (unique identifier) of the closest creek.
+     */
     private String getClosestCreek(){
         Set<POI> creeks = mapArea.getCreeks();
         POI emergSite = mapArea.getEmergencySite();
