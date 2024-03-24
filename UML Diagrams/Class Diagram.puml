@@ -1,95 +1,169 @@
 @startuml "Class Diagram"
-class Actions {
-    + echo(JSONObject, JSONObject, Direction): void
-    + fly(JSONObject): void
-    + stop(JSONObject): void
-    + heading(JSONObject, JSONObject, Direction): void
-    + scan(JSONObject): void
-    + land(JSONObject, JSONObject): void
-    + explore(JSONObject): void
-    + scout(JSONObject, JSONObject, Direction): void
-    + moveTo(JSONObject, JSONObject, Direction): void
+
+package DroneTools <<Frame>> {
+    class Actions {
+        + echo(JSONObject, JSONObject, Direction) : void
+        + fly(JSONObject) : void
+        + stop(JSONObject) : void
+        + heading(JSONObject, JSONObject, Direction) : void
+        + scan(JSONObject) : void
+        + land(JSONObject, JSONObject) : void
+        + explore(JSONObject) : void
+        + scout(JSONObject, JSONObject, Direction) : void
+        + moveTo(JSONObject, JSONObject, Direction) : void
+    }
+
+    class Compass {
+        + getLeftDirection(Direction) : Direction
+        + getRightDirection(Direction) : Direction
+    }
+
+    interface DimensionFinder {
+        getDimension(BaseDrone, JSONObject, JSONObject) : void
+    }
+
+    enum Direction {
+        N,
+        E,
+        W,
+        S,
+        FORWARD,
+        LEFT,
+        RIGHT
+    }
+    
+    interface DroneFlightManager {
+        fly(BaseDrone, JSONObject, JSONObject) : void
+    }
+
+    class FatalErrorHandler {
+        + FatalErrorHandler(BaseDrone, MapArea)
+        + setRangeDanger(int) : void
+        + handleDanger(JSONObject, JSONObject) : void
+        + setBatteryDanger(boolean) : void
+        + getDanger() : boolean
+        + changeDirection(MapArea) : Direction
+    }
+
+    interface SearchAlgorithm {
+        + search(BaseDrone, JSONObject, JSONObject) : void
+        + setDimensions(int, int) : void
+    }
+
+    interface State {
+        + handle(BaseDrone, JSONObject, JSONObject) : void
+    }
+
+    enum Status {
+        GROUND_FINDER_STATE,
+        CENTER_START_STATE,
+        WIDTH_STATE,
+        LENGTH_STATE,
+        MOVE_CENTER_STATE,
+        CENTER_STATE
+    }
 }
-abstract class BaseDrone {
-    # currentBatteryLevel : int
-    # status : Status
-    + {abstract} updateDrone(int, Direction) : void
-    + {abstract} getStatus() : Status
-    + {abstract} setStatus(Status) : void
-    + {abstract} getBatterLevel() : int
-    + {abstract} stop(JSONObject) : void
-    + {abstract} fly(JSONObject) : void
-    + {abstract} canMakeDecision(int) : boolean
-    + {abstract} useBattery(int) : void
-    + {abstract} echo(JSONObject, JSONObject, Direction) : void
-    + {abstract} updateHeading(JSONObject, JSONObject, Direction) : void
-    + {abstract} scan(JSONObject) : void
+
+package Drones <<Frame>> {
+    abstract class BaseDrone {
+        # minimumBatteryToOperate : int
+        # currentBatteryLevel : int
+        # status : Status
+        # action : Actions
+        # mapArea : MapArea
+        + {abstract} updateDrone(int, Direction) : void
+        + {abstract} getStatus() : Status
+        + {abstract} setStatus(Status) : void
+        + {abstract} getBatteryLevel() : int
+        + {abstract} stop(JSONObject) : void
+        + {abstract} fly(JSONObject) : void
+        + {abstract} canMakeDecision(int) : boolean
+        + {abstract} useBattery(int) : void
+        + {abstract} echo(JSONObject, JSONObject, Direction) : void
+        + {abstract} updateHeading(JSONObject, JSONObject, Direction) : void
+        + {abstract} scan(JSONObject) : void
+    }
+
+    class Drone {
+        + Drone(int, MapArea)
+        + ^updateDrone(int, Direction) : void
+        + ^getBatteryLevel() : int
+        + ^getStatus() : Status
+        + ^setStatus(Status) : void
+        + ^fly(JSONObject) : void
+        + ^echo(JSONObject, JSONObject, Direction) : void
+        + ^stop(JSONObject) : void
+        + ^scan(JSONObject) : void
+        + ^updateHeading(JSONObject, JSONObject, Direction) : void
+        + ^canMakeDecision(int) : boolean
+        + ^useBattery(int) : void
+    }
 }
-class CenterStartHandler {
-    + fly(BaseDrone, JSONObject, JSONObject) : void
+
+package Exploration <<Frame>> {
+    class DecisionMaker {
+        + DecisionMaker(BaseDrone, MapArea, FatalErrorHandler)
+        + makeDecisions(JSONObject, JSONObject) : void
+    }
+
+    class Explorer
+
+    class MapArea
+
+    class Reporter
+
+    class ResultsAcknowledger
+
+    class Runner
+
+    interface IExplorerRaid {
+        + initialize(String) : void
+        + takeDecision() : String
+        + acknowledgeResults() : void
+        + deliverFinalReport() : String
+    }
 }
-class Compass {
-    + getLeftDirection(Direction) : Direction
-    + getRightDirection(Direction) : Direction
+
+package Locations <<Frame>> {
+    class POI {
+        + Creek(Point, String)
+        + getCreekID() : String
+        + getCreekPoint() : Point
+        + getDistance(Creek) : double
+        + getID() : String
+        + toString() : String
+    }
+    
+    class Point
 }
-class Creek {
-    + Creek(Point, String)
-    + getCreekID() : String
-    + getCreekPoint() : Point
-    + getDistance(Creek) : double
-    + getID(): String
-    + toString() : String
+
+package States <<Frame>> {
+    class CenterStartHandlerState {
+        + fly(BaseDrone, JSONObject, JSONObject) : void
+    }
+
+    class GroundFinderState
+
+    class LengthFinderState
+
+    class ReachCenterState
+
+    class SpiralSearchState
+
+    class WidthFinderState
+    
 }
-class DecisionMaker {
-    + DecisionMaker(BaseDrone, MapArea, FatalErrorHandler)
-    + makeDecisions(JSONObject, JSONObject) : void
-}
-interface DimensionFinder {
-    getDimension(BaseDrone, JSONObject, JSONObject) : void
-}
-enum Direction {
-    N,
-    E,
-    W,
-    S,
-    FORWARD,
-    LEFT,
-    RIGHT
-    + {static} fromString(String) : Direction
-}
-class Drone {
-    + Drone(int, MapArea)
-    + ^updateDrone(int, Direction): void
-    + ^getBatteryLevel(): int
-    + ^getStatus(): Status
-    + ^setStatus(Status): void
-    + ^fly(JSONObject): void
-    + ^echo(JSONObject, JSONObject, Direction) : void
-    + ^stop(JSONObject) : void
-    + ^scan(JSONObject) : void
-    + ^updateHeading(JSONObject, JSONObject, Direction) : void
-    + ^useBattery(int) : void
-}
-interface DroneFlightManager
-class Explorer
-class FatalErrorHandler
-class GroundFinder
-interface IExplorerRaid {
-    + initialize(String): void
-    + takeDecision(): String
-    + acknowledgeResults(): void
-    + deliverFinalReport(): String
-}
-class LengthFinder
-class MapArea
-class Point
-class ReachCenter
-enum RelativeDirection
-class Reporter
-class ResultsAcknowledger
-class Runner
-interface Search
-class SpiralSearch
-enum Status
-class WidthFinder
+
+
+
+
+
+
+
+
+
+
+
+
+
 @enduml
